@@ -72,9 +72,16 @@
   <script src="vendor/html2canvas.min.js"></script>
 
   <style>
-    body {
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
       font-family: 'Alexandria', 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+      position: relative;
     }
     /* Smooth custom scrollbars */
     ::-webkit-scrollbar {
@@ -101,55 +108,66 @@
     }
   </style>
 </head>
-<body class="bg-[#FBF9F5] text-stone-800 dark:bg-warmdark-900 dark:text-stone-100 min-h-screen transition-colors duration-300 antialiased selection:bg-sage-500 selection:text-white">
+<body class="bg-[#FBF9F5] text-stone-800 dark:bg-warmdark-900 dark:text-stone-100 min-h-screen transition-colors duration-300 antialiased selection:bg-sage-500 selection:text-white w-full overflow-x-hidden">
+
+  <!-- PWA New Version Update Banner -->
+  <div id="pwaUpdateBanner" class="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-md bg-stone-900 text-white dark:bg-white dark:text-stone-900 p-3 rounded-2xl shadow-2xl border border-stone-700 dark:border-stone-200 flex items-center justify-between gap-2.5 transition-all duration-300 hidden">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping shrink-0"></span>
+      <p class="text-xs font-semibold truncate">يتوفر إصدار جديد محدث من التطبيق! 🚀</p>
+    </div>
+    <button onclick="applyAppUpdate()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shrink-0 shadow-sm transition-all active:scale-95">
+      تحديث الآن
+    </button>
+  </div>
 
   <!-- Top Announcement / Motivation Bar -->
-  <header class="border-b border-stone-200/70 dark:border-warmdark-700 bg-white/90 dark:bg-warmdark-800/90 backdrop-blur-md sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
+  <header class="border-b border-stone-200/70 dark:border-warmdark-700 bg-white/90 dark:bg-warmdark-800/90 backdrop-blur-md sticky top-0 z-40 w-full overflow-hidden">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-2">
       
       <!-- Brand & Section Label -->
-      <div class="flex items-center gap-2.5 shrink-0">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-sage-500 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-sm shadow-sage-500/20">
+      <div class="flex items-center gap-2 shrink min-w-0">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-sage-500 text-white flex items-center justify-center font-bold text-sm sm:text-lg shadow-sm shadow-sage-500/20 shrink-0">
           6
         </div>
-        <div>
-          <div class="flex items-center gap-1.5">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
             <h1 class="text-sm sm:text-lg font-bold tracking-tight text-stone-900 dark:text-white whitespace-nowrap">سكشن 6</h1>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-sage-50 text-sage-700 border border-sage-200 dark:bg-sage-950/60 dark:text-sage-300 dark:border-sage-800">
-              نظم معلومات
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] sm:text-xs font-semibold bg-sage-50 text-sage-700 border border-sage-200 dark:bg-sage-950/60 dark:text-sage-300 dark:border-sage-800 shrink-0">
+              نظم
             </span>
           </div>
-          <p class="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal hidden sm:block">الفرقة الثالثة • ترم أول 2026-2027</p>
+          <p class="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal hidden md:block">الفرقة الثالثة • ترم أول 2026-2027</p>
         </div>
       </div>
 
       <!-- Action Buttons & Controls (Touch-Friendly & Spaced) -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
         <!-- Streak Counter -->
-        <button id="streakBadge" onclick="showMotivationModal()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 transition-all text-xs font-semibold shadow-xs">
+        <button id="streakBadge" onclick="showMotivationModal()" class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 transition-all text-xs font-semibold shadow-xs shrink-0">
           <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-bounce"></i>
           <span><span id="streakDays">0</span> يوم</span>
         </button>
 
         <!-- Live Network & Cloud Sync Badge -->
-        <button onclick="openSyncModal()" id="networkSyncBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800" title="حالة الاتصال والمزامنة مع جوجل شيت (انقر للتفاصيل)">
+        <button onclick="openSyncModal()" id="networkSyncBadge" class="flex items-center gap-1.5 px-2 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 shrink-0" title="حالة الاتصال والمزامنة مع جوجل شيت (انقر للتفاصيل)">
           <i data-lucide="sheet" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0"></i>
           <span id="networkSyncDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span id="networkSyncText" class="text-[11px] whitespace-nowrap">متزامن ✓</span>
+          <span id="networkSyncText" class="text-[11px] whitespace-nowrap hidden min-[440px]:inline">متزامن ✓</span>
         </button>
 
         <!-- Time Settings Modal Trigger -->
-        <button onclick="openTimeSettingsModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="ضبط مواعيد الفترات">
+        <button onclick="openTimeSettingsModal()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="ضبط مواعيد الفترات">
           <i data-lucide="clock" class="w-4 h-4"></i>
         </button>
 
         <!-- Export Modal Trigger -->
-        <button onclick="openExportModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="تصدير كرت الجدول">
+        <button onclick="openExportModal()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="تصدير كرت الجدول">
           <i data-lucide="download" class="w-4 h-4"></i>
         </button>
 
         <!-- Theme Toggle -->
-        <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="تبديل المظهر">
+        <button onclick="toggleDarkMode()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="تبديل المظهر">
           <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
         </button>
       </div>
@@ -173,18 +191,18 @@
       </div>
 
       <!-- Quick Stats Pill -->
-      <div class="flex items-center gap-3 shrink-0 w-full md:w-auto justify-between bg-white/70 dark:bg-warmdark-900/60 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
-        <div>
-          <div class="text-[11px] text-stone-500 dark:text-stone-400">معدل حضورك الإجمالي</div>
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0 w-full md:w-auto justify-between bg-white/70 dark:bg-warmdark-900/60 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-200/60 dark:border-warmdark-600 overflow-hidden">
+        <div class="min-w-0">
+          <div class="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate">معدل حضورك الإجمالي</div>
           <div class="flex items-center gap-1.5">
-            <span id="overallAttendancePercent" class="text-base sm:text-lg font-bold text-sage-600 dark:text-sage-400">100%</span>
-            <span id="overallAttendanceBadge" class="text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold">بداية جديدة ✨</span>
+            <span id="overallAttendancePercent" class="text-sm sm:text-lg font-bold text-sage-600 dark:text-sage-400">100%</span>
+            <span id="overallAttendanceBadge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold truncate">بداية جديدة ✨</span>
           </div>
         </div>
-        <div class="h-7 w-px bg-stone-200 dark:bg-warmdark-700"></div>
-        <div>
-          <div class="text-[11px] text-stone-500 dark:text-stone-400">أيام الدراسة هذا الأسبوع</div>
-          <div class="text-base sm:text-lg font-bold text-stone-800 dark:text-stone-100">4 <span class="text-xs font-normal text-stone-500">أيام فقط ✨</span></div>
+        <div class="h-7 w-px bg-stone-200 dark:bg-warmdark-700 shrink-0"></div>
+        <div class="min-w-0 text-left">
+          <div class="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate">أيام الدراسة هذا الأسبوع</div>
+          <div class="text-sm sm:text-lg font-bold text-stone-800 dark:text-stone-100 whitespace-nowrap">4 <span class="text-[10px] sm:text-xs font-normal text-stone-500">أيام ✨</span></div>
         </div>
       </div>
     </div>
@@ -630,6 +648,14 @@
             <span>مزامنة الآن</span>
           </button>
         </div>
+      </div>
+
+      <!-- App Version & Force Update Section -->
+      <div class="pt-2 border-t border-stone-100 dark:border-warmdark-700">
+        <button onclick="forceAppUpdate()" id="forceUpdateBtn" class="w-full py-2.5 px-3 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 dark:bg-warmdark-700 dark:hover:bg-warmdark-600 text-stone-700 dark:text-stone-200 transition-colors flex items-center justify-center gap-2 border border-stone-200/60 dark:border-warmdark-600 shadow-2xs">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
+          <span>التحقق من التحديثات ومسح الكاش (Force Update PWA)</span>
+        </button>
       </div>
     </div>
   </div>
@@ -2439,7 +2465,57 @@
     }
 
     // ----------------------------------------------------
-    // 14. APP INITIALIZATION
+    // 14. PWA AUTO-UPDATE ENGINE & CACHE PURGE
+    // ----------------------------------------------------
+    let newWorkerWaiting = null;
+
+    function showPwaUpdateBanner() {
+      const banner = document.getElementById('pwaUpdateBanner');
+      if (banner) banner.classList.remove('hidden');
+    }
+
+    function applyAppUpdate() {
+      if (newWorkerWaiting) {
+        newWorkerWaiting.postMessage({ type: 'SKIP_WAITING' });
+      } else {
+        window.location.reload(true);
+      }
+    }
+
+    async function forceAppUpdate() {
+      const btn = document.getElementById('forceUpdateBtn');
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> <span>جاري التحديث ومسح الكاش...</span>`;
+        btn.disabled = true;
+      }
+
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let reg of registrations) {
+            await reg.update();
+            if (reg.waiting) {
+              reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+          }
+        }
+
+        showSyncToast("تم تفريغ الكاش وتحديث التطبيق! 🚀", "success");
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 800);
+      } catch (err) {
+        window.location.reload(true);
+      }
+    }
+
+    // ----------------------------------------------------
+    // 15. APP INITIALIZATION
     // ----------------------------------------------------
     window.addEventListener('DOMContentLoaded', () => {
       // Load saved theme
@@ -2484,14 +2560,47 @@
         showSyncToast('أنت الآن في وضع عدم الاتصال (أوفلاين) 📴', 'offline');
       });
 
-      // Register PWA service worker with auto-update
+      // Register PWA service worker with auto-update & foreground polling
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => {
-              reg.update().catch(() => {});
-            })
-            .catch(() => {});
+          navigator.serviceWorker.register('./sw.js').then((reg) => {
+            // Check immediately on load
+            reg.update().catch(() => {});
+
+            // Check when app is brought to foreground on mobile
+            document.addEventListener('visibilitychange', () => {
+              if (document.visibilityState === 'visible') {
+                reg.update().catch(() => {});
+              }
+            });
+
+            // If a new worker is already waiting
+            if (reg.waiting) {
+              newWorkerWaiting = reg.waiting;
+              showPwaUpdateBanner();
+            }
+
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    newWorkerWaiting = newWorker;
+                    showPwaUpdateBanner();
+                  }
+                });
+              }
+            });
+          }).catch(() => {});
+
+          // Auto reload when new controller takes over
+          let refreshing = false;
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+              refreshing = true;
+              window.location.reload();
+            }
+          });
         });
       }
     });

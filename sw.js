@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (100% Offline Capable)
+// Service Worker for Section 6 PWA (v3 - Auto-Update & 100% Offline Capable)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v2';
+const CACHE_NAME = 'section6-hub-v3';
 
 const PRECACHE_ASSETS = [
   './',
@@ -16,26 +16,26 @@ const PRECACHE_ASSETS = [
   './vendor/html2canvas.min.js'
 ];
 
-// 1. Install & Cache All Core Assets
+// 1. Install & Precache
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Precaching offline assets...');
+        console.log('[SW v3] Precaching core assets...');
         return cache.addAll(PRECACHE_ASSETS);
       })
       .then(() => self.skipWaiting())
   );
 });
 
-// 2. Activate & Clean Old Caches
+// 2. Activate & Purge All Old Caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('[SW] Deleting old cache:', cache);
+            console.log('[SW v3] Deleting stale cache:', cache);
             return caches.delete(cache);
           }
         })
@@ -44,11 +44,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Strategy: Cache-First for assets, Network-First for Google APIs with fallback
+// 3. Message Event (Allow instant skip waiting on user demand)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// 4. Fetch Handler
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Skip non-GET requests (e.g. POST to Apps Script will be handled by fetch in app with try/catch)
+  // Skip non-GET requests (e.g. POST to Google Apps Script)
   if (event.request.method !== 'GET') {
     return;
   }
@@ -66,33 +73,49 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-First strategy with runtime caching for all assets (HTML, JS, CSS, Fonts, Images)
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+  // STRATEGY A: For Navigation / HTML pages -> NETWORK-FIRST with CACHE FALLBACK
+  // This guarantees that any updates you push to GitHub are received immediately by the phone!
+  const isHtmlRequest = event.request.mode === 'navigate' ||
+                        event.request.destination === 'document' ||
+                        url.pathname.endsWith('.html') ||
+                        url.pathname.endsWith('/');
 
-      return fetch(event.request)
+  if (isHtmlRequest) {
+    event.respondWith(
+      fetch(event.request)
         .then((networkResponse) => {
-          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type === 'opaque') {
-            return networkResponse;
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
           }
-
-          // Clone and cache the newly fetched response
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-
           return networkResponse;
         })
         .catch(() => {
-          // If offline and navigating to a page, serve cached index.html
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html') || caches.match('./');
+          // If network fails (offline), serve cached index.html immediately!
+          return caches.match(event.request) || caches.match('./index.html') || caches.match('./');
+        })
+    );
+    return;
+  }
+
+  // STRATEGY B: For Static Assets (JS, CSS, Icons, Images) -> STALE-WHILE-REVALIDATE
+  // Instant load from cache, while updating the cache in background if connected!
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
           }
+          return networkResponse;
+        })
+        .catch(() => {
+          // If offline and not in cache, fallback
+          return null;
         });
+
+      return cachedResponse || fetchPromise;
     })
   );
 });
