@@ -33,9 +33,11 @@ function doGet(e) {
       return jsonResponse({ status: "success", data: data });
     }
     
+    const { ss } = ensureSheetsSetup();
     return jsonResponse({
       status: "online",
       message: "تم تشغيل سيرفر سكشن 6 بنجاح! السيرفر متصل بجوجل شيت وجاهز لاستقبال البيانات.",
+      sheetUrl: ss ? ss.getUrl() : "",
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -101,10 +103,29 @@ function jsonResponse(data) {
 }
 
 /**
- * التأكد من وجود وتنسيق الشيتات المطلوبة
+ * التأكد من وجود وتنسيق الشيتات المطلوبة (يعمل سواء تم فتحه من داخل الشيت أو بشكل مستقل)
  */
 function ensureSheetsSetup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let ss = null;
+  try {
+    ss = SpreadsheetApp.getActiveSpreadsheet();
+  } catch (e) {}
+  
+  if (!ss) {
+    const props = PropertiesService.getScriptProperties();
+    const savedId = props.getProperty("SPREADSHEET_ID");
+    if (savedId) {
+      try {
+        ss = SpreadsheetApp.openById(savedId);
+      } catch (e) {}
+    }
+    
+    // إذا كان السكريبت مستقلاً ولم يتم ربطه، يتم إنشاء شيت جديد تلقائياً في درايف وحفظ المعرف
+    if (!ss) {
+      ss = SpreadsheetApp.create("جدول سكشن 6 - قاعدة البيانات");
+      props.setProperty("SPREADSHEET_ID", ss.getId());
+    }
+  }
   
   // 1. شيت الحضور والغياب
   let sheetAtt = ss.getSheetByName(SHEET_ATTENDANCE);
