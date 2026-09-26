@@ -582,7 +582,7 @@
           رابط تطبيق الويب (Google Apps Script Web App URL):
         </label>
         <div class="flex gap-2">
-          <input id="gasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 text-xs font-mono rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <input id="gasUrlInput" type="url" value="https://script.google.com/macros/s/AKfycbyyx3V7RUlAdh2j99h7cU8grjFMv2H6vdAXAG_Rknfwf3IRhcjRgnoV2uWVRth0QaZ_Ow/exec" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 text-xs font-mono rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           <button onclick="saveGasUrlFromInput()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shrink-0 shadow-xs transition-all">
             حفظ الرابط
           </button>
@@ -963,11 +963,12 @@
     // ----------------------------------------------------
     // 2. STATE INITIALIZATION (LocalStorage & Cloud Zeroed)
     // ----------------------------------------------------
+    const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbyyx3V7RUlAdh2j99h7cU8grjFMv2H6vdAXAG_Rknfwf3IRhcjRgnoV2uWVRth0QaZ_Ow/exec";
     let periodTimes = JSON.parse(localStorage.getItem('sakan6_periodTimes')) || defaultPeriodTimes;
     let attendanceData = JSON.parse(localStorage.getItem('sakan6_attendance')) || {};
     let streakCount = parseInt(localStorage.getItem('sakan6_streak') || "0", 10);
     let tasksList = JSON.parse(localStorage.getItem('sakan6_tasks')) || [];
-    let gasUrl = localStorage.getItem('sakan6_gas_url') || "";
+    let gasUrl = localStorage.getItem('sakan6_gas_url') || DEFAULT_GAS_URL;
     let currentFilter = 'all';
     let currentView = 'today';
     let activeDayView = new Date().getDay(); // 0 is Sunday, 1 Monday, 2 Tuesday, 4 Thursday...
@@ -1970,7 +1971,7 @@
     // ----------------------------------------------------
     function openSyncModal() {
       const input = document.getElementById('gasUrlInput');
-      if (input) input.value = gasUrl || "";
+      if (input) input.value = gasUrl || DEFAULT_GAS_URL;
       updateSyncStatusUI();
       document.getElementById('syncModal').classList.remove('hidden');
     }
