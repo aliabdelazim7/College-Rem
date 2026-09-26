@@ -131,10 +131,11 @@
           <span><span id="streakDays">0</span> يوم</span>
         </button>
 
-        <!-- Google Sheets Cloud Sync Trigger -->
-        <button onclick="openSyncModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors relative" title="ربط ومزامنة جوجل شيت (Google Sheets)">
-          <i data-lucide="sheet" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
-          <span id="syncStatusDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-stone-300 dark:bg-warmdark-600"></span>
+        <!-- Live Network & Cloud Sync Badge -->
+        <button onclick="openSyncModal()" id="networkSyncBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800" title="حالة الاتصال والمزامنة مع جوجل شيت (انقر للتفاصيل)">
+          <i data-lucide="sheet" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0"></i>
+          <span id="networkSyncDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="networkSyncText" class="text-[11px] whitespace-nowrap">متزامن ✓</span>
         </button>
 
         <!-- Time Settings Modal Trigger -->
@@ -567,13 +568,33 @@
         </button>
       </div>
 
-      <!-- Connection Status Banner -->
-      <div id="syncStatusBanner" class="p-3 rounded-xl bg-stone-50 dark:bg-warmdark-700/60 border border-stone-200/70 dark:border-warmdark-600 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span id="syncStatusIndicator" class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
-          <span id="syncStatusText" class="text-xs font-semibold text-stone-700 dark:text-stone-300">غير متصل (تخزين محلي فقط)</span>
+      <!-- Connection & Sync Diagnostic Cards -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <!-- Net Status -->
+        <div id="modalNetCard" class="p-3 rounded-xl border bg-stone-50 dark:bg-warmdark-700/60 border-stone-200/80 dark:border-warmdark-600 space-y-1">
+          <div class="text-[10px] text-stone-400 font-medium">حالة الاتصال (الشبكة)</div>
+          <div class="flex items-center gap-1.5">
+            <span id="modalNetDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="modalNetText" class="text-xs font-bold text-stone-800 dark:text-stone-200">أونلاين (Online) 🌐</span>
+          </div>
         </div>
-        <span id="syncLastTime" class="text-[11px] text-stone-400">لم تتم المزامنة بعد</span>
+
+        <!-- Sync Status -->
+        <div id="modalSyncCard" class="p-3 rounded-xl border bg-stone-50 dark:bg-warmdark-700/60 border-stone-200/80 dark:border-warmdark-600 space-y-1">
+          <div class="text-[10px] text-stone-400 font-medium">حالة المزامنة السحابية</div>
+          <div class="flex items-center gap-1.5">
+            <span id="modalSyncDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="modalSyncText" class="text-xs font-bold text-stone-800 dark:text-stone-200">متزامن بالكامل ✓</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400 px-1 py-1 rounded-lg bg-stone-100/60 dark:bg-warmdark-700/40">
+        <span id="syncLastTime">لم تتم المزامنة بعد</span>
+        <span id="pendingChangesBadge" class="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+          <span>جميع التعديلات محفوظة</span>
+        </span>
       </div>
 
       <!-- Web App URL Input Form -->
@@ -1994,35 +2015,175 @@
       }
     }
 
-    function updateSyncStatusUI() {
-      const dot = document.getElementById('syncStatusDot');
-      const indicator = document.getElementById('syncStatusIndicator');
-      const statusText = document.getElementById('syncStatusText');
-      const lastTimeEl = document.getElementById('syncLastTime');
-      const lastSync = localStorage.getItem('sakan6_last_sync_time');
-      const isOnline = navigator.onLine;
+    let currentSyncStatus = 'synced'; // 'synced', 'syncing', 'offline', 'offline-pending', 'pending', 'local'
 
-      if (!isOnline) {
+    function showSyncToast(message, type = 'info') {
+      let toast = document.getElementById('syncToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'syncToast';
+        document.body.appendChild(toast);
+      }
+      
+      let bgClass = "bg-stone-800 text-white dark:bg-stone-100 dark:text-stone-900 border-stone-700";
+      let icon = "info";
+      if (type === 'success') {
+        bgClass = "bg-emerald-700 text-white border-emerald-600";
+        icon = "check-circle";
+      } else if (type === 'offline') {
+        bgClass = "bg-amber-700 text-white border-amber-600";
+        icon = "wifi-off";
+      } else if (type === 'syncing') {
+        bgClass = "bg-sky-700 text-white border-sky-600";
+        icon = "refresh-cw";
+      }
+
+      toast.className = `fixed bottom-16 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl text-xs font-semibold shadow-card border backdrop-blur-md transition-all duration-300 opacity-100 translate-y-0 ${bgClass} flex items-center gap-2 pointer-events-auto`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0 ${type === 'syncing' ? 'animate-spin' : ''}"></i> <span>${message}</span>`;
+      lucide.createIcons();
+
+      clearTimeout(window.syncToastTimer);
+      window.syncToastTimer = setTimeout(() => {
+        toast.className = 'fixed bottom-16 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl text-xs font-semibold shadow-card border backdrop-blur-md transition-all duration-300 opacity-0 translate-y-3 pointer-events-none hidden';
+      }, 2500);
+    }
+
+    function updateSyncStatusUI(stateOverride) {
+      const isOnline = navigator.onLine;
+      const hasPending = localStorage.getItem('sakan6_has_pending_sync') === 'true';
+      const lastSync = localStorage.getItem('sakan6_last_sync_time');
+
+      let state = stateOverride;
+      if (!state) {
+        if (!isOnline) {
+          state = hasPending ? 'offline-pending' : 'offline';
+        } else if (!gasUrl) {
+          state = 'local';
+        } else if (hasPending) {
+          state = 'pending';
+        } else {
+          state = 'synced';
+        }
+      }
+      currentSyncStatus = state;
+
+      // Header Elements
+      const badge = document.getElementById('networkSyncBadge');
+      const dot = document.getElementById('networkSyncDot');
+      const text = document.getElementById('networkSyncText');
+
+      // Modal Elements
+      const modalNetDot = document.getElementById('modalNetDot');
+      const modalNetText = document.getElementById('modalNetText');
+      const modalSyncDot = document.getElementById('modalSyncDot');
+      const modalSyncText = document.getElementById('modalSyncText');
+      const pendingBadge = document.getElementById('pendingChangesBadge');
+      const lastTimeEl = document.getElementById('syncLastTime');
+
+      // 1. Internet Status in modal
+      if (modalNetDot && modalNetText) {
+        if (isOnline) {
+          modalNetDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+          modalNetText.innerText = "أونلاين (Online) 🌐";
+          modalNetText.className = "text-xs font-bold text-emerald-700 dark:text-emerald-400";
+        } else {
+          modalNetDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+          modalNetText.innerText = "أوفلاين (Offline) 📴";
+          modalNetText.className = "text-xs font-bold text-amber-700 dark:text-amber-400";
+        }
+      }
+
+      // 2. Sync state styling
+      if (state === 'syncing') {
+        if (badge) {
+          badge.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800";
+        }
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-sky-500 animate-ping";
+        if (text) text.innerText = "مزامنة... ⏳";
+        if (modalSyncDot) modalSyncDot.className = "w-2 h-2 rounded-full bg-sky-500 animate-ping";
+        if (modalSyncText) {
+          modalSyncText.innerText = "جاري الحفظ في جوجل شيت...";
+          modalSyncText.className = "text-xs font-bold text-sky-700 dark:text-sky-400";
+        }
+        if (pendingBadge) {
+          pendingBadge.className = "text-sky-600 dark:text-sky-400 font-semibold flex items-center gap-1";
+          pendingBadge.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i> <span>جاري إرسال البيانات...</span>`;
+        }
+      } else if (state === 'offline' || state === 'offline-pending') {
+        if (badge) {
+          badge.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800";
+        }
         if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-500";
-        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
-        if (statusText) statusText.innerText = "وضع عدم الاتصال (أوفلاين) - البيانات محفوظة على جهازك 📴";
-      } else if (!gasUrl) {
+        if (text) text.innerText = state === 'offline-pending' ? "أوفلاين • معلق 📴" : "أوفلاين 📴";
+        if (modalSyncDot) modalSyncDot.className = "w-2 h-2 rounded-full bg-amber-500";
+        if (modalSyncText) {
+          modalSyncText.innerText = "محلي (بانتظار الإنترنت)";
+          modalSyncText.className = "text-xs font-bold text-amber-700 dark:text-amber-400";
+        }
+        if (pendingBadge) {
+          pendingBadge.className = "text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1";
+          pendingBadge.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5"></i> <span>تعديلات محفوظة محلياً (ستُرفع تلقائياً)</span>`;
+        }
+      } else if (state === 'pending') {
+        if (badge) {
+          badge.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-orange-50 text-orange-800 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800";
+        }
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-orange-500 animate-pulse";
+        if (text) text.innerText = "بانتظار المزامنة ⏳";
+        if (modalSyncDot) modalSyncDot.className = "w-2 h-2 rounded-full bg-orange-500";
+        if (modalSyncText) {
+          modalSyncText.innerText = "تعديلات معلقة";
+          modalSyncText.className = "text-xs font-bold text-orange-700 dark:text-orange-400";
+        }
+        if (pendingBadge) {
+          pendingBadge.className = "text-orange-600 dark:text-orange-400 font-semibold flex items-center gap-1";
+          pendingBadge.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> <span>تعديلات بانتظار الرفع للشيت</span>`;
+        }
+      } else if (state === 'local') {
+        if (badge) {
+          badge.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-stone-100 text-stone-600 border-stone-200 dark:bg-warmdark-700 dark:text-stone-300 dark:border-warmdark-600";
+        }
         if (dot) dot.className = "w-2 h-2 rounded-full bg-stone-400";
-        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-stone-400";
-        if (statusText) statusText.innerText = "تخزين محلي (غير متصل بجوجل شيت)";
+        if (text) text.innerText = "تخزين محلي 📁";
+        if (modalSyncDot) modalSyncDot.className = "w-2 h-2 rounded-full bg-stone-400";
+        if (modalSyncText) {
+          modalSyncText.innerText = "تخزين محلي فقط";
+          modalSyncText.className = "text-xs font-bold text-stone-600 dark:text-stone-400";
+        }
+        if (pendingBadge) {
+          pendingBadge.className = "text-stone-500 font-medium flex items-center gap-1";
+          pendingBadge.innerHTML = `<i data-lucide="info" class="w-3.5 h-3.5"></i> <span>البيانات محفوظة على هذا الجهاز فقط</span>`;
+        }
       } else {
-        if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
-        if (statusText) statusText.innerText = "متصل بجوجل شيت (جاهز للمزامنة)";
+        // synced
+        if (badge) {
+          badge.className = "flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800";
+        }
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500";
+        if (text) text.innerText = "متزامن ✓";
+        if (modalSyncDot) modalSyncDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+        if (modalSyncText) {
+          modalSyncText.innerText = "متزامن بالكامل ✓";
+          modalSyncText.className = "text-xs font-bold text-emerald-700 dark:text-emerald-400";
+        }
+        if (pendingBadge) {
+          pendingBadge.className = "text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1";
+          pendingBadge.innerHTML = `<i data-lucide="check-circle" class="w-3.5 h-3.5"></i> <span>تم الحفظ والمزامنة مع جوجل شيت</span>`;
+        }
       }
 
       if (lastTimeEl) {
         lastTimeEl.innerText = lastSync ? `آخر مزامنة: ${lastSync}` : "لم تتم المزامنة بعد";
       }
+
+      lucide.createIcons();
     }
 
     async function syncWithGoogleSheets(isManual = false) {
       if (!navigator.onLine) {
+        localStorage.setItem('sakan6_has_pending_sync', 'true');
+        updateSyncStatusUI('offline-pending');
+        showSyncToast("أوفلاين: التعديلات محفوظة محلياً وستُرفع تلقائياً عند عودة النت 📴", 'offline');
         if (isManual) {
           alert("أنت حالياً في وضع عدم الاتصال (أوفلاين). جميع تعديلاتك محفوظة بأمان محلياً، وسيتم رفعها ومزامنتها مع جوجل شيت فور عودة الإنترنت!");
         }
@@ -2030,12 +2191,15 @@
       }
 
       if (!gasUrl) {
+        updateSyncStatusUI('local');
         if (isManual) {
           alert("يرجى لصق رابط Google Apps Script Web App أولاً لحفظ البيانات في جوجل شيت.");
           openSyncModal();
         }
         return;
       }
+
+      updateSyncStatusUI('syncing');
 
       const syncBtn = document.getElementById('manualSyncBtn');
       if (isManual && syncBtn) {
@@ -2079,7 +2243,9 @@
 
         const nowFormatted = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
         localStorage.setItem('sakan6_last_sync_time', nowFormatted);
-        updateSyncStatusUI();
+        localStorage.removeItem('sakan6_has_pending_sync');
+        updateSyncStatusUI('synced');
+        showSyncToast("تمت المزامنة وحفظ البيانات في جوجل شيت ✓", 'success');
 
         if (isManual) {
           playChime('success');
@@ -2087,6 +2253,9 @@
         }
       } catch (err) {
         console.error("Sync error:", err);
+        localStorage.setItem('sakan6_has_pending_sync', 'true');
+        updateSyncStatusUI('pending');
+        showSyncToast("تعذر الاتصال بالسحابة: حُفظ محلياً 📁", 'offline');
         if (isManual) {
           alert("تعذر الاتصال برابط Google Apps Script، يرجى التأكد من نشر تطبيق الويب واختيار 'Anyone' في صلاحيات الوصول.");
         }
@@ -2144,7 +2313,9 @@
           updateOverallStats();
           renderTasksList();
           renderTasksView();
-          updateSyncStatusUI();
+          localStorage.removeItem('sakan6_has_pending_sync');
+          updateSyncStatusUI('synced');
+          showSyncToast("تم سحب أحدث البيانات بنجاح من جوجل شيت 📊", 'success');
 
           playChime('success');
           alert("تم سحب أحدث البيانات بنجاح من جوجل شيت! 📊");
@@ -2303,12 +2474,14 @@
       // Network online/offline event listeners
       window.addEventListener('online', () => {
         updateSyncStatusUI();
+        showSyncToast('عاد اتصال الإنترنت! 🌐 جاري التحقق من التعديلات...', 'syncing');
         if (gasUrl) {
           syncWithGoogleSheets(false);
         }
       });
       window.addEventListener('offline', () => {
         updateSyncStatusUI();
+        showSyncToast('أنت الآن في وضع عدم الاتصال (أوفلاين) 📴', 'offline');
       });
 
       // Register PWA service worker with auto-update
