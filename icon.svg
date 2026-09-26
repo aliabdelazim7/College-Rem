@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="sageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4E9F76" />
+      <stop offset="100%" stop-color="#234B36" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  
+  <!-- App Background -->
+  <rect width="512" height="512" rx="128" fill="url(#sageGrad)" />
+  
+  <!-- Subtle decorative rings -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="4" />
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="6" stroke-dasharray="16 12" />
+
+  <!-- Badge 6 -->
+  <g filter="url(#shadow)">
+    <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF" font-size="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" letter-spacing="-4">6</text>
+  </g>
+  
+  <!-- Subtitle -->
+  <rect x="156" y="375" width="200" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.2" />
+  <text x="50%" y="396" dominant-baseline="central" text-anchor="middle" fill="#FFFFFF" font-size="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Alexandria', 'Cairo', sans-serif" font-weight="700">سكشن 6</text>
+</svg>

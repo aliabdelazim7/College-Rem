@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>سكشن 6 • الفرقة الثالثة نظم معلومات</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <meta name="theme-color" content="#3B7A57" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="سكشن 6" />
+  <meta name="application-name" content="سكشن 6" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Google Fonts: Alexandria & Plus Jakarta Sans (with system offline fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Local Vendor Scripts for 100% Offline PWA Capability -->
+  <script src="vendor/tailwind.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Alexandria', 'Cairo', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['Plus Jakarta Sans', 'monospace']
+          },
+          colors: {
+            cream: {
+              50: '#FDFCFB',
+              100: '#FBF9F5',
+              200: '#F4EFEB',
+              300: '#EAE1D9',
+              400: '#D5C4B5',
+              500: '#BAA18D'
+            },
+            sage: {
+              50: '#F3F8F5',
+              100: '#E4F1E9',
+              200: '#C8E2D2',
+              500: '#4E9F76',
+              600: '#3B7A57',
+              700: '#2F6246',
+              800: '#234B36'
+            },
+            warmdark: {
+              900: '#11141A',
+              800: '#171B24',
+              700: '#202632',
+              600: '#2B3342',
+              500: '#3D475A'
+            }
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(60, 50, 40, 0.05)',
+            'card': '0 8px 30px -4px rgba(60, 50, 40, 0.07)',
+            'glow': '0 0 25px rgba(59, 122, 87, 0.18)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Local Offline-Ready Libraries -->
+  <script src="vendor/lucide.min.js"></script>
+  <script src="vendor/confetti.browser.min.js"></script>
+  <script src="vendor/html2canvas.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Alexandria', 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D5C4B5;
+      border-radius: 999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #2B3342;
+    }
+    /* Gentle pulse badge */
+    @keyframes softPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.03); }
+    }
+    .animate-soft-pulse {
+      animation: softPulse 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#FBF9F5] text-stone-800 dark:bg-warmdark-900 dark:text-stone-100 min-h-screen transition-colors duration-300 antialiased selection:bg-sage-500 selection:text-white">
+
+  <!-- Top Announcement / Motivation Bar -->
+  <header class="border-b border-stone-200/70 dark:border-warmdark-700 bg-white/90 dark:bg-warmdark-800/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
+      
+      <!-- Brand & Section Label -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-sage-500 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-sm shadow-sage-500/20">
+          6
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-sm sm:text-lg font-bold tracking-tight text-stone-900 dark:text-white whitespace-nowrap">سكشن 6</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-sage-50 text-sage-700 border border-sage-200 dark:bg-sage-950/60 dark:text-sage-300 dark:border-sage-800">
+              نظم معلومات
+            </span>
+          </div>
+          <p class="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 font-normal hidden sm:block">الفرقة الثالثة • ترم أول 2026-2027</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Controls (Touch-Friendly & Spaced) -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Streak Counter -->
+        <button id="streakBadge" onclick="showMotivationModal()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 transition-all text-xs font-semibold shadow-xs">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-bounce"></i>
+          <span><span id="streakDays">0</span> يوم</span>
+        </button>
+
+        <!-- Google Sheets Cloud Sync Trigger -->
+        <button onclick="openSyncModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors relative" title="ربط ومزامنة جوجل شيت (Google Sheets)">
+          <i data-lucide="sheet" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
+          <span id="syncStatusDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-stone-300 dark:bg-warmdark-600"></span>
+        </button>
+
+        <!-- Time Settings Modal Trigger -->
+        <button onclick="openTimeSettingsModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="ضبط مواعيد الفترات">
+          <i data-lucide="clock" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Export Modal Trigger -->
+        <button onclick="openExportModal()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="تصدير كرت الجدول">
+          <i data-lucide="download" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors" title="تبديل المظهر">
+          <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Motivational Quote Banner -->
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-3 sm:pt-4">
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sage-50 via-cream-100 to-amber-50 dark:from-warmdark-800 dark:via-warmdark-800 dark:to-warmdark-700 border border-stone-200/80 dark:border-warmdark-600 p-4 sm:p-5 shadow-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex p-1.5 rounded-lg bg-sage-500/10 text-sage-600 dark:text-sage-400">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </span>
+          <span class="text-xs font-semibold uppercase tracking-wider text-sage-700 dark:text-sage-300">رسالة اليوم التشجيعية</span>
+        </div>
+        <p id="motivationalText" class="text-xs sm:text-base font-medium text-stone-800 dark:text-stone-200 leading-relaxed">
+          "الحضور خطوة بسيطة اليوم، لكنها تصنع فارقاً حقيقياً في فهمك ومعدلك غداً. كل يوم تحضره هو استثمار في مستقبلك!"
+        </p>
+      </div>
+
+      <!-- Quick Stats Pill -->
+      <div class="flex items-center gap-3 shrink-0 w-full md:w-auto justify-between bg-white/70 dark:bg-warmdark-900/60 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+        <div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400">معدل حضورك الإجمالي</div>
+          <div class="flex items-center gap-1.5">
+            <span id="overallAttendancePercent" class="text-base sm:text-lg font-bold text-sage-600 dark:text-sage-400">100%</span>
+            <span id="overallAttendanceBadge" class="text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold">بداية جديدة ✨</span>
+          </div>
+        </div>
+        <div class="h-7 w-px bg-stone-200 dark:bg-warmdark-700"></div>
+        <div>
+          <div class="text-[11px] text-stone-500 dark:text-stone-400">أيام الدراسة هذا الأسبوع</div>
+          <div class="text-base sm:text-lg font-bold text-stone-800 dark:text-stone-100">4 <span class="text-xs font-normal text-stone-500">أيام فقط ✨</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Status Card (Current / Next Lecture Countdown) -->
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-3 sm:pt-4">
+    <div id="liveBanner" class="rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 shadow-card flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
+      <div class="flex items-start gap-3 w-full">
+        <div id="liveStatusIconContainer" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950/60 dark:text-sage-300 flex items-center justify-center shrink-0 border border-sage-200 dark:border-sage-800/80">
+          <i id="liveStatusIcon" data-lucide="coffee" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1.5">
+            <span id="liveStatusPill" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-semibold bg-sage-100 text-sage-800 dark:bg-sage-900/60 dark:text-sage-300">
+              <span class="w-2 h-2 rounded-full bg-sage-600 dark:bg-sage-400 animate-pulse"></span>
+              <span id="liveStatusTitle">يوم راحة وإجازة رسمية 🎉</span>
+            </span>
+            <span id="liveTimeRemaining" class="text-[11px] sm:text-xs font-medium text-stone-500 dark:text-stone-400">عطلة سعيدة وراحة مستحقة ☕</span>
+          </div>
+          <h2 id="liveSubjectName" class="text-sm sm:text-lg font-bold text-stone-900 dark:text-white break-words leading-snug">
+            لا توجد أي محاضرات أو سكاشن مقررة لسكشن 6 اليوم
+          </h2>
+          <div class="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs text-stone-600 dark:text-stone-400 mt-2.5">
+            <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600 shrink-0"></i>
+              <span id="liveRoom">يوم راحة واستجمام</span>
+            </span>
+            <span class="inline-flex items-center gap-1 font-mono font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+              <span id="liveSlot">سكشن 6 • نظم معلومات</span>
+            </span>
+            <span class="inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+              <i data-lucide="user-check" class="w-3.5 h-3.5 text-stone-400 shrink-0"></i>
+              <span id="liveDoctor">استمتع بعطلتك، أو راجع شيتاتك في هدوء</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Attendance Quick Log Action -->
+      <div id="liveAttendanceActions" class="flex items-center gap-2 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-stone-100 dark:border-warmdark-700 hidden">
+        <button id="quickBtnPresent" onclick="quickMarkCurrent('present')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 active:scale-95 text-white font-medium text-xs transition-all shadow-sm">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span id="quickPresentText">سجلني حاضر</span>
+        </button>
+        <button id="quickBtnAbsent" onclick="quickMarkCurrent('absent')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-stone-100 hover:bg-rose-50 hover:text-rose-700 active:scale-95 text-stone-600 dark:bg-warmdark-700 dark:text-stone-300 dark:hover:bg-rose-950/40 dark:hover:text-rose-300 font-medium text-xs transition-all">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span id="quickAbsentText">غائب</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fixed Bottom Navigation Bar for Mobile (App-Like Experience) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-warmdark-800/95 backdrop-blur-lg border-t border-stone-200/80 dark:border-warmdark-700 py-1.5 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-around shadow-lg">
+    <button onclick="switchView('today')" id="mobile-tab-today" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-sage-600 dark:text-sage-400 bg-sage-50/90 dark:bg-sage-950/70 font-bold text-[11px] gap-1 transition-all relative">
+      <i data-lucide="calendar-check" class="w-5 h-5"></i>
+      <span>اليوم</span>
+    </button>
+    <button onclick="switchView('week')" id="mobile-tab-week" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+      <i data-lucide="layout-grid" class="w-5 h-5"></i>
+      <span>الأسبوع</span>
+    </button>
+    <button onclick="switchView('tasks')" id="mobile-tab-tasks" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+      <i data-lucide="check-square" class="w-5 h-5"></i>
+      <span>التكليفات</span>
+      <span id="mobileTasksBadge" class="absolute top-1 right-2.5 w-2 h-2 bg-rose-500 rounded-full hidden"></span>
+    </button>
+    <button onclick="switchView('subjects')" id="mobile-tab-subjects" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+      <i data-lucide="book-open" class="w-5 h-5"></i>
+      <span>المواد</span>
+    </button>
+  </nav>
+
+  <!-- Navigation View Tabs (Desktop / Tablet) -->
+  <main class="max-w-6xl mx-auto px-3.5 sm:px-6 py-4 sm:py-6 pb-28 md:pb-8">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-5 sm:mb-6">
+      
+      <!-- Views Switcher (Hidden on small mobile, replaced by bottom bar) -->
+      <div class="hidden md:flex items-center p-1 rounded-2xl bg-stone-200/60 dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 overflow-x-auto">
+        <button onclick="switchView('today')" id="tab-today" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-white bg-sage-600 shadow-sm whitespace-nowrap">
+          <i data-lucide="calendar-check" class="w-4 h-4"></i>
+          <span>جدول اليوم</span>
+        </button>
+        <button onclick="switchView('week')" id="tab-week" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <span>الجدول الأسبوعي</span>
+        </button>
+        <button onclick="switchView('subjects')" id="tab-subjects" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span>المواد والحضور</span>
+        </button>
+        <button onclick="switchView('tasks')" id="tab-tasks" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap relative">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>التكليفات والشيتات</span>
+          <span id="tabTasksBadge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500 text-white font-bold hidden">0</span>
+        </button>
+      </div>
+
+      <!-- Filter by Type -->
+      <div class="flex items-center justify-between sm:justify-start gap-2 overflow-x-auto pb-1 sm:pb-0">
+        <span class="text-xs text-stone-500 dark:text-stone-400 shrink-0">تصفية:</span>
+        <div class="flex items-center gap-1.5">
+          <button onclick="filterSchedule('all')" id="filter-all" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-800 text-white dark:bg-stone-200 dark:text-stone-900 transition-all">الكل</button>
+          <button onclick="filterSchedule('lecture')" id="filter-lecture" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-warmdark-700 transition-all">المحاضرات</button>
+          <button onclick="filterSchedule('section')" id="filter-section" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-warmdark-700 transition-all">السكاشن</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 1: TODAY'S SCHEDULE -->
+    <div id="view-today" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
+            <span id="currentDayArabic">الأحد</span>
+            <span id="currentDateFormatted" class="text-xs font-normal text-stone-500 dark:text-stone-400">27 سبتمبر 2026</span>
+          </h2>
+          <p id="todaySubtitle" class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">لديك 4 حصص مجدولة اليوم</p>
+        </div>
+
+        <!-- Day Selector for previewing any day (Clean horizontal scroll on mobile) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full sm:w-auto bg-stone-100/70 dark:bg-warmdark-800 p-1.5 rounded-2xl border border-stone-200/60 dark:border-warmdark-700">
+          <button onclick="changeDayView(6)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="6">السبت</button>
+          <button onclick="changeDayView(0)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold" data-day="0">الأحد</button>
+          <button onclick="changeDayView(1)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="1">الاثنين</button>
+          <button onclick="changeDayView(2)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="2">الثلاثاء</button>
+          <button onclick="changeDayView(3)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="3">الأربعاء</button>
+          <button onclick="changeDayView(4)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="4">الخميس</button>
+          <button onclick="changeDayView(5)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="5">الجمعة</button>
+        </div>
+      </div>
+
+      <!-- Today Cards Container -->
+      <div id="todayCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Dynamically Rendered -->
+      </div>
+    </div>
+
+    <!-- VIEW 2: FULL WEEKLY GRID -->
+    <div id="view-week" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-stone-900 dark:text-white">الجدول الأسبوعي الشامل</h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400">توزيع جميع محاضرات وسكاشن سكشن 6 على مدار أيام الأسبوع</p>
+        </div>
+        <button onclick="openExportModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-warmdark-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-warmdark-700 hover:bg-stone-50 shadow-xs">
+          <i data-lucide="image" class="w-3.5 h-3.5"></i>
+          <span>حفظ صورة الجدول</span>
+        </button>
+      </div>
+
+      <!-- Weekly Grid by Day Columns -->
+      <div id="weeklyGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- VIEW 3: SUBJECTS & ATTENDANCE TRACKER -->
+    <div id="view-subjects" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-stone-900 dark:text-white">سجل المواد ونسب الحضور</h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400">تتبع نسبة الغياب المسموح به لكل مادة (الحد الأقصى الموصى به 25%)</p>
+        </div>
+        <button onclick="resetAllAttendanceConfirm()" class="text-xs text-stone-500 hover:text-rose-600 transition-colors">
+          إعادة ضبط السجل
+        </button>
+      </div>
+
+      <!-- Subjects Cards Grid -->
+      <div id="subjectsListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- VIEW 4: TASKS & LAB ASSIGNMENTS (شيتات وتكليفات السكاشن) -->
+    <div id="view-tasks" class="hidden space-y-6">
+      
+      <!-- Top Overview & Progress Banner -->
+      <div class="rounded-2xl p-5 bg-gradient-to-r from-cream-100 via-white to-sage-50 dark:from-warmdark-800 dark:via-warmdark-800 dark:to-warmdark-700/80 border border-stone-200/80 dark:border-warmdark-700 shadow-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="p-1.5 rounded-lg bg-sage-500/10 text-sage-600 dark:text-sage-400">
+              <i data-lucide="check-check" class="w-4 h-4"></i>
+            </span>
+            <h2 class="text-lg font-bold text-stone-900 dark:text-white">شيتات وتكليفات سكشن 6</h2>
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">
+            سجل ونظم المطلوب تسليمه لمعيدي ودكاترة السكاشن حتى لا يفوتك أي موعد تسليم أو كويز!
+          </p>
+        </div>
+
+        <!-- Progress Pills -->
+        <div class="flex items-center gap-4 bg-white/80 dark:bg-warmdark-900/60 backdrop-blur-sm px-4 py-3 rounded-2xl border border-stone-200/70 dark:border-warmdark-600 self-stretch md:self-auto justify-around">
+          <div class="text-center">
+            <div class="text-[11px] text-stone-400">قيد التنفيذ</div>
+            <div id="tasksPendingCount" class="text-lg font-bold text-amber-600 dark:text-amber-400">0</div>
+          </div>
+          <div class="h-8 w-px bg-stone-200 dark:bg-warmdark-700"></div>
+          <div class="text-center">
+            <div class="text-[11px] text-stone-400">تم التسليم</div>
+            <div id="tasksCompletedCount" class="text-lg font-bold text-sage-600 dark:text-sage-400">0</div>
+          </div>
+          <div class="h-8 w-px bg-stone-200 dark:bg-warmdark-700"></div>
+          <div class="text-center">
+            <div class="text-[11px] text-stone-400">نسبة الإنجاز</div>
+            <div id="tasksProgressPercent" class="text-lg font-bold text-stone-800 dark:text-stone-100">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New Task Card -->
+      <div class="rounded-2xl p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 shadow-soft space-y-4">
+        <div class="flex items-center justify-between border-b border-stone-100 dark:border-warmdark-700 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center font-bold">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-stone-900 dark:text-white">إضافة تكليف أو شيت جديد</h3>
+              <p class="text-[11px] text-stone-400">اختر السكشن أو المحاضرة وسجل المطلوب بدقة</p>
+            </div>
+          </div>
+          <span class="text-[11px] text-stone-400">يُحفظ تلقائياً ✨</span>
+        </div>
+
+        <form id="fullTaskForm" onsubmit="handleFullTaskSubmit(event)" class="space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            
+            <!-- Section / Class Dropdown -->
+            <div>
+              <label class="block text-[11px] font-semibold text-stone-600 dark:text-stone-400 mb-1">السكشن / المحاضرة المعنية:</label>
+              <select id="formTaskClass" required class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-sage-500">
+                <optgroup label="سكاشن ومعامل سكشن 6">
+                  <option value="قواعد بيانات 2|سكشن عملي (م/ آلاء جلال - B4 Hardware)|emerald" selected>سكشن قواعد بيانات 2 (م/ آلاء جلال - B4)</option>
+                  <option value="شبكات الحاسب|سكشن عملي (م/ محمد السيد - D8)|sky">سكشن شبكات الحاسب (م/ محمد السيد - D8)</option>
+                  <option value="تحليل النظم والتصميم المنطقي|سكشن عملي (م/ محمود سعيد - B5)|amber">سكشن تحليل النظم (م/ محمود سعيد - B5)</option>
+                  <option value="نظرية المعلومات|سكشن عملي (م/ أحمد عماد الدين - قاعة 6)|purple">سكشن نظرية المعلومات (م/ أحمد عماد - قاعة 6)</option>
+                  <option value="أساليب البحث العلمي|سكشن عملي (م/ آية عياد - قاعة 6)|rose">سكشن أساليب البحث العلمي (م/ آية عياد - قاعة 6)</option>
+                </optgroup>
+                <optgroup label="المحاضرات النظرية">
+                  <option value="شبكات الحاسب|محاضرة مدرج 3 (أ.د/ أحمد عطوان، أ.د/ محمد محفوظ)|sky">محاضرة شبكات الحاسب (مدرج 3)</option>
+                  <option value="أساليب البحث العلمي|محاضرة مدرج 2 (د/ هالة عكاشة)|rose">محاضرة أساليب البحث العلمي (مدرج 2)</option>
+                  <option value="تحليل النظم والتصميم المنطقي|محاضرة مدرج 3 (أ.د/ سمير عبدالرازق)|amber">محاضرة تحليل النظم والتصميم (مدرج 3)</option>
+                  <option value="نظرية المعلومات|محاضرة مدرج 3 (د/ إسراء جمال)|purple">محاضرة نظرية المعلومات (مدرج 3)</option>
+                  <option value="قواعد بيانات 2|محاضرة مدرج 2 (أ.د/ أميرة رزق)|emerald">محاضرة قواعد بيانات 2 (مدرج 2)</option>
+                </optgroup>
+                <optgroup label="أخرى">
+                  <option value="تكليف عام|مشروع أو مادة عامة|stone">تكليف أو مشروع عام</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <!-- Task Type -->
+            <div>
+              <label class="block text-[11px] font-semibold text-stone-600 dark:text-stone-400 mb-1">نوع التكليف:</label>
+              <select id="formTaskType" class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-sage-500">
+                <option value="sheet">شيت معمل / تسليم عملي 💻</option>
+                <option value="assignment">واجب / بحث نظري 📝</option>
+                <option value="quiz">كويز / اختبار سريع ⏱️</option>
+                <option value="project">مشروع فصلي 🚀</option>
+              </select>
+            </div>
+
+            <!-- Due Date -->
+            <div>
+              <label class="block text-[11px] font-semibold text-stone-600 dark:text-stone-400 mb-1">تاريخ وموعد التسليم:</label>
+              <input id="formTaskDueDate" type="date" class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-sage-500" />
+            </div>
+
+            <!-- Priority -->
+            <div>
+              <label class="block text-[11px] font-semibold text-stone-600 dark:text-stone-400 mb-1">الأهمية:</label>
+              <select id="formTaskPriority" class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-sage-500">
+                <option value="normal">عادي (Normal)</option>
+                <option value="high">هام (Important)</option>
+                <option value="urgent">عاجل جداً (Urgent) 🔥</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Title & Submit Button -->
+          <div class="flex flex-col sm:flex-row gap-2 pt-1">
+            <input id="formTaskTitle" type="text" placeholder="اكتب عنوان الشيت أو التكليف المطلوب (مثال: تسليم شيت 1 استعلامات SQL، أو شيت الـ IP في شبكات المعمل)..." required class="flex-1 text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-sage-500" />
+            <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 active:scale-95 text-white shrink-0 flex items-center justify-center gap-1.5 shadow-sm transition-all">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>إضافة التكليف</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Filters & Tasks Grid -->
+      <div class="space-y-4">
+        <!-- Sub-filters Bar -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-stone-100/60 dark:bg-warmdark-800/60 p-2 rounded-2xl border border-stone-200/60 dark:border-warmdark-700">
+          <!-- Status Filter -->
+          <div class="flex items-center gap-1">
+            <button onclick="setTasksFilter('all')" id="task-filter-all" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-800 text-white dark:bg-stone-200 dark:text-stone-900 transition-all">جميع التكليفات</button>
+            <button onclick="setTasksFilter('pending')" id="task-filter-pending" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all">قيد التنفيذ</button>
+            <button onclick="setTasksFilter('completed')" id="task-filter-completed" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all">تم التسليم</button>
+          </div>
+
+          <!-- Subject Filter -->
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-stone-500">حسب المادة:</span>
+            <select id="tasksSubjectFilter" onchange="renderTasksView()" class="text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-700 px-2.5 py-1 text-stone-800 dark:text-stone-100 focus:outline-none">
+              <option value="all">جميع المواد والسكاشن</option>
+              <option value="شبكات الحاسب">شبكات الحاسب</option>
+              <option value="قواعد بيانات 2">قواعد بيانات 2</option>
+              <option value="تحليل النظم والتصميم المنطقي">تحليل النظم والتصميم</option>
+              <option value="نظرية المعلومات">نظرية المعلومات</option>
+              <option value="أساليب البحث العلمي">أساليب البحث العلمي</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tasks Cards List -->
+        <div id="fullTasksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL: TIME SETTINGS -->
+  <div id="timeSettingsModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all animate-in fade-in zoom-in-95">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-base font-bold text-stone-900 dark:text-white">تخصيص مواعيد الفترات</h3>
+        </div>
+        <button onclick="closeTimeSettingsModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-stone-500 dark:text-stone-400">
+        حدد وقت بداية ونهاية كل فترة دراسية لتناسب توقيت كليتك بدقة، وسيعتمدها العداد التنازلي التلقائي:
+      </p>
+
+      <!-- Period Inputs List -->
+      <div id="periodInputsList" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-stone-100 dark:border-warmdark-700">
+        <button onclick="resetDefaultPeriodTimes()" class="text-xs text-stone-500 hover:underline">استعادة الافتراضي</button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeTimeSettingsModal()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700">إلغاء</button>
+          <button onclick="savePeriodTimes()" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">حفظ المواعيد</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GOOGLE SHEETS / APPS SCRIPT SYNC -->
+  <div id="syncModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center">
+            <i data-lucide="sheet" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-stone-900 dark:text-white">ربط ومزامنة جوجل شيت</h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400">Google Apps Script Web App Integration</p>
+          </div>
+        </div>
+        <button onclick="closeSyncModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Connection Status Banner -->
+      <div id="syncStatusBanner" class="p-3 rounded-xl bg-stone-50 dark:bg-warmdark-700/60 border border-stone-200/70 dark:border-warmdark-600 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span id="syncStatusIndicator" class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+          <span id="syncStatusText" class="text-xs font-semibold text-stone-700 dark:text-stone-300">غير متصل (تخزين محلي فقط)</span>
+        </div>
+        <span id="syncLastTime" class="text-[11px] text-stone-400">لم تتم المزامنة بعد</span>
+      </div>
+
+      <!-- Web App URL Input Form -->
+      <div class="space-y-2">
+        <label class="block text-xs font-semibold text-stone-700 dark:text-stone-300">
+          رابط تطبيق الويب (Google Apps Script Web App URL):
+        </label>
+        <div class="flex gap-2">
+          <input id="gasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 text-xs font-mono rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <button onclick="saveGasUrlFromInput()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shrink-0 shadow-xs transition-all">
+            حفظ الرابط
+          </button>
+        </div>
+        <p class="text-[11px] text-stone-400">
+          تم تجهيز ملف <code class="px-1 py-0.5 rounded bg-stone-100 dark:bg-warmdark-700 text-emerald-600 font-mono font-bold">Code.gs</code> في مجلد المشروع، انسخه إلى محرر Apps Script الخاص بشيتك وانشره كتطبيق ويب.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 border-t border-stone-100 dark:border-warmdark-700 flex flex-wrap items-center justify-between gap-2">
+        <button onclick="clearAllDataConfirm()" class="px-3 py-2 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors flex items-center gap-1.5" title="تصفير ومسح قاعدة البيانات تماماً للبدء من جديد">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>تصفير ومسح البيانات</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="fetchFromGoogleSheets()" class="px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-300 bg-stone-100 dark:bg-warmdark-700 hover:bg-stone-200 dark:hover:bg-warmdark-600 transition-colors flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>سحب من الشيت</span>
+          </button>
+          <button id="manualSyncBtn" onclick="syncWithGoogleSheets(true)" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>مزامنة الآن</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TASKS & ASSIGNMENTS (شيتات وتكليفات) -->
+  <div id="tasksModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 flex items-center justify-center">
+            <i data-lucide="check-square" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-stone-900 dark:text-white">شيتات وتكليفات السكاشن</h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400">سجل المطلوب تسليمه للمعيدين والدكاترة</p>
+          </div>
+        </div>
+        <button onclick="closeTasksModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Add New Task Form -->
+      <form onsubmit="addTask(event)" class="flex flex-col sm:flex-row gap-2 pt-2">
+        <select id="taskSubject" class="text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-sage-500">
+          <option value="شبكات الحاسب">شبكات الحاسب</option>
+          <option value="قواعد بيانات 2">قواعد بيانات 2</option>
+          <option value="تحليل النظم والتصميم المنطقي">تحليل النظم</option>
+          <option value="نظرية المعلومات">نظرية المعلومات</option>
+          <option value="أساليب البحث العلمي">أساليب البحث العلمي</option>
+        </select>
+        <input id="taskTitle" type="text" placeholder="مثال: تسليم شيت 1 أو كويز المعمل" required class="flex-1 text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-sage-500" />
+        <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shrink-0 flex items-center justify-center gap-1 shadow-xs">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>إضافة</span>
+        </button>
+      </form>
+
+      <!-- Tasks List -->
+      <div id="tasksList" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EXPORT / PRINTABLE CARD -->
+  <div id="exportModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-2xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-stone-900 dark:text-white">كرت الجدول الجمالي (للحفظ والمشاركة)</h3>
+          <p class="text-xs text-stone-500 dark:text-stone-400">تصميم أنيق ومريح تم تنسيقه ليكون خلفية مميزة أو نسخة مطبوعة</p>
+        </div>
+        <button onclick="closeExportModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Printable Card Preview Canvas Container -->
+      <div id="printableCardArea" class="bg-gradient-to-br from-[#FDFBF7] to-[#F5EFEB] text-stone-800 p-6 rounded-2xl border border-stone-300/70 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-stone-200/80 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-sage-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">
+              6
+            </div>
+            <div>
+              <div class="text-sm font-bold text-stone-900">جدول سكشن 6 • الفرقة الثالثة</div>
+              <div class="text-[11px] text-stone-500">قسم نظم معلومات • الترم الأول 2026-2027</div>
+            </div>
+          </div>
+          <div class="text-left text-[11px] text-stone-500">
+            <div>الأيام الدراسية: 4 أيام</div>
+            <div class="text-sage-700 font-semibold">الجمعة والسبت والأربعاء إجازة ✨</div>
+          </div>
+        </div>
+
+        <!-- Compact Schedule List for Export -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <!-- Sunday -->
+          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+            <div class="font-bold text-sage-800 flex items-center justify-between text-xs">
+              <span>الأحد</span>
+              <span class="text-[10px] text-stone-400 font-normal">4 فترات</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف1: محاضرة شبكات (مدرج 3)</div>
+              <div class="p-1 rounded bg-emerald-50 text-emerald-900 font-medium">ف2: سكشن قواعد بيانات 2 (قاعة B4 Hardware)</div>
+              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف3: محاضرة أساليب البحث العلمي (مدرج 2)</div>
+              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف4: سكشن شبكات الحاسب (قاعة D8)</div>
+            </div>
+          </div>
+
+          <!-- Monday -->
+          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+            <div class="font-bold text-amber-800 flex items-center justify-between text-xs">
+              <span>الاثنين</span>
+              <span class="text-[10px] text-stone-400 font-normal">2 فترات</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف2: محاضرة تحليل النظم والتصميم (مدرج 3)</div>
+              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف3: محاضرة نظرية المعلومات (مدرج 3)</div>
+            </div>
+          </div>
+
+          <!-- Tuesday -->
+          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+            <div class="font-bold text-purple-800 flex items-center justify-between text-xs">
+              <span>الثلاثاء</span>
+              <span class="text-[10px] text-stone-400 font-normal">3 سكاشن</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف4: سكشن نظرية المعلومات (قاعة 6)</div>
+              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف5: سكشن أساليب البحث العلمي (قاعة 6)</div>
+              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف6: سكشن تحليل النظم (قاعة B5)</div>
+            </div>
+          </div>
+
+          <!-- Thursday -->
+          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+            <div class="font-bold text-emerald-800 flex items-center justify-between text-xs">
+              <span>الخميس</span>
+              <span class="text-[10px] text-stone-400 font-normal">فترة واحدة صباحية</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 font-medium">ف1: محاضرة قواعد بيانات 2 (مدرج 2) - أ.د/ أميرة رزق</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-center text-stone-400 pt-1">
+          تم إنشاؤه عبر نظام سكشن 6 الذكي • درجات الباستيل الهادئة
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="closeExportModal()" class="px-3 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300">إغلاق</button>
+        <button onclick="downloadCardImage()" id="downloadCardBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>تحميل كصورة عالية الجودة (PNG)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOTIVATION POPUP MODAL -->
+  <div id="motivationModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4">
+      <div class="w-16 h-16 rounded-3xl bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-400 mx-auto flex items-center justify-center text-2xl shadow-inner">
+        🔥
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-stone-900 dark:text-white">سلسلة الالتزام مستمرة!</h3>
+        <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">
+          أنت الآن في اليوم <span id="streakModalDays" class="font-bold text-amber-600 dark:text-amber-400">3</span> من الحضور المتواصل.
+        </p>
+      </div>
+      <div class="p-3.5 rounded-2xl bg-sage-50 dark:bg-warmdark-700/60 border border-sage-200/60 dark:border-warmdark-600 text-xs text-sage-800 dark:text-sage-300">
+        "الانتظام في الحضور يوفر عليك 70% من وقت المذاكرة ليلة الامتحان!" 💡
+      </div>
+      <button onclick="closeMotivationModal()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">
+        متحمس ومكمل! 💪
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ----------------------------------------------------
+    // 1. DATA & SCHEDULE STRUCTURE FOR SECTION 6
+    // ----------------------------------------------------
+    const initialSchedule = [
+      // الأحد (Sunday = 0)
+      {
+        id: "sun-1",
+        day: "الأحد",
+        dayIndex: 0,
+        period: 1,
+        subject: "شبكات الحاسب",
+        type: "lecture",
+        typeLabel: "محاضرة",
+        doctor: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ",
+        room: "مدرج 3",
+        color: "sky"
+      },
+      {
+        id: "sun-2",
+        day: "الأحد",
+        dayIndex: 0,
+        period: 2,
+        subject: "قواعد بيانات 2",
+        type: "section",
+        typeLabel: "سكشن عملي",
+        doctor: "م/ آلاء جلال",
+        room: "قاعة B4 (Hardware)",
+        color: "emerald"
+      },
+      {
+        id: "sun-3",
+        day: "الأحد",
+        dayIndex: 0,
+        period: 3,
+        subject: "أساليب البحث العلمي",
+        type: "lecture",
+        typeLabel: "محاضرة",
+        doctor: "د/ هالة عكاشة",
+        room: "مدرج 2",
+        color: "rose"
+      },
+      {
+        id: "sun-4",
+        day: "الأحد",
+        dayIndex: 0,
+        period: 4,
+        subject: "شبكات الحاسب",
+        type: "section",
+        typeLabel: "سكشن عملي",
+        doctor: "م/ محمد السيد",
+        room: "قاعة D8",
+        color: "sky"
+      },
+
+      // الاثنين (Monday = 1)
+      {
+        id: "mon-2",
+        day: "الاثنين",
+        dayIndex: 1,
+        period: 2,
+        subject: "تحليل النظم والتصميم المنطقي",
+        type: "lecture",
+        typeLabel: "محاضرة",
+        doctor: "أ.د/ سمير عبدالرازق",
+        room: "مدرج 3",
+        color: "amber"
+      },
+      {
+        id: "mon-3",
+        day: "الاثنين",
+        dayIndex: 1,
+        period: 3,
+        subject: "نظرية المعلومات",
+        type: "lecture",
+        typeLabel: "محاضرة",
+        doctor: "د/ إسراء جمال",
+        room: "مدرج 3",
+        color: "purple"
+      },
+
+      // الثلاثاء (Tuesday = 2)
+      {
+        id: "tue-4",
+        day: "الثلاثاء",
+        dayIndex: 2,
+        period: 4,
+        subject: "نظرية المعلومات",
+        type: "section",
+        typeLabel: "سكشن عملي",
+        doctor: "م/ أحمد عماد الدين",
+        room: "قاعة 6",
+        color: "purple"
+      },
+      {
+        id: "tue-5",
+        day: "الثلاثاء",
+        dayIndex: 2,
+        period: 5,
+        subject: "أساليب البحث العلمي",
+        type: "section",
+        typeLabel: "سكشن عملي",
+        doctor: "م/ آية عياد",
+        room: "قاعة 6",
+        color: "rose"
+      },
+      {
+        id: "tue-6",
+        day: "الثلاثاء",
+        dayIndex: 2,
+        period: 6,
+        subject: "تحليل النظم والتصميم المنطقي",
+        type: "section",
+        typeLabel: "سكشن عملي",
+        doctor: "م/ محمود سعيد",
+        room: "قاعة B5",
+        color: "amber"
+      },
+
+      // الخميس (Thursday = 4)
+      {
+        id: "thu-1",
+        day: "الخميس",
+        dayIndex: 4,
+        period: 1,
+        subject: "قواعد بيانات 2",
+        type: "lecture",
+        typeLabel: "محاضرة",
+        doctor: "أ.د/ أميرة رزق",
+        room: "مدرج 2",
+        color: "emerald"
+      }
+    ];
+
+    const defaultPeriodTimes = {
+      1: { start: "08:30", end: "10:00" },
+      2: { start: "10:00", end: "11:30" },
+      3: { start: "11:30", end: "13:00" },
+      4: { start: "13:00", end: "14:30" },
+      5: { start: "14:30", end: "16:00" },
+      6: { start: "16:00", end: "17:30" }
+    };
+
+    const motivationalQuotes = [
+      "كل محاضرة تحضرها اليوم تزيد من فهمك وتوفر ساعات طويلة من الضغط ليلة الامتحان!",
+      "الالتزام هو الجسر بين أهدافك وطموحك وبين تحقيقها على أرض الواقع.",
+      "صباح النشاط! ركز في نقاط المعيد والدكتور واكتب ملاحظاتك بذكاء.",
+      "فخورين بانتظامك وسعيك! جدولك منظم ومريح، واليوم يوم إنجاز جديد.",
+      "حضورك يعكس احترامك لعلمك وطاقتك، استمتع بيومك الدراسي!"
+    ];
+
+    // Color theme classes helper
+    const colorThemes = {
+      sky: {
+        badge: "bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800",
+        border: "border-sky-200 dark:border-sky-900/50",
+        accent: "text-sky-600 dark:text-sky-400",
+        dot: "bg-sky-500"
+      },
+      emerald: {
+        badge: "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+        border: "border-emerald-200 dark:border-emerald-900/50",
+        accent: "text-emerald-600 dark:text-emerald-400",
+        dot: "bg-emerald-500"
+      },
+      amber: {
+        badge: "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+        border: "border-amber-200 dark:border-amber-900/50",
+        accent: "text-amber-600 dark:text-amber-400",
+        dot: "bg-amber-500"
+      },
+      purple: {
+        badge: "bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800",
+        border: "border-purple-200 dark:border-purple-900/50",
+        accent: "text-purple-600 dark:text-purple-400",
+        dot: "bg-purple-500"
+      },
+      rose: {
+        badge: "bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800",
+        border: "border-rose-200 dark:border-rose-900/50",
+        accent: "text-rose-600 dark:text-rose-400",
+        dot: "bg-rose-500"
+      }
+    };
+
+    // ----------------------------------------------------
+    // 2. STATE INITIALIZATION (LocalStorage & Cloud Zeroed)
+    // ----------------------------------------------------
+    let periodTimes = JSON.parse(localStorage.getItem('sakan6_periodTimes')) || defaultPeriodTimes;
+    let attendanceData = JSON.parse(localStorage.getItem('sakan6_attendance')) || {};
+    let streakCount = parseInt(localStorage.getItem('sakan6_streak') || "0", 10);
+    let tasksList = JSON.parse(localStorage.getItem('sakan6_tasks')) || [];
+    let gasUrl = localStorage.getItem('sakan6_gas_url') || "";
+    let currentFilter = 'all';
+    let currentView = 'today';
+    let activeDayView = new Date().getDay(); // 0 is Sunday, 1 Monday, 2 Tuesday, 4 Thursday...
+
+    // ----------------------------------------------------
+    // 3. SOUND EFFECT (Soft Zen Audio via Web Audio API)
+    // ----------------------------------------------------
+    function playChime(type = 'success') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        const now = audioCtx.currentTime;
+        if (type === 'success') {
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        } else if (type === 'undo') {
+          osc.frequency.setValueAtTime(440.00, now); // A4
+          osc.frequency.exponentialRampToValueAtTime(349.23, now + 0.08); // F4
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else {
+          osc.frequency.setValueAtTime(329.63, now); // E4
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        }
+      } catch (e) {}
+    }
+
+    // ----------------------------------------------------
+    // 4. RENDER TODAY'S CARDS
+    // ----------------------------------------------------
+    function renderTodayView() {
+      const container = document.getElementById('todayCardsList');
+      const dayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      const currentDayName = dayNames[activeDayView];
+      
+      const dayEl = document.getElementById('currentDayArabic');
+      if (dayEl) dayEl.innerText = currentDayName;
+
+      // Calculate dynamic date for activeDayView
+      const now = new Date();
+      const currentDay = now.getDay();
+      const diff = activeDayView - currentDay;
+      const targetDate = new Date(now);
+      targetDate.setDate(now.getDate() + diff);
+
+      try {
+        const dateFormatted = targetDate.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
+        const dateEl = document.getElementById('currentDateFormatted');
+        if (dateEl) {
+          dateEl.innerText = (diff === 0) ? `(اليوم) • ${dateFormatted}` : dateFormatted;
+        }
+      } catch (e) {}
+      
+      // Update day buttons state
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        if (parseInt(btn.getAttribute('data-day'), 10) === activeDayView) {
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold shadow-xs border border-sage-200/80 dark:border-sage-800";
+        } else {
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 font-medium border border-transparent";
+        }
+      });
+
+      // Filter classes for the active day
+      let dayClasses = initialSchedule.filter(c => c.dayIndex === activeDayView);
+      if (currentFilter !== 'all') {
+        dayClasses = dayClasses.filter(c => c.type === currentFilter);
+      }
+
+      if (dayClasses.length === 0) {
+        let isHoliday = [3, 5, 6].includes(activeDayView); // Wed, Fri, Sat
+        container.innerHTML = `
+          <div class="col-span-full py-12 px-6 rounded-2xl bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-sage-50 dark:bg-sage-950/60 text-sage-600 dark:text-sage-300 mx-auto flex items-center justify-center">
+              <i data-lucide="${isHoliday ? 'coffee' : 'calendar-x'}" class="w-7 h-7"></i>
+            </div>
+            <h3 class="text-base font-bold text-stone-900 dark:text-white">
+              ${isHoliday ? 'يوم راحة وإجازة رسمية لسكشن 6 🎉' : 'لا توجد حصص مطابقة للتصفية'}
+            </h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
+              ${isHoliday ? 'استمتع بوقتك في شحن طاقتك، مراجعة التكليفات السابقة، أو قضاء أوقات ممتعة!' : 'يمكنك تبديل التصفية لعرض جميع المحاضرات والسكاشن.'}
+            </p>
+          </div>
+        `;
+        document.getElementById('todaySubtitle').innerText = isHoliday ? 'يوم راحة وهدوء، لا توجد محاضرات مقررة اليوم' : 'لا توجد حصص';
+        lucide.createIcons();
+        return;
+      }
+
+      document.getElementById('todaySubtitle').innerText = `لديك ${dayClasses.length} حصص مجدولة (${dayClasses.filter(c => c.type==='lecture').length} محاضرة + ${dayClasses.filter(c => c.type==='section').length} سكشن)`;
+
+      container.innerHTML = dayClasses.map(c => {
+        const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+        const theme = colorThemes[c.color] || colorThemes.sky;
+        const attStatus = attendanceData[c.id] || 'pending'; // 'present', 'absent', 'excused', 'pending'
+
+        return `
+          <div class="rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3.5 group">
+            <div class="space-y-3">
+              <!-- Top Row: Period & Type Badge -->
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2.5 py-1 rounded-xl text-xs font-semibold ${theme.badge} shrink-0">
+                    ${c.typeLabel}
+                  </span>
+                  <span class="text-xs font-mono font-medium text-stone-500 dark:text-stone-400 inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2 py-0.5 rounded-lg border border-stone-200/50 dark:border-warmdark-600 shrink-0">
+                    <i data-lucide="clock" class="w-3.5 h-3.5 text-stone-400"></i>
+                    <span>ف${c.period} (${slot.start} - ${slot.end})</span>
+                  </span>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  ${attStatus === 'present' ? `
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800 shadow-xs">
+                      <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                      <span>حاضر</span>
+                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-emerald-200/60 dark:hover:bg-emerald-900/80 rounded-md p-0.5 text-emerald-700 dark:text-emerald-300 transition-colors">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                      </button>
+                    </div>` : ''}
+                  ${attStatus === 'absent' ? `
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950 dark:text-rose-300 dark:border-rose-800 shadow-xs">
+                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                      <span>غائب</span>
+                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-rose-200/60 dark:hover:bg-rose-900/80 rounded-md p-0.5 text-rose-700 dark:text-rose-300 transition-colors">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                      </button>
+                    </div>` : ''}
+                  ${attStatus === 'excused' ? `
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-stone-100 text-stone-600 border border-stone-200 dark:bg-warmdark-700 dark:text-stone-300 dark:border-warmdark-600 shadow-xs">
+                      <span>ملغاة / اعتذار</span>
+                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-stone-200 dark:hover:bg-warmdark-600 rounded-md p-0.5 text-stone-500 transition-colors">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                      </button>
+                    </div>` : ''}
+                </div>
+              </div>
+
+              <!-- Subject & Details -->
+              <div>
+                <h3 class="text-base sm:text-lg font-bold text-stone-900 dark:text-white group-hover:${theme.accent} transition-colors leading-snug">
+                  ${c.subject}
+                </h3>
+                <div class="flex flex-wrap items-center gap-2 text-xs text-stone-600 dark:text-stone-400 mt-2.5">
+                  <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600 shrink-0">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600"></i>
+                    <span>${c.room}</span>
+                  </span>
+                  <span class="inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-stone-400"></i>
+                    <span>${c.doctor}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Attendance Action Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-stone-100 dark:border-warmdark-700 text-xs">
+              <span class="text-stone-400 text-xs font-medium">تسجيل الحضور:</span>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <button onclick="setAttendance('${c.id}', 'present')" title="${attStatus === 'present' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'تسجيل حاضر'}" class="py-1.5 px-3 rounded-xl ${attStatus === 'present' ? 'bg-emerald-600 text-white shadow-xs font-semibold ring-2 ring-emerald-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-600 dark:text-stone-300 hover:bg-emerald-50 hover:text-emerald-700 font-medium'} active:scale-95 transition-all inline-flex items-center gap-1.5 text-xs">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>حاضر</span>
+                </button>
+                <button onclick="setAttendance('${c.id}', 'absent')" title="${attStatus === 'absent' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'تسجيل غائب'}" class="py-1.5 px-3 rounded-xl ${attStatus === 'absent' ? 'bg-rose-600 text-white shadow-xs font-semibold ring-2 ring-rose-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-600 dark:text-stone-300 hover:bg-rose-50 hover:text-rose-700 font-medium'} active:scale-95 transition-all inline-flex items-center gap-1.5 text-xs">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  <span>غياب</span>
+                </button>
+                <button onclick="setAttendance('${c.id}', 'excused')" title="${attStatus === 'excused' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'ملغاة'}" class="py-1.5 px-2.5 rounded-xl ${attStatus === 'excused' ? 'bg-stone-600 text-white shadow-xs font-semibold ring-2 ring-stone-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-400 hover:text-stone-600 font-medium'} active:scale-95 transition-all text-xs">
+                  ملغاة
+                </button>
+                ${attStatus !== 'pending' ? `
+                  <button onclick="setAttendance('${c.id}', null)" title="إلغاء التحديد وحذف الاختيار" class="py-1.5 px-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 active:scale-95 transition-all inline-flex items-center gap-1 text-[11px] font-semibold">
+                    <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                    <span>إلغاء الاختيار</span>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 5. RENDER WEEKLY GRID
+    // ----------------------------------------------------
+    function renderWeeklyGrid() {
+      const container = document.getElementById('weeklyGridContainer');
+      const days = [
+        { name: "السبت", index: 6, isHoliday: true },
+        { name: "الأحد", index: 0, isHoliday: false },
+        { name: "الاثنين", index: 1, isHoliday: false },
+        { name: "الثلاثاء", index: 2, isHoliday: false },
+        { name: "الأربعاء", index: 3, isHoliday: true },
+        { name: "الخميس", index: 4, isHoliday: false },
+        { name: "الجمعة", index: 5, isHoliday: true }
+      ];
+
+      container.innerHTML = days.map(day => {
+        let classes = initialSchedule.filter(c => c.dayIndex === day.index);
+        if (currentFilter !== 'all') {
+          classes = classes.filter(c => c.type === currentFilter);
+        }
+
+        return `
+          <div class="rounded-2xl p-4 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 flex flex-col justify-between shadow-soft">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-stone-100 dark:border-warmdark-700 pb-2">
+                <span class="font-bold text-sm text-stone-900 dark:text-white">${day.name}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full ${day.isHoliday ? 'bg-stone-100 text-stone-500 dark:bg-warmdark-700' : 'bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300'} font-semibold">
+                  ${day.isHoliday ? 'إجازة' : `${classes.length} حصص`}
+                </span>
+              </div>
+
+              ${day.isHoliday ? `
+                <div class="py-8 text-center space-y-1 text-stone-400">
+                  <i data-lucide="coffee" class="w-6 h-6 mx-auto opacity-70"></i>
+                  <p class="text-xs">راحة واستجمام</p>
+                </div>
+              ` : `
+                <div class="space-y-2">
+                  ${classes.map(c => {
+                    const theme = colorThemes[c.color] || colorThemes.sky;
+                    const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                    return `
+                      <div class="p-2.5 rounded-xl border ${theme.border} bg-stone-50/70 dark:bg-warmdark-700/50 space-y-1 text-xs">
+                        <div class="flex items-center justify-between">
+                          <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 line-clamp-1">${c.subject}</span>
+                          <span class="text-[9px] px-1.5 py-0.5 rounded ${theme.badge} shrink-0">${c.typeLabel}</span>
+                        </div>
+                        <div class="text-[10px] text-stone-500 flex items-center justify-between">
+                          <span>ف${c.period} (${slot.start})</span>
+                          <span class="font-medium text-stone-700 dark:text-stone-300">${c.room}</span>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 6. RENDER SUBJECTS & ATTENDANCE SUMMARY
+    // ----------------------------------------------------
+    function renderSubjectsSummary() {
+      const container = document.getElementById('subjectsListContainer');
+      const uniqueSubjects = [
+        { name: "شبكات الحاسب", color: "sky", doc: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ", ta: "م/ محمد السيد" },
+        { name: "قواعد بيانات 2", color: "emerald", doc: "أ.د/ أميرة رزق", ta: "م/ آلاء جلال" },
+        { name: "تحليل النظم والتصميم المنطقي", color: "amber", doc: "أ.د/ سمير عبدالرازق", ta: "م/ محمود سعيد" },
+        { name: "نظرية المعلومات", color: "purple", doc: "د/ إسراء جمال", ta: "م/ أحمد عماد الدين" },
+        { name: "أساليب البحث العلمي", color: "rose", doc: "د/ هالة عكاشة", ta: "م/ آية عياد" }
+      ];
+
+      // Calculate attendance stats
+      container.innerHTML = uniqueSubjects.map(sub => {
+        const theme = colorThemes[sub.color] || colorThemes.sky;
+        const subClasses = initialSchedule.filter(c => c.subject === sub.name);
+        
+        let presentCount = 0;
+        let absentCount = 0;
+        subClasses.forEach(c => {
+          const status = attendanceData[c.id];
+          if (status === 'present') presentCount++;
+          if (status === 'absent') absentCount++;
+        });
+
+        // Clean realistic attendance calculation (Zero-base ready)
+        const totalRecorded = presentCount + absentCount;
+        const percent = totalRecorded > 0 ? Math.min(100, Math.max(0, Math.round((presentCount / totalRecorded) * 100))) : 100;
+        const maxAllowedAbsence = 3; // 25% limit
+        const absentTotal = Math.max(0, absentCount);
+        const remainingAbsence = Math.max(0, maxAllowedAbsence - absentTotal);
+
+        return `
+          <div class="rounded-2xl p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold ${theme.badge} mb-1">
+                  نظم معلومات
+                </span>
+                <h3 class="text-base font-bold text-stone-900 dark:text-white">${sub.name}</h3>
+              </div>
+              <div class="text-left">
+                <span class="text-xl font-bold ${percent >= 75 ? 'text-sage-600 dark:text-sage-400' : 'text-rose-600 dark:text-rose-400'}">${percent}%</span>
+                <div class="text-[10px] text-stone-400">نسبة الحضور</div>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="space-y-1">
+              <div class="w-full bg-stone-100 dark:bg-warmdark-700 rounded-full h-2 overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-500 ${percent >= 75 ? 'bg-sage-500' : 'bg-rose-500'}" style="width: ${percent}%"></div>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400 pt-0.5">
+                <span>الغياب المسجل: <strong class="text-stone-800 dark:text-stone-200">${absentTotal}</strong></span>
+                <span>المتبقي قبل الخطر: <strong class="${remainingAbsence <= 1 ? 'text-rose-600 font-bold' : 'text-sage-600'}">${remainingAbsence} مرات</strong></span>
+              </div>
+            </div>
+
+            <!-- Teaching Staff -->
+            <div class="pt-2 border-t border-stone-100 dark:border-warmdark-700 text-xs text-stone-500 space-y-1">
+              <div class="flex items-center gap-1.5">
+                <span class="font-medium text-stone-700 dark:text-stone-300">المحاضر:</span>
+                <span>${sub.doc}</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-medium text-stone-700 dark:text-stone-300">المعيد:</span>
+                <span>${sub.ta}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 7. LIVE BANNER & COUNTDOWN ENGINE
+    // ----------------------------------------------------
+    function formatDurationArabic(mins) {
+      if (mins <= 0) return "الآن";
+      if (mins < 60) return `${mins} دقيقة`;
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      let hStr = h === 1 ? "ساعة" : h === 2 ? "ساعتين" : (h >= 3 && h <= 10) ? `${h} ساعات` : `${h} ساعة`;
+      if (m === 0) return hStr;
+      return `${hStr} و ${m} دقيقة`;
+    }
+
+    function updateLiveBanner() {
+      const now = new Date();
+      const currentDay = now.getDay(); // 0 = Sunday
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // Find upcoming or ongoing class today
+      const todayClasses = initialSchedule.filter(c => c.dayIndex === currentDay);
+      let ongoing = null;
+      let nextClass = null;
+
+      for (let c of todayClasses) {
+        const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+        const [sh, sm] = slot.start.split(':').map(Number);
+        const [eh, em] = slot.end.split(':').map(Number);
+        const startMin = sh * 60 + sm;
+        const endMin = eh * 60 + em;
+
+        if (currentMinutes >= startMin && currentMinutes <= endMin) {
+          ongoing = c;
+          break;
+        } else if (currentMinutes < startMin) {
+          if (!nextClass) nextClass = c;
+        }
+      }
+
+      const statusTitle = document.getElementById('liveStatusTitle');
+      const timeRemaining = document.getElementById('liveTimeRemaining');
+      const subjectName = document.getElementById('liveSubjectName');
+      const room = document.getElementById('liveRoom');
+      const doc = document.getElementById('liveDoctor');
+      const slotLabel = document.getElementById('liveSlot');
+      const banner = document.getElementById('liveBanner');
+      const actions = document.getElementById('liveAttendanceActions');
+      const icon = document.getElementById('liveStatusIcon');
+
+      const isHoliday = [3, 5, 6].includes(currentDay); // 3=Wed, 5=Fri, 6=Sat
+
+      if (ongoing) {
+        if (icon) icon.setAttribute('data-lucide', 'play-circle');
+        if (statusTitle) statusTitle.innerText = "جارية الآن 🔴";
+        const slot = periodTimes[ongoing.period] || defaultPeriodTimes[ongoing.period];
+        const [eh, em] = slot.end.split(':').map(Number);
+        const left = Math.max(0, (eh * 60 + em) - currentMinutes);
+        if (timeRemaining) timeRemaining.innerText = `تنتهي خلال ${formatDurationArabic(left)}`;
+        if (subjectName) subjectName.innerText = `${ongoing.subject} (${ongoing.typeLabel})`;
+        if (room) room.innerText = ongoing.room;
+        if (doc) doc.innerText = ongoing.doctor;
+        if (slotLabel) slotLabel.innerText = `الفترة ${ongoing.period} (${slot.start} - ${slot.end})`;
+      } else if (nextClass) {
+        if (icon) icon.setAttribute('data-lucide', 'clock');
+        if (statusTitle) statusTitle.innerText = "المحاضرة القادمة";
+        const slot = periodTimes[nextClass.period] || defaultPeriodTimes[nextClass.period];
+        const [sh, sm] = slot.start.split(':').map(Number);
+        const left = Math.max(0, (sh * 60 + sm) - currentMinutes);
+        if (timeRemaining) timeRemaining.innerText = `تبدأ بعد ${formatDurationArabic(left)}`;
+        if (subjectName) subjectName.innerText = `${nextClass.subject} (${nextClass.typeLabel})`;
+        if (room) room.innerText = nextClass.room;
+        if (doc) doc.innerText = nextClass.doctor;
+        if (slotLabel) slotLabel.innerText = `الفترة ${nextClass.period} (${slot.start} - ${slot.end})`;
+      } else if (isHoliday) {
+        // Off-day / Weekend (Saturday, Wednesday, Friday)
+        if (icon) icon.setAttribute('data-lucide', 'coffee');
+        if (statusTitle) statusTitle.innerText = "يوم راحة وإجازة رسمية 🎉";
+        if (timeRemaining) timeRemaining.innerText = "عطلة سعيدة وراحة مستحقة ☕";
+        if (subjectName) subjectName.innerText = "لا توجد أي محاضرات أو سكاشن مقررة لسكشن 6 اليوم";
+        if (room) room.innerText = "يوم راحة واستجمام";
+        if (doc) doc.innerText = "استمتع بعطلتك، أو راجع شيتاتك في هدوء";
+        if (slotLabel) slotLabel.innerText = "سكشن 6 • نظم معلومات";
+      } else {
+        // Study day but all classes finished
+        if (icon) icon.setAttribute('data-lucide', 'check-circle-2');
+        if (statusTitle) statusTitle.innerText = "انتهى اليوم الدراسي بنجاح ✨";
+        if (timeRemaining) timeRemaining.innerText = "أحسنت صنعاً اليوم!";
+        if (subjectName) subjectName.innerText = "انتهت جميع حصص اليوم المقررة لسكشن 6";
+        if (room) room.innerText = "انتهى الدوام";
+        if (doc) doc.innerText = "راجع تكليفاتك واستعد لليوم القادم";
+        if (slotLabel) slotLabel.innerText = "لا توجد حصص متبقية اليوم";
+      }
+
+      // Sync Quick Action Buttons in Live Banner
+      const targetClass = ongoing || nextClass;
+      if (targetClass && actions) {
+        actions.classList.remove('hidden');
+        const attStatus = attendanceData[targetClass.id];
+        const pBtn = document.getElementById('quickBtnPresent');
+        const aBtn = document.getElementById('quickBtnAbsent');
+        const pText = document.getElementById('quickPresentText');
+        const aText = document.getElementById('quickAbsentText');
+
+        if (pBtn && pText) {
+          if (attStatus === 'present') {
+            pBtn.className = "flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 ring-2 ring-emerald-400/50 text-white font-semibold text-xs shadow-xs transition-all";
+            pText.innerText = "مسجل حاضر ✓ (تراجع)";
+          } else {
+            pBtn.className = "flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 active:scale-95 text-white font-medium text-xs transition-all shadow-sm";
+            pText.innerText = "سجلني حاضر";
+          }
+        }
+
+        if (aBtn && aText) {
+          if (attStatus === 'absent') {
+            aBtn.className = "flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-rose-600 ring-2 ring-rose-400/50 text-white font-semibold text-xs transition-all shadow-xs";
+            aText.innerText = "مسجل غياب ✕ (تراجع)";
+          } else {
+            aBtn.className = "flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-stone-100 hover:bg-rose-50 hover:text-rose-700 active:scale-95 text-stone-600 dark:bg-warmdark-700 dark:text-stone-300 dark:hover:bg-rose-950/40 dark:hover:text-rose-300 font-medium text-xs transition-all";
+            aText.innerText = "غائب";
+          }
+        }
+      } else if (actions) {
+        actions.classList.add('hidden');
+      }
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 8. ATTENDANCE & STREAK ACTIONS
+    // ----------------------------------------------------
+    function setAttendance(classId, status) {
+      const currentStatus = attendanceData[classId];
+
+      // Case 1: Toggle off / deselect / cancel
+      // If clicking the same status that was already selected, or passing null/empty
+      if (currentStatus === status || !status) {
+        if (currentStatus === 'present') {
+          streakCount = Math.max(0, streakCount - 1);
+          localStorage.setItem('sakan6_streak', streakCount.toString());
+          const streakEl = document.getElementById('streakDays');
+          if (streakEl) streakEl.innerText = streakCount;
+        }
+        delete attendanceData[classId];
+        localStorage.setItem('sakan6_attendance', JSON.stringify(attendanceData));
+        playChime('undo');
+      } else {
+        // Case 2: Changing selection or setting new selection
+        if (currentStatus === 'present' && status !== 'present') {
+          streakCount = Math.max(0, streakCount - 1);
+          localStorage.setItem('sakan6_streak', streakCount.toString());
+          const streakEl = document.getElementById('streakDays');
+          if (streakEl) streakEl.innerText = streakCount;
+        } else if (currentStatus !== 'present' && status === 'present') {
+          streakCount++;
+          localStorage.setItem('sakan6_streak', streakCount.toString());
+          const streakEl = document.getElementById('streakDays');
+          if (streakEl) streakEl.innerText = streakCount;
+          playChime('success');
+          triggerConfetti();
+        }
+
+        attendanceData[classId] = status;
+        localStorage.setItem('sakan6_attendance', JSON.stringify(attendanceData));
+
+        if (status !== 'present') {
+          playChime('error');
+        }
+      }
+
+      renderTodayView();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      syncWithGoogleSheets(false);
+    }
+
+    function updateOverallStats() {
+      const uniqueSubjects = [
+        "شبكات الحاسب",
+        "قواعد بيانات 2",
+        "تحليل النظم والتصميم المنطقي",
+        "نظرية المعلومات",
+        "أساليب البحث العلمي"
+      ];
+      let totalPresent = 0;
+      let totalAbsent = 0;
+      uniqueSubjects.forEach(subName => {
+        const subClasses = initialSchedule.filter(c => c.subject === subName);
+        subClasses.forEach(c => {
+          const status = attendanceData[c.id];
+          if (status === 'present') totalPresent++;
+          if (status === 'absent') totalAbsent++;
+        });
+      });
+      const totalRecorded = totalPresent + totalAbsent;
+      const avg = totalRecorded > 0 ? Math.round((totalPresent / totalRecorded) * 100) : 100;
+      const overallEl = document.getElementById('overallAttendancePercent');
+      const badgeEl = document.getElementById('overallAttendanceBadge');
+      if (overallEl) overallEl.innerText = `${avg}%`;
+      if (badgeEl) {
+        if (totalRecorded === 0) {
+          badgeEl.innerText = 'بداية جديدة ✨';
+          badgeEl.className = 'text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold';
+        } else if (avg >= 85) {
+          badgeEl.innerText = 'ممتاز';
+          badgeEl.className = 'text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold';
+        } else if (avg >= 70) {
+          badgeEl.innerText = 'جيد جداً';
+          badgeEl.className = 'text-[10px] px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 font-semibold';
+        } else {
+          badgeEl.innerText = 'تنبيه غياب';
+          badgeEl.className = 'text-[10px] px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-semibold';
+        }
+      }
+    }
+
+    function quickMarkCurrent(status) {
+      const now = new Date();
+      const currentDay = now.getDay();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const todayClasses = initialSchedule.filter(c => c.dayIndex === currentDay);
+      if (todayClasses.length === 0) return;
+
+      let target = null;
+      for (let c of todayClasses) {
+        const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+        const [sh, sm] = slot.start.split(':').map(Number);
+        const [eh, em] = slot.end.split(':').map(Number);
+        if (currentMinutes >= sh * 60 + sm && currentMinutes <= eh * 60 + em) {
+          target = c;
+          break;
+        }
+        if (currentMinutes < sh * 60 + sm && !target) {
+          target = c;
+        }
+      }
+      if (target) {
+        setAttendance(target.id, status);
+      }
+    }
+
+    function resetAllAttendanceConfirm() {
+      if (confirm('هل أنت متأكد من رغبتك في إعادة ضبط سجل الحضور والغياب؟')) {
+        attendanceData = {};
+        localStorage.removeItem('sakan6_attendance');
+        renderTodayView();
+        renderSubjectsSummary();
+        updateOverallStats();
+      }
+    }
+
+    function triggerConfetti() {
+      if (window.confetti) {
+        window.confetti({
+          particleCount: 60,
+          spread: 55,
+          origin: { y: 0.8 },
+          colors: ['#4E9F76', '#3B7A57', '#F59E0B', '#38BDF8']
+        });
+      }
+    }
+
+    // ----------------------------------------------------
+    // 9. VIEW SWITCHING & FILTERING
+    // ----------------------------------------------------
+    let currentTasksFilter = 'all'; // 'all', 'pending', 'completed'
+
+    function switchView(view) {
+      currentView = view;
+      ['today', 'week', 'subjects', 'tasks'].forEach(v => {
+        // Desktop top tabs
+        const btn = document.getElementById(`tab-${v}`);
+        const el = document.getElementById(`view-${v}`);
+        if (el) {
+          if (v === view) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+        if (btn) {
+          if (v === view) {
+            btn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-white bg-sage-600 shadow-sm whitespace-nowrap";
+          } else {
+            btn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap";
+          }
+        }
+        // Mobile bottom navigation tabs
+        const mobBtn = document.getElementById(`mobile-tab-${v}`);
+        if (mobBtn) {
+          if (v === view) {
+            mobBtn.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl text-sage-600 dark:text-sage-400 bg-sage-50/90 dark:bg-sage-950/70 font-bold text-[11px] gap-1 transition-all relative";
+          } else {
+            mobBtn.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-medium text-[11px] gap-1 transition-all relative";
+          }
+        }
+      });
+
+      if (view === 'today') renderTodayView();
+      if (view === 'week') renderWeeklyGrid();
+      if (view === 'subjects') renderSubjectsSummary();
+      if (view === 'tasks') renderTasksView();
+    }
+
+    function filterSchedule(filter) {
+      currentFilter = filter;
+      ['all', 'lecture', 'section'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}`);
+        if (f === filter) {
+          btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-800 text-white dark:bg-stone-200 dark:text-stone-900 transition-all";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-warmdark-700 transition-all";
+        }
+      });
+
+      if (currentView === 'today') renderTodayView();
+      if (currentView === 'week') renderWeeklyGrid();
+    }
+
+    function changeDayView(dayIdx) {
+      activeDayView = dayIdx;
+      renderTodayView();
+    }
+
+    // ----------------------------------------------------
+    // 10. TIME SETTINGS MODAL
+    // ----------------------------------------------------
+    function openTimeSettingsModal() {
+      const container = document.getElementById('periodInputsList');
+      container.innerHTML = [1, 2, 3, 4, 5, 6].map(p => {
+        const slot = periodTimes[p] || defaultPeriodTimes[p];
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 text-xs">
+            <span class="font-bold text-stone-800 dark:text-stone-200">الفترة ${p}:</span>
+            <div class="flex items-center gap-2">
+              <input id="period-start-${p}" type="time" value="${slot.start}" class="rounded-lg border border-stone-300 dark:border-warmdark-500 bg-white dark:bg-warmdark-800 px-2 py-1 text-xs" />
+              <span class="text-stone-400">إلى</span>
+              <input id="period-end-${p}" type="time" value="${slot.end}" class="rounded-lg border border-stone-300 dark:border-warmdark-500 bg-white dark:bg-warmdark-800 px-2 py-1 text-xs" />
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('timeSettingsModal').classList.remove('hidden');
+    }
+
+    function closeTimeSettingsModal() {
+      document.getElementById('timeSettingsModal').classList.add('hidden');
+    }
+
+    function savePeriodTimes() {
+      for (let p = 1; p <= 6; p++) {
+        const s = document.getElementById(`period-start-${p}`).value;
+        const e = document.getElementById(`period-end-${p}`).value;
+        if (s && e) {
+          if (e <= s) {
+            alert(`تنبيه: وقت نهاية الفترة ${p} (${e}) يجب أن يكون بعد وقت البداية (${s})!`);
+            return;
+          }
+          periodTimes[p] = { start: s, end: e };
+        }
+      }
+      localStorage.setItem('sakan6_periodTimes', JSON.stringify(periodTimes));
+      closeTimeSettingsModal();
+      renderTodayView();
+      renderWeeklyGrid();
+      updateLiveBanner();
+      playChime('success');
+      syncWithGoogleSheets(false);
+    }
+
+    function resetDefaultPeriodTimes() {
+      periodTimes = JSON.parse(JSON.stringify(defaultPeriodTimes));
+      localStorage.removeItem('sakan6_periodTimes');
+      openTimeSettingsModal();
+    }
+
+    // ----------------------------------------------------
+    // 11. TASKS / ASSIGNMENTS (TAB & MODAL)
+    // ----------------------------------------------------
+    function updateTasksBadges() {
+      const pendingCount = tasksList.filter(t => !t.completed).length;
+      
+      const headerBadge = document.getElementById('pendingTasksBadge');
+      if (headerBadge) {
+        if (pendingCount > 0) {
+          headerBadge.innerText = pendingCount;
+          headerBadge.classList.remove('hidden');
+        } else {
+          headerBadge.classList.add('hidden');
+        }
+      }
+
+      const tabBadge = document.getElementById('tabTasksBadge');
+      if (tabBadge) {
+        if (pendingCount > 0) {
+          tabBadge.innerText = pendingCount;
+          tabBadge.classList.remove('hidden');
+        } else {
+          tabBadge.classList.add('hidden');
+        }
+      }
+
+      const mobBadge = document.getElementById('mobileTasksBadge');
+      if (mobBadge) {
+        if (pendingCount > 0) {
+          mobBadge.classList.remove('hidden');
+        } else {
+          mobBadge.classList.add('hidden');
+        }
+      }
+    }
+
+    function setTasksFilter(filter) {
+      currentTasksFilter = filter;
+      ['all', 'pending', 'completed'].forEach(f => {
+        const btn = document.getElementById(`task-filter-${f}`);
+        if (btn) {
+          if (f === filter) {
+            btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-800 text-white dark:bg-stone-200 dark:text-stone-900 transition-all";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all";
+          }
+        }
+      });
+      renderTasksView();
+    }
+
+    function renderTasksView() {
+      updateTasksBadges();
+      const container = document.getElementById('fullTasksContainer');
+      if (!container) return;
+
+      const totalCount = tasksList.length;
+      const completedCount = tasksList.filter(t => t.completed).length;
+      const pendingCount = totalCount - completedCount;
+      const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+      const pCountEl = document.getElementById('tasksPendingCount');
+      const cCountEl = document.getElementById('tasksCompletedCount');
+      const progEl = document.getElementById('tasksProgressPercent');
+
+      if (pCountEl) pCountEl.innerText = pendingCount;
+      if (cCountEl) cCountEl.innerText = completedCount;
+      if (progEl) progEl.innerText = `${percent}%`;
+
+      const subjectFilterVal = document.getElementById('tasksSubjectFilter')?.value || 'all';
+
+      // Filter tasks
+      let filtered = tasksList.filter(t => {
+        if (currentTasksFilter === 'pending' && t.completed) return false;
+        if (currentTasksFilter === 'completed' && !t.completed) return false;
+        if (subjectFilterVal !== 'all' && t.subject !== subjectFilterVal) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 px-6 rounded-2xl bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-sage-50 dark:bg-sage-950/60 text-sage-600 dark:text-sage-300 mx-auto flex items-center justify-center">
+              <i data-lucide="sparkles" class="w-7 h-7"></i>
+            </div>
+            <h4 class="text-base font-bold text-stone-900 dark:text-white">لا توجد تكليفات في هذه القائمة ✨</h4>
+            <p class="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
+              ${currentTasksFilter === 'pending' ? 'رائع جداً! لقد أنهيت جميع التكليفات المطلوبة منك، استمتع بوقتك!' : 'يمكنك إضافة شيتات المعمل والتكليفات من النموذج أعلاه.'}
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      container.innerHTML = filtered.map(t => {
+        const theme = colorThemes[t.color] || colorThemes.sky;
+        
+        let typeBadge = '';
+        if (t.type === 'sheet') typeBadge = '<span class="px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border border-sky-200 dark:border-sky-800">💻 شيت عملي</span>';
+        else if (t.type === 'quiz') typeBadge = '<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">⏱️ كويز سريع</span>';
+        else if (t.type === 'project') typeBadge = '<span class="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">🚀 مشروع</span>';
+        else typeBadge = '<span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 dark:bg-warmdark-700 dark:text-stone-300">📝 واجب نظري</span>';
+
+        let priorityBadge = '';
+        if (t.priority === 'urgent') priorityBadge = '<span class="px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950 dark:text-rose-300 text-[10px] font-bold">عاجل جداً 🔥</span>';
+        else if (t.priority === 'high') priorityBadge = '<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950 dark:text-amber-300 text-[10px] font-semibold">هام</span>';
+
+        let dateStatus = '';
+        if (t.dueDate) {
+          if (!t.completed && t.dueDate < todayStr) {
+            dateStatus = `<span class="text-rose-600 font-bold flex items-center gap-1"><i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> متأخر (${t.dueDate})</span>`;
+          } else if (!t.completed && t.dueDate === todayStr) {
+            dateStatus = `<span class="text-amber-600 font-bold flex items-center gap-1"><i data-lucide="clock" class="w-3.5 h-3.5"></i> التسليم اليوم!</span>`;
+          } else {
+            dateStatus = `<span class="text-stone-500 flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> تسليم: ${t.dueDate}</span>`;
+          }
+        }
+
+        return `
+          <div class="rounded-2xl p-4 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3 group">
+            <div class="space-y-2.5">
+              <!-- Header Badges -->
+              <div class="flex items-center justify-between flex-wrap gap-2 text-[11px]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-lg font-semibold ${theme.badge}">${t.subject}</span>
+                  ${typeBadge}
+                  ${priorityBadge}
+                </div>
+                <div>
+                  ${t.completed ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 font-bold">تم التسليم ✓</span>' : dateStatus}
+                </div>
+              </div>
+
+              <!-- Title & Checkbox -->
+              <div class="flex items-start gap-3 pt-1">
+                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})" class="w-4 h-4 mt-1 rounded text-sage-600 focus:ring-sage-500 cursor-pointer shrink-0" />
+                <div class="flex-1">
+                  <h4 class="text-sm sm:text-base font-bold ${t.completed ? 'line-through text-stone-400' : 'text-stone-900 dark:text-white'} leading-snug">
+                    ${t.title}
+                  </h4>
+                  <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 flex items-center gap-1">
+                    <i data-lucide="bookmark" class="w-3.5 h-3.5 text-sage-600 shrink-0"></i>
+                    <span>${t.sectionLabel || 'سكشن عملي'}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="flex items-center justify-between pt-2.5 border-t border-stone-100 dark:border-warmdark-700 text-xs">
+              <span class="text-[11px] text-stone-400">
+                ${t.completed ? 'أحسنت صنعاً! 🌟' : 'انقر على المربع للاكتمال'}
+              </span>
+              <button onclick="deleteTask(${t.id})" class="text-stone-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-stone-50 dark:hover:bg-warmdark-700 transition-colors flex items-center gap-1 text-[11px]">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>حذف</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function handleFullTaskSubmit(e) {
+      e.preventDefault();
+      const classSelect = document.getElementById('formTaskClass').value;
+      const [subject, sectionLabel, color] = classSelect.split('|');
+      const type = document.getElementById('formTaskType').value;
+      const dueDate = document.getElementById('formTaskDueDate').value;
+      const priority = document.getElementById('formTaskPriority').value;
+      const title = document.getElementById('formTaskTitle').value.trim();
+
+      if (!title) return;
+
+      tasksList.unshift({
+        id: Date.now(),
+        subject,
+        sectionLabel,
+        color: color || 'sky',
+        type,
+        dueDate,
+        priority,
+        title,
+        completed: false,
+        createdAt: new Date().toISOString()
+      });
+
+      localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+      document.getElementById('formTaskTitle').value = '';
+      
+      renderTasksView();
+      renderTasksList(); // For modal
+      playChime('success');
+      triggerConfetti();
+      syncWithGoogleSheets(false);
+    }
+
+    function openTasksModal() {
+      renderTasksList();
+      document.getElementById('tasksModal').classList.remove('hidden');
+    }
+
+    function closeTasksModal() {
+      document.getElementById('tasksModal').classList.add('hidden');
+    }
+
+    function renderTasksList() {
+      updateTasksBadges();
+      const container = document.getElementById('tasksList');
+      if (!container) return;
+
+      if (tasksList.length === 0) {
+        container.innerHTML = '<p class="text-xs text-stone-400 text-center py-6">لا توجد تكليفات مسجلة حالياً ✨</p>';
+        return;
+      }
+
+      container.innerHTML = tasksList.map(t => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 text-xs">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})" class="w-4 h-4 rounded text-sage-600 focus:ring-sage-500 cursor-pointer" />
+            <div class="${t.completed ? 'line-through text-stone-400' : 'text-stone-800 dark:text-stone-200'}">
+              <span class="font-bold text-[10px] px-1.5 py-0.5 rounded bg-stone-200/70 dark:bg-warmdark-600 ml-1.5">${t.subject}</span>
+              ${t.title}
+            </div>
+          </div>
+          <button onclick="deleteTask(${t.id})" class="text-stone-400 hover:text-rose-500 p-1">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function addTask(e) {
+      e.preventDefault();
+      const subject = document.getElementById('taskSubject').value;
+      const title = document.getElementById('taskTitle').value.trim();
+      if (!title) return;
+
+      tasksList.unshift({
+        id: Date.now(),
+        subject,
+        sectionLabel: 'سكشن عملي',
+        color: 'sky',
+        title,
+        completed: false
+      });
+      localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+      document.getElementById('taskTitle').value = '';
+      renderTasksList();
+      renderTasksView();
+      playChime('success');
+      syncWithGoogleSheets(false);
+    }
+
+    function toggleTask(id) {
+      const task = tasksList.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+        renderTasksList();
+        renderTasksView();
+        if (task.completed) {
+          playChime('success');
+          triggerConfetti();
+        }
+        syncWithGoogleSheets(false);
+      }
+    }
+
+    function deleteTask(id) {
+      tasksList = tasksList.filter(t => t.id !== id);
+      localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+      renderTasksList();
+      renderTasksView();
+      syncWithGoogleSheets(false);
+    }
+
+    // ----------------------------------------------------
+    // 12. GOOGLE APPS SCRIPT / CLOUD SYNC LOGIC
+    // ----------------------------------------------------
+    function openSyncModal() {
+      const input = document.getElementById('gasUrlInput');
+      if (input) input.value = gasUrl || "";
+      updateSyncStatusUI();
+      document.getElementById('syncModal').classList.remove('hidden');
+    }
+
+    function closeSyncModal() {
+      document.getElementById('syncModal').classList.add('hidden');
+    }
+
+    function saveGasUrlFromInput() {
+      const input = document.getElementById('gasUrlInput');
+      if (!input) return;
+      const url = input.value.trim();
+      gasUrl = url;
+      localStorage.setItem('sakan6_gas_url', gasUrl);
+      updateSyncStatusUI();
+      playChime('success');
+      alert(gasUrl ? "تم حفظ رابط Google Apps Script بنجاح! سيتم المزامنة تلقائياً مع جدول البيانات." : "تم تفريغ رابط المزامنة. التطبيق سيعمل محلياً فقط.");
+      if (gasUrl) {
+        syncWithGoogleSheets(true);
+      }
+    }
+
+    function updateSyncStatusUI() {
+      const dot = document.getElementById('syncStatusDot');
+      const indicator = document.getElementById('syncStatusIndicator');
+      const statusText = document.getElementById('syncStatusText');
+      const lastTimeEl = document.getElementById('syncLastTime');
+      const lastSync = localStorage.getItem('sakan6_last_sync_time');
+      const isOnline = navigator.onLine;
+
+      if (!isOnline) {
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-500";
+        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
+        if (statusText) statusText.innerText = "وضع عدم الاتصال (أوفلاين) - البيانات محفوظة على جهازك 📴";
+      } else if (!gasUrl) {
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-stone-400";
+        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-stone-400";
+        if (statusText) statusText.innerText = "تخزين محلي (غير متصل بجوجل شيت)";
+      } else {
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+        if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
+        if (statusText) statusText.innerText = "متصل بجوجل شيت (جاهز للمزامنة)";
+      }
+
+      if (lastTimeEl) {
+        lastTimeEl.innerText = lastSync ? `آخر مزامنة: ${lastSync}` : "لم تتم المزامنة بعد";
+      }
+    }
+
+    async function syncWithGoogleSheets(isManual = false) {
+      if (!navigator.onLine) {
+        if (isManual) {
+          alert("أنت حالياً في وضع عدم الاتصال (أوفلاين). جميع تعديلاتك محفوظة بأمان محلياً، وسيتم رفعها ومزامنتها مع جوجل شيت فور عودة الإنترنت!");
+        }
+        return;
+      }
+
+      if (!gasUrl) {
+        if (isManual) {
+          alert("يرجى لصق رابط Google Apps Script Web App أولاً لحفظ البيانات في جوجل شيت.");
+          openSyncModal();
+        }
+        return;
+      }
+
+      const syncBtn = document.getElementById('manualSyncBtn');
+      if (isManual && syncBtn) {
+        syncBtn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> <span>جاري الحفظ...</span>`;
+        syncBtn.disabled = true;
+      }
+
+      // Build metadata map for classes
+      const meta = {};
+      initialSchedule.forEach(c => {
+        meta[c.id] = {
+          subject: c.subject,
+          typeLabel: c.typeLabel,
+          day: c.day,
+          period: c.period,
+          room: c.room,
+          doctor: c.doctor
+        };
+      });
+
+      const payload = {
+        action: 'syncAll',
+        data: {
+          attendance: attendanceData,
+          tasks: tasksList,
+          streak: streakCount,
+          periodTimes: periodTimes,
+          meta: meta
+        }
+      };
+
+      try {
+        await fetch(gasUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const nowFormatted = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        localStorage.setItem('sakan6_last_sync_time', nowFormatted);
+        updateSyncStatusUI();
+
+        if (isManual) {
+          playChime('success');
+          alert("تم إرسال كافة البيانات ومزامنتها بنجاح مع جوجل شيت! ✓");
+        }
+      } catch (err) {
+        console.error("Sync error:", err);
+        if (isManual) {
+          alert("تعذر الاتصال برابط Google Apps Script، يرجى التأكد من نشر تطبيق الويب واختيار 'Anyone' في صلاحيات الوصول.");
+        }
+      } finally {
+        if (isManual && syncBtn) {
+          syncBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> <span>مزامنة الآن</span>`;
+          syncBtn.disabled = false;
+          lucide.createIcons();
+        }
+      }
+    }
+
+    async function fetchFromGoogleSheets() {
+      if (!gasUrl) {
+        alert("يرجى لصق رابط Google Apps Script Web App أولاً.");
+        return;
+      }
+
+      const confirmPull = confirm("هل تريد سحب وتحديث بيانات الحضور والتكليفات من جوجل شيت؟ قد يستبدل ذلك أي تعديلات محلية غير محفوظة.");
+      if (!confirmPull) return;
+
+      try {
+        const fetchUrl = gasUrl + (gasUrl.includes('?') ? '&' : '?') + 'action=getData&_t=' + Date.now();
+        const res = await fetch(fetchUrl);
+        const result = await res.json();
+
+        if (result && result.status === 'success' && result.data) {
+          const d = result.data;
+          if (d.attendance) {
+            attendanceData = d.attendance;
+            localStorage.setItem('sakan6_attendance', JSON.stringify(attendanceData));
+          }
+          if (Array.isArray(d.tasks)) {
+            tasksList = d.tasks;
+            localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+          }
+          if (d.streak !== undefined && d.streak !== null) {
+            streakCount = parseInt(d.streak, 10) || 0;
+            localStorage.setItem('sakan6_streak', streakCount.toString());
+            const sEl = document.getElementById('streakDays');
+            if (sEl) sEl.innerText = streakCount;
+          }
+          if (d.periodTimes && Object.keys(d.periodTimes).length > 0) {
+            periodTimes = d.periodTimes;
+            localStorage.setItem('sakan6_periodTimes', JSON.stringify(periodTimes));
+          }
+
+          const nowFormatted = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+          localStorage.setItem('sakan6_last_sync_time', nowFormatted);
+
+          // Re-render UI
+          renderTodayView();
+          renderWeeklyGrid();
+          renderSubjectsSummary();
+          updateOverallStats();
+          renderTasksList();
+          renderTasksView();
+          updateSyncStatusUI();
+
+          playChime('success');
+          alert("تم سحب أحدث البيانات بنجاح من جوجل شيت! 📊");
+        } else {
+          alert("تم استلام استجابة غير متوقعة من الخادم.");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        alert("حدث خطأ أثناء جلب البيانات من شيت جوجل. تأكد من نشر الرابط بصلاحية الوصول: Anyone.");
+      }
+    }
+
+    async function clearAllDataConfirm() {
+      const confirmMsg = "تحذير: هل أنت متأكد من رغبتك في تصفير قاعدة البيانات ومسح سجلات الحضور والتكليفات بالكامل للبدء من الصفر؟";
+      if (!confirm(confirmMsg)) return;
+
+      // 1. Clear state
+      attendanceData = {};
+      tasksList = [];
+      streakCount = 0;
+      periodTimes = defaultPeriodTimes;
+
+      // 2. Clear localStorage (keep theme and gas_url)
+      localStorage.removeItem('sakan6_attendance');
+      localStorage.removeItem('sakan6_tasks');
+      localStorage.removeItem('sakan6_streak');
+      localStorage.removeItem('sakan6_periodTimes');
+      localStorage.removeItem('sakan6_last_sync_time');
+
+      // 3. Update GAS if connected
+      if (gasUrl) {
+        try {
+          await fetch(gasUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'clearAll' })
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 4. Re-render UI
+      const streakEl = document.getElementById('streakDays');
+      if (streakEl) streakEl.innerText = '0';
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      renderTasksList();
+      renderTasksView();
+      updateSyncStatusUI();
+      closeSyncModal();
+
+      playChime('undo');
+      alert("تم تصفير قاعدة البيانات بالكامل وتفريغ سجل الحضور والتكليفات! أنت الآن على بداية جديدة ونظيفة 100%. ✨");
+    }
+
+    // ----------------------------------------------------
+    // 12. EXPORT & DOWNLOAD CARD AS IMAGE
+    // ----------------------------------------------------
+    function openExportModal() {
+      document.getElementById('exportModal').classList.remove('hidden');
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.add('hidden');
+    }
+
+    function downloadCardImage() {
+      const element = document.getElementById('printableCardArea');
+      const btn = document.getElementById('downloadCardBtn');
+      btn.innerText = "جاري الحفظ...";
+      btn.disabled = true;
+
+      html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Section-6-Timetable.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> <span>تم الحفظ بنجاح!</span>`;
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.innerHTML = `<i data-lucide="download" class="w-3.5 h-3.5"></i> <span>تحميل كصورة عالية الجودة (PNG)</span>`;
+          btn.disabled = false;
+          lucide.createIcons();
+        }, 2000);
+      }).catch(err => {
+        alert("حدث خطأ أثناء حفظ الصورة، يمكنك التقاط لقطة شاشة للكرت مباشرة.");
+        btn.innerHTML = `<i data-lucide="download" class="w-3.5 h-3.5"></i> <span>تحميل كصورة عالية الجودة (PNG)</span>`;
+        btn.disabled = false;
+        lucide.createIcons();
+      });
+    }
+
+    // ----------------------------------------------------
+    // 13. MOTIVATION MODAL & THEME
+    // ----------------------------------------------------
+    function showMotivationModal() {
+      document.getElementById('streakModalDays').innerText = streakCount;
+      document.getElementById('motivationModal').classList.remove('hidden');
+      triggerConfetti();
+    }
+
+    function closeMotivationModal() {
+      document.getElementById('motivationModal').classList.add('hidden');
+    }
+
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
+      localStorage.setItem('sakan6_theme', isDark ? 'dark' : 'light');
+      updateThemeIcon(isDark);
+    }
+
+    function updateThemeIcon(isDark) {
+      const icon = document.getElementById('themeIcon');
+      icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // 14. APP INITIALIZATION
+    // ----------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load saved theme
+      const savedTheme = localStorage.getItem('sakan6_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        updateThemeIcon(true);
+      } else {
+        updateThemeIcon(false);
+      }
+
+      // Random motivation quote
+      const randQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+      document.getElementById('motivationalText').innerText = `"${randQuote}"`;
+
+      // Streak badge
+      document.getElementById('streakDays').innerText = streakCount;
+
+      // Update tasks badges (header & tab)
+      updateTasksBadges();
+
+      // Render default view
+      renderTodayView();
+      updateOverallStats();
+      updateLiveBanner();
+      updateSyncStatusUI();
+
+      // Refresh countdown every 60s
+      setInterval(updateLiveBanner, 60000);
+
+      // Network online/offline event listeners
+      window.addEventListener('online', () => {
+        updateSyncStatusUI();
+        if (gasUrl) {
+          syncWithGoogleSheets(false);
+        }
+      });
+      window.addEventListener('offline', () => {
+        updateSyncStatusUI();
+      });
+
+      // Register PWA service worker with auto-update
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+              reg.update().catch(() => {});
+            })
+            .catch(() => {});
+        });
+      }
+    });
+  </script>
+</body>
+</html>
