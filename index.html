@@ -741,10 +741,10 @@
               <span class="text-[10px] text-stone-400 font-normal">4 فترات</span>
             </div>
             <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف1: محاضرة شبكات (مدرج 3)</div>
-              <div class="p-1 rounded bg-emerald-50 text-emerald-900 font-medium">ف2: سكشن قواعد بيانات 2 (قاعة B4 Hardware)</div>
-              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف3: محاضرة أساليب البحث العلمي (مدرج 2)</div>
-              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف4: سكشن شبكات الحاسب (قاعة D8)</div>
+              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف1 (08:30 - 10:10): محاضرة شبكات (مدرج 3)</div>
+              <div class="p-1 rounded bg-emerald-50 text-emerald-900 font-medium">ف2 (10:20 - 12:00): سكشن قواعد بيانات 2 (قاعة B4 Hardware)</div>
+              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف3 (12:20 - 14:00): محاضرة أساليب البحث العلمي (مدرج 2)</div>
+              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف4 (14:10 - 15:50): سكشن شبكات الحاسب (قاعة D8)</div>
             </div>
           </div>
 
@@ -755,8 +755,8 @@
               <span class="text-[10px] text-stone-400 font-normal">2 فترات</span>
             </div>
             <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف2: محاضرة تحليل النظم والتصميم (مدرج 3)</div>
-              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف3: محاضرة نظرية المعلومات (مدرج 3)</div>
+              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف2 (10:20 - 12:00): محاضرة تحليل النظم والتصميم (مدرج 3)</div>
+              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف3 (12:20 - 14:00): محاضرة نظرية المعلومات (مدرج 3)</div>
             </div>
           </div>
 
@@ -767,9 +767,9 @@
               <span class="text-[10px] text-stone-400 font-normal">3 سكاشن</span>
             </div>
             <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف4: سكشن نظرية المعلومات (قاعة 6)</div>
-              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف5: سكشن أساليب البحث العلمي (قاعة 6)</div>
-              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف6: سكشن تحليل النظم (قاعة B5)</div>
+              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف4 (14:10 - 15:50): سكشن نظرية المعلومات (قاعة 6)</div>
+              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف5 (16:00 - 17:40): سكشن أساليب البحث العلمي (قاعة 6)</div>
+              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف6 (17:50 - 19:30): سكشن تحليل النظم (قاعة B5)</div>
             </div>
           </div>
 
@@ -780,7 +780,7 @@
               <span class="text-[10px] text-stone-400 font-normal">فترة واحدة صباحية</span>
             </div>
             <div class="space-y-1 text-[11px]">
-              <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 font-medium">ف1: محاضرة قواعد بيانات 2 (مدرج 2) - أ.د/ أميرة رزق</div>
+              <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 font-medium">ف1 (08:30 - 10:10): محاضرة قواعد بيانات 2 (مدرج 2) - أ.د/ أميرة رزق</div>
             </div>
           </div>
         </div>
@@ -956,13 +956,16 @@
       }
     ];
 
+    // المواعيد الرسمية المعتمدة للفترات الدراسية (خريف 2026)
     const defaultPeriodTimes = {
-      1: { start: "08:30", end: "10:00" },
-      2: { start: "10:00", end: "11:30" },
-      3: { start: "11:30", end: "13:00" },
-      4: { start: "13:00", end: "14:30" },
-      5: { start: "14:30", end: "16:00" },
-      6: { start: "16:00", end: "17:30" }
+      1: { start: "08:30", end: "10:10", label: "الفترة الأولى" },
+      2: { start: "10:20", end: "12:00", label: "الفترة الثانية" },
+      3: { start: "12:20", end: "14:00", label: "الفترة الثالثة" },
+      4: { start: "14:10", end: "15:50", label: "الفترة الرابعة" },
+      5: { start: "16:00", end: "17:40", label: "الفترة الخامسة" },
+      6: { start: "17:50", end: "19:30", label: "الفترة السادسة" },
+      "on1": { start: "19:30", end: "21:00", label: "أونلاين 1" },
+      "on2": { start: "21:00", end: "22:30", label: "أونلاين 2" }
     };
 
     const motivationalQuotes = [
@@ -1011,7 +1014,14 @@
     // 2. STATE INITIALIZATION (LocalStorage & Cloud Zeroed)
     // ----------------------------------------------------
     const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbyyx3V7RUlAdh2j99h7cU8grjFMv2H6vdAXAG_Rknfwf3IRhcjRgnoV2uWVRth0QaZ_Ow/exec";
-    let periodTimes = JSON.parse(localStorage.getItem('sakan6_periodTimes')) || defaultPeriodTimes;
+    
+    // Auto-migrate to official Fall 2026 times if user has outdated periodTimes
+    let storedPeriodTimes = JSON.parse(localStorage.getItem('sakan6_periodTimes'));
+    if (!storedPeriodTimes || storedPeriodTimes[1]?.end === "10:00" || storedPeriodTimes[2]?.end === "11:30" || !storedPeriodTimes["on1"]) {
+      storedPeriodTimes = defaultPeriodTimes;
+      localStorage.setItem('sakan6_periodTimes', JSON.stringify(defaultPeriodTimes));
+    }
+    let periodTimes = storedPeriodTimes;
     let attendanceData = JSON.parse(localStorage.getItem('sakan6_attendance')) || {};
     let streakCount = parseInt(localStorage.getItem('sakan6_streak') || "0", 10);
     let tasksList = JSON.parse(localStorage.getItem('sakan6_tasks')) || [];
@@ -1681,11 +1691,19 @@
     // ----------------------------------------------------
     function openTimeSettingsModal() {
       const container = document.getElementById('periodInputsList');
-      container.innerHTML = [1, 2, 3, 4, 5, 6].map(p => {
+      const periodKeys = [1, 2, 3, 4, 5, 6, "on1", "on2"];
+      container.innerHTML = periodKeys.map(p => {
         const slot = periodTimes[p] || defaultPeriodTimes[p];
+        const label = slot.label || (typeof p === 'number' ? `الفترة ${p}` : p);
+        const isOnline = String(p).startsWith('on');
+        const badgeClass = isOnline 
+          ? "bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border-purple-200 dark:border-purple-800"
+          : "bg-sage-100 text-sage-800 dark:bg-sage-950/60 dark:text-sage-300 border-sage-200 dark:border-sage-800";
         return `
           <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 text-xs">
-            <span class="font-bold text-stone-800 dark:text-stone-200">الفترة ${p}:</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-stone-800 dark:text-stone-200">
+              <span class="px-1.5 py-0.5 rounded text-[10px] border font-semibold ${badgeClass}">${label}</span>
+            </span>
             <div class="flex items-center gap-2">
               <input id="period-start-${p}" type="time" value="${slot.start}" class="rounded-lg border border-stone-300 dark:border-warmdark-500 bg-white dark:bg-warmdark-800 px-2 py-1 text-xs" />
               <span class="text-stone-400">إلى</span>
@@ -1703,15 +1721,24 @@
     }
 
     function savePeriodTimes() {
-      for (let p = 1; p <= 6; p++) {
-        const s = document.getElementById(`period-start-${p}`).value;
-        const e = document.getElementById(`period-end-${p}`).value;
+      const periodKeys = [1, 2, 3, 4, 5, 6, "on1", "on2"];
+      for (const p of periodKeys) {
+        const startInput = document.getElementById(`period-start-${p}`);
+        const endInput = document.getElementById(`period-end-${p}`);
+        if (!startInput || !endInput) continue;
+        const s = startInput.value;
+        const e = endInput.value;
         if (s && e) {
           if (e <= s) {
-            alert(`تنبيه: وقت نهاية الفترة ${p} (${e}) يجب أن يكون بعد وقت البداية (${s})!`);
+            const label = defaultPeriodTimes[p]?.label || `الفترة ${p}`;
+            alert(`تنبيه: وقت نهاية ${label} (${e}) يجب أن يكون بعد وقت البداية (${s})!`);
             return;
           }
-          periodTimes[p] = { start: s, end: e };
+          periodTimes[p] = { 
+            start: s, 
+            end: e, 
+            label: defaultPeriodTimes[p]?.label || (typeof p === 'number' ? `الفترة ${p}` : p) 
+          };
         }
       }
       localStorage.setItem('sakan6_periodTimes', JSON.stringify(periodTimes));

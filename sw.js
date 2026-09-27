@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (v3 - Auto-Update & 100% Offline Capable)
+// Service Worker for Section 6 PWA (v4 - Fall 2026 Official Timetable & Offline)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v3';
+const CACHE_NAME = 'section6-hub-v4';
 
 const PRECACHE_ASSETS = [
   './',
