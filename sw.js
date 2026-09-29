@@ -1,7 +1,6 @@
+// Service Worker for Section 6 PWA (v8 - Fix view-buses nesting and display)
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (v7 - Updated Google Apps Script Web App URL)
-// ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v7';
+const CACHE_NAME = 'section6-hub-v8';
 
 const PRECACHE_ASSETS = [
   './',
