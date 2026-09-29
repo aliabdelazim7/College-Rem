@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v14 - Dynamic Study Days & Custom Schedule Detection)
+// Service Worker for Section 6 PWA (v15 - UI/UX Pro Max Mobile & Touch Optimization)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v14';
+const CACHE_NAME = 'section6-hub-v15';
 
 const PRECACHE_ASSETS = [
   './',
