@@ -254,6 +254,11 @@
           <span id="quickAbsentText">غائب</span>
         </button>
       </div>
+
+      <!-- Smart Commute Bus Quick Bar -->
+      <div id="todayBusQuickBar" onclick="switchView('buses')" class="w-full mt-2 pt-3 border-t border-stone-100 dark:border-warmdark-700/80 flex flex-wrap items-center justify-between gap-2 text-xs cursor-pointer hover:opacity-95 transition-opacity">
+        <!-- Dynamically rendered via renderTodayBusQuickBar() -->
+      </div>
     </div>
   </section>
 
@@ -267,14 +272,18 @@
       <i data-lucide="layout-grid" class="w-5 h-5"></i>
       <span>الأسبوع</span>
     </button>
-    <button onclick="switchView('tasks')" id="mobile-tab-tasks" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+    <button onclick="switchView('tasks')" id="mobile-tab-tasks" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
       <i data-lucide="check-square" class="w-5 h-5"></i>
       <span>التكليفات</span>
       <span id="mobileTasksBadge" class="absolute top-1 right-2.5 w-2 h-2 bg-rose-500 rounded-full hidden"></span>
     </button>
-    <button onclick="switchView('subjects')" id="mobile-tab-subjects" class="flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+    <button onclick="switchView('subjects')" id="mobile-tab-subjects" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
       <i data-lucide="book-open" class="w-5 h-5"></i>
       <span>المواد</span>
+    </button>
+    <button onclick="switchView('buses')" id="mobile-tab-buses" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-stone-400 dark:text-stone-500 font-medium text-[11px] gap-1 transition-all relative">
+      <i data-lucide="bus" class="w-5 h-5"></i>
+      <span>الباصات</span>
     </button>
   </nav>
 
@@ -300,6 +309,10 @@
           <i data-lucide="check-square" class="w-4 h-4"></i>
           <span>التكليفات والشيتات</span>
           <span id="tabTasksBadge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500 text-white font-bold hidden">0</span>
+        </button>
+        <button onclick="switchView('buses')" id="tab-buses" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap">
+          <i data-lucide="bus" class="w-4 h-4"></i>
+          <span>مواعيد الباصات</span>
         </button>
       </div>
 
@@ -541,6 +554,84 @@
 
         <!-- Tasks Cards List -->
         <div id="fullTasksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    <!-- VIEW 5: BUS SCHEDULES & COMMUTE ASSISTANT -->
+    <div id="view-buses" class="hidden space-y-5">
+      
+      <!-- Top Title and Badges -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-stone-900 dark:text-white flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 flex items-center justify-center shadow-xs">
+              <i data-lucide="bus" class="w-4 h-4"></i>
+            </span>
+            <span>مواعيد باصات الجامعة (ظفر ⇄ جامعة المنصورة)</span>
+          </h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">
+            دليل مواعيد شركتي <strong>زين</strong> و<strong>الغندور</strong> مع حساب ذكي لأقرب باص ذهاب وعودة مناسب لمحاضراتك اليوم
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap text-xs">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sage-50 text-sage-800 dark:bg-sage-950 dark:text-sage-300 border border-sage-200/80 dark:border-sage-800 font-semibold shadow-2xs">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600"></i>
+            <span>نقطة الانطلاق: ظفر 📍</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 font-semibold shadow-2xs">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>زمن الطريق: 60 دقيقة (ساعة)</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- SMART COMMUTE RECOMMENDATION CARD FOR SELECTED DAY -->
+      <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-amber-500/10 via-white to-sage-500/10 dark:from-warmdark-800 dark:via-warmdark-800 dark:to-warmdark-800 border border-amber-200/80 dark:border-warmdark-700 shadow-soft space-y-4">
+        
+        <!-- Header row of recommendation -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-stone-200/60 dark:border-warmdark-700 pb-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-bold text-stone-800 dark:text-stone-200">اختر اليوم لحساب الباص الأنسب:</span>
+            <!-- Day Pills -->
+            <div id="busDaySelector" class="flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Company preference toggle -->
+          <div class="flex items-center gap-1.5 bg-stone-100 dark:bg-warmdark-700 p-1 rounded-2xl border border-stone-200/80 dark:border-warmdark-600 self-start sm:self-auto">
+            <span class="text-[11px] font-semibold text-stone-500 dark:text-stone-400 px-1">الشركة:</span>
+            <button onclick="setPreferredBusCompany('zain')" id="btn-comp-zain" class="px-3 py-1 rounded-xl text-xs font-semibold transition-all">شركة زين</button>
+            <button onclick="setPreferredBusCompany('ghandour')" id="btn-comp-ghandour" class="px-3 py-1 rounded-xl text-xs font-semibold transition-all">شركة الغندور</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Recommendation Content -->
+        <div id="busRecommendationContainer">
+          <!-- Rendered via renderBusesView() -->
+        </div>
+      </div>
+
+      <!-- DETAILED TIMETABLE TABS FOR BOTH COMPANIES -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 dark:border-warmdark-700 pb-2">
+          <div class="flex items-center gap-2">
+            <h3 class="text-sm font-bold text-stone-900 dark:text-white">جدول المواعيد الكامل للشركتين</h3>
+            <span class="text-[10px] text-stone-400 font-normal">(مواعيد الذهاب من المحطات والعودة من الجامعة)</span>
+          </div>
+
+          <!-- Sub-tab for viewing companies -->
+          <div class="flex items-center gap-1 bg-stone-100 dark:bg-warmdark-800 p-1 rounded-xl border border-stone-200/60 dark:border-warmdark-700 self-start sm:self-auto">
+            <button onclick="showBusCompanyView('both')" id="bus-view-both" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-warmdark-700 text-stone-800 dark:text-stone-200 shadow-xs">الكل</button>
+            <button onclick="showBusCompanyView('zain')" id="bus-view-zain" class="px-2.5 py-1 rounded-lg text-xs font-medium text-stone-600 dark:text-stone-300">شركة زين</button>
+            <button onclick="showBusCompanyView('ghandour')" id="bus-view-ghandour" class="px-2.5 py-1 rounded-lg text-xs font-medium text-stone-600 dark:text-stone-300">شركة الغندور</button>
+          </div>
+        </div>
+
+        <!-- Companies Grid Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="busCompanyCardsList">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -1548,6 +1639,7 @@
         actions.classList.add('hidden');
       }
 
+      renderTodayBusQuickBar();
       lucide.createIcons();
     }
 
@@ -1693,7 +1785,7 @@
 
     function switchView(view) {
       currentView = view;
-      ['today', 'week', 'subjects', 'tasks'].forEach(v => {
+      ['today', 'week', 'subjects', 'tasks', 'buses'].forEach(v => {
         // Desktop top tabs
         const btn = document.getElementById(`tab-${v}`);
         const el = document.getElementById(`view-${v}`);
@@ -1712,9 +1804,9 @@
         const mobBtn = document.getElementById(`mobile-tab-${v}`);
         if (mobBtn) {
           if (v === view) {
-            mobBtn.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl text-sage-600 dark:text-sage-400 bg-sage-50/90 dark:bg-sage-950/70 font-bold text-[11px] gap-1 transition-all relative";
+            mobBtn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-sage-600 dark:text-sage-400 bg-sage-50/90 dark:bg-sage-950/70 font-bold text-[11px] gap-1 transition-all relative";
           } else {
-            mobBtn.className = "flex flex-col items-center justify-center py-1 px-3 rounded-xl text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-medium text-[11px] gap-1 transition-all relative";
+            mobBtn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-medium text-[11px] gap-1 transition-all relative";
           }
         }
       });
@@ -1723,6 +1815,7 @@
       if (view === 'week') renderWeeklyGrid();
       if (view === 'subjects') renderSubjectsSummary();
       if (view === 'tasks') renderTasksView();
+      if (view === 'buses') renderBusesView();
     }
 
     function filterSchedule(filter) {
@@ -3022,6 +3115,602 @@
       } catch (err) {
         window.location.reload(true);
       }
+    }
+
+    // ----------------------------------------------------
+    // 14.5 BUS COMPANIES & SMART COMMUTE ASSISTANT ENGINE
+    // ----------------------------------------------------
+    const busCompaniesData = {
+      zain: {
+        id: "zain",
+        name: "شركة زين",
+        tagline: "رحلتك لجامعتك مع زين • بأمانتكم وأمنة لطلاب الجامعات",
+        themeColor: "sky",
+        phones: [
+          { name: "أ/ صبري الغندور", number: "01020281099" }
+        ],
+        departureOrigin: "ظفر",
+        travelMinutes: 60,
+        // All departure times from stations
+        departures: [
+          { zafar: "06:45", saudi: "06:50", safa: "06:55", bayda: "07:00", arrivalEstimate: "07:45" },
+          { zafar: "07:45", saudi: "07:50", safa: "07:55", bayda: "08:00", arrivalEstimate: "08:45" },
+          { zafar: "08:45", saudi: "08:50", safa: "08:55", bayda: "09:00", arrivalEstimate: "09:45" },
+          { zafar: "10:45", saudi: "10:50", safa: "10:55", bayda: "11:00", arrivalEstimate: "11:45" }
+        ],
+        // All return times from Mansoura University
+        returns: [
+          { time: "12:00", label: "12:00 ظهراً" },
+          { time: "13:00", label: "01:00 ظهراً" },
+          { time: "14:00", label: "02:00 عصراً" },
+          { time: "15:00", label: "03:00 عصراً" },
+          { time: "16:00", label: "04:00 عصراً" },
+          { time: "17:00", label: "05:00 مساءً" },
+          { time: "17:30", label: "05:30 مساءً" }
+        ],
+        notes: "مواعيد جامعة المنصورة (حكومي) • التزام ودقة في التحرك"
+      },
+      ghandour: {
+        id: "ghandour",
+        name: "شركة الغندور",
+        tagline: "للخدمات الطلابية والرحلات • رحلتك .. هدفنا",
+        themeColor: "amber",
+        phones: [
+          { name: "ثروت العوضي", number: "01092929849" },
+          { name: "العوضي ثروت", number: "01001439980" }
+        ],
+        departureOrigin: "ظفر",
+        travelMinutes: 60,
+        // All departure times from stations
+        departures: [
+          { zafar: "06:40", saudi: "06:45", safa: "06:50", bayda: "07:00", arrivalEstimate: "07:40" },
+          { zafar: "07:40", saudi: "07:45", safa: "07:50", bayda: "08:00", arrivalEstimate: "08:40", note: "الذهاب إلى الدراسات 07:40" },
+          { zafar: "08:40", saudi: "08:45", safa: "08:50", bayda: "09:00", arrivalEstimate: "09:40" },
+          { zafar: "10:40", saudi: "10:45", safa: "10:50", bayda: "11:00", arrivalEstimate: "11:40" }
+        ],
+        // All return times from Mansoura University
+        returns: [
+          { time: "13:00", label: "01:00 ظهراً (المنصورة)" },
+          { time: "13:30", label: "01:30 ظهراً (الدراسات)" },
+          { time: "14:30", label: "02:30 عصراً (المنصورة)" },
+          { time: "15:00", label: "03:00 عصراً (الدراسات)" },
+          { time: "15:30", label: "03:30 عصراً (المنصورة)" },
+          { time: "16:30", label: "04:30 عصراً (المنصورة)" },
+          { time: "17:30", label: "05:30 مساءً (المنصورة)" }
+        ],
+        notes: "الرجاء الالتزام بالمواعيد لأن الباص سيتحرك بعد خمس دقائق من الميعاد بدون انتظار!"
+      }
+    };
+
+    let preferredBusCompany = localStorage.getItem('sakan6_bus_company') || 'zain';
+    let selectedBusDay = new Date().getDay();
+    let currentBusCompanyView = 'both';
+
+    function setPreferredBusCompany(companyKey) {
+      preferredBusCompany = companyKey;
+      localStorage.setItem('sakan6_bus_company', companyKey);
+      renderBusesView();
+      renderTodayBusQuickBar();
+      playChime('click');
+    }
+
+    function setSelectedBusDay(dayIdx) {
+      selectedBusDay = dayIdx;
+      renderBusesView();
+      playChime('click');
+    }
+
+    function showBusCompanyView(view) {
+      currentBusCompanyView = view;
+      ['both', 'zain', 'ghandour'].forEach(k => {
+        const btn = document.getElementById(`bus-view-${k}`);
+        if (btn) {
+          if (k === view) {
+            btn.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-warmdark-700 text-stone-900 dark:text-white shadow-xs";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg text-xs font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900";
+          }
+        }
+      });
+      renderBusCompanyCards();
+    }
+
+    function calculateSmartBusCommute(dayIndex, companyKey) {
+      const company = busCompaniesData[companyKey] || busCompaniesData.zain;
+      const classes = scheduleData.filter(c => c.dayIndex === dayIndex);
+
+      if (classes.length === 0) {
+        return {
+          hasClasses: false,
+          dayIndex: dayIndex,
+          company: company
+        };
+      }
+
+      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
+      classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+      const firstClass = classes[0];
+      const lastClass = classes[classes.length - 1];
+
+      const firstSlot = periodTimes[firstClass.period] || defaultPeriodTimes[firstClass.period];
+      const lastSlot = periodTimes[lastClass.period] || defaultPeriodTimes[lastClass.period];
+
+      const toMins = (timeStr) => {
+        const [h, m] = timeStr.split(':').map(Number);
+        return h * 60 + m;
+      };
+
+      const firstClassStartMin = toMins(firstSlot.start);
+      const lastClassEndMin = toMins(lastSlot.end);
+
+      // 1. BEST DEPARTURE BUS FROM ظفر
+      // Ride is 60 mins. We want arrival (dep + 60) <= firstClassStartMin
+      let bestDeparture = null;
+      let minWaitBeforeClass = 999999;
+
+      for (let dep of company.departures) {
+        const depMin = toMins(dep.zafar);
+        const arrMin = depMin + 60; // 1 hour commute
+
+        if (arrMin <= firstClassStartMin) {
+          const waitTime = firstClassStartMin - arrMin;
+          if (waitTime < minWaitBeforeClass) {
+            minWaitBeforeClass = waitTime;
+            bestDeparture = {
+              ...dep,
+              depMin: depMin,
+              arrMin: arrMin,
+              waitTime: waitTime,
+              isEarly: true
+            };
+          }
+        }
+      }
+
+      // If all buses arrive after class start, pick the earliest available bus
+      if (!bestDeparture) {
+        const firstDep = company.departures[0];
+        const depMin = toMins(firstDep.zafar);
+        const arrMin = depMin + 60;
+        bestDeparture = {
+          ...firstDep,
+          depMin: depMin,
+          arrMin: arrMin,
+          lateTime: arrMin - firstClassStartMin,
+          isEarly: false
+        };
+      }
+
+      // 2. BEST RETURN BUS FROM MANSOURA (Same Company)
+      // Bus departure >= lastClassEndMin
+      let bestReturn = null;
+      let minWaitAfterClass = 999999;
+
+      for (let ret of company.returns) {
+        const retMin = toMins(ret.time);
+        if (retMin >= lastClassEndMin) {
+          const waitTime = retMin - lastClassEndMin;
+          if (waitTime < minWaitAfterClass) {
+            minWaitAfterClass = waitTime;
+            bestReturn = {
+              ...ret,
+              retMin: retMin,
+              waitTime: waitTime,
+              available: true
+            };
+          }
+        }
+      }
+
+      if (!bestReturn) {
+        const lastRet = company.returns[company.returns.length - 1];
+        bestReturn = {
+          ...lastRet,
+          retMin: toMins(lastRet.time),
+          available: false,
+          warning: "المحاضرة تنتهي بعد موعد آخر باص متوفر للشركة (" + lastRet.time + ")"
+        };
+      }
+
+      return {
+        hasClasses: true,
+        dayIndex: dayIndex,
+        company: company,
+        firstClass: firstClass,
+        firstSlot: firstSlot,
+        lastClass: lastClass,
+        lastSlot: lastSlot,
+        bestDeparture: bestDeparture,
+        bestReturn: bestReturn,
+        totalClassesCount: classes.length
+      };
+    }
+
+    function formatTime12h(timeStr) {
+      if (!timeStr) return '';
+      const [hStr, mStr] = timeStr.split(':');
+      let h = parseInt(hStr, 10);
+      const m = mStr || '00';
+      const p = h >= 12 ? 'م' : 'ص';
+      if (h > 12) h -= 12;
+      if (h === 0) h = 12;
+      return `${h}:${m} ${p}`;
+    }
+
+    function renderBusesView() {
+      // 1. Day Selector Pills
+      const daySelector = document.getElementById('busDaySelector');
+      if (daySelector) {
+        const days = [
+          { name: "السبت", index: 6 },
+          { name: "الأحد", index: 0 },
+          { name: "الاثنين", index: 1 },
+          { name: "الثلاثاء", index: 2 },
+          { name: "الأربعاء", index: 3 },
+          { name: "الخميس", index: 4 },
+          { name: "الجمعة", index: 5 }
+        ];
+
+        daySelector.innerHTML = days.map(d => {
+          const isSelected = d.index === selectedBusDay;
+          const classesCount = scheduleData.filter(c => c.dayIndex === d.index).length;
+          return `
+            <button onclick="setSelectedBusDay(${d.index})" class="px-2.5 py-1 rounded-xl text-xs shrink-0 whitespace-nowrap transition-all ${
+              isSelected
+                ? 'bg-amber-600 text-white font-bold shadow-xs'
+                : 'bg-white dark:bg-warmdark-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 border border-stone-200/60 dark:border-warmdark-600'
+            }">
+              <span>${d.name}</span>
+              ${classesCount > 0 ? `<span class="text-[9px] opacity-80 mr-1">(${classesCount})</span>` : ''}
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Company preference buttons
+      const btnZain = document.getElementById('btn-comp-zain');
+      const btnGhandour = document.getElementById('btn-comp-ghandour');
+      if (btnZain && btnGhandour) {
+        if (preferredBusCompany === 'zain') {
+          btnZain.className = "px-3 py-1 rounded-xl text-xs font-semibold bg-sky-600 text-white shadow-xs";
+          btnGhandour.className = "px-3 py-1 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/60";
+        } else {
+          btnGhandour.className = "px-3 py-1 rounded-xl text-xs font-semibold bg-amber-600 text-white shadow-xs";
+          btnZain.className = "px-3 py-1 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/60";
+        }
+      }
+
+      // 3. Smart Commute Recommendation Card
+      const recContainer = document.getElementById('busRecommendationContainer');
+      if (recContainer) {
+        const commute = calculateSmartBusCommute(selectedBusDay, preferredBusCompany);
+        const dayNames = { 0: "الأحد", 1: "الاثنين", 2: "الثلاثاء", 3: "الأربعاء", 4: "الخميس", 5: "الجمعة", 6: "السبت" };
+        const dayName = dayNames[selectedBusDay];
+
+        if (!commute.hasClasses) {
+          recContainer.innerHTML = `
+            <div class="py-6 px-4 rounded-2xl bg-white/80 dark:bg-warmdark-800/80 border border-stone-200/80 dark:border-warmdark-700 text-center space-y-2">
+              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-400 mx-auto flex items-center justify-center">
+                <i data-lucide="coffee" class="w-6 h-6"></i>
+              </div>
+              <h4 class="text-sm font-bold text-stone-900 dark:text-white">يوم ${dayName}: عطلة أو راحة رسمية 🎉</h4>
+              <p class="text-xs text-stone-500 dark:text-stone-400 max-w-md mx-auto">
+                لا توجد محاضرات مجدولة لك في هذا اليوم، لذا لن تحتاج لركوب باص الجامعة اليوم. يمكنك الاطلاع على المواعيد الكاملة بالأسفل إذا كنت ترغب في الذهاب للمدينة!
+              </p>
+            </div>
+          `;
+        } else {
+          const comp = commute.company;
+          const dep = commute.bestDeparture;
+          const ret = commute.bestReturn;
+
+          recContainer.innerHTML = `
+            <div class="space-y-4">
+              
+              <!-- Trip Overview Banner -->
+              <div class="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-white/90 dark:bg-warmdark-800/90 border border-amber-200/60 dark:border-warmdark-700 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold">
+                    <i data-lucide="navigation" class="w-4 h-4"></i>
+                  </span>
+                  <div>
+                    <span class="font-bold text-stone-900 dark:text-white">جدول يوم ${dayName}:</span>
+                    <span class="text-stone-500 dark:text-stone-400 mr-1">لديك ${commute.totalClassesCount} حصص مجدولة</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-stone-500 flex items-center gap-3">
+                  <span>أول محاضرة: <strong class="text-stone-800 dark:text-stone-200 font-mono">${commute.firstSlot.start}</strong> (${commute.firstClass.subject})</span>
+                  <span>•</span>
+                  <span>آخر محاضرة: <strong class="text-stone-800 dark:text-stone-200 font-mono">${commute.lastSlot.end}</strong></span>
+                </div>
+              </div>
+
+              <!-- Recommendation 2-Card Grid: Departure & Return -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- 1. DEPARTURE CARD -->
+                <div class="p-4 rounded-2xl bg-white dark:bg-warmdark-800 border-2 border-emerald-500/30 dark:border-emerald-500/20 shadow-xs space-y-3 relative overflow-hidden">
+                  <div class="absolute top-0 left-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-0.5 rounded-br-xl shadow-2xs">
+                    أفضل باص للذهاب 🚀
+                  </div>
+
+                  <div class="flex items-center gap-2 pt-1">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center shrink-0">
+                      <i data-lucide="bus" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                        <span>الذهاب من ظفر مع ${comp.name}</span>
+                      </h4>
+                      <p class="text-[11px] text-stone-400">نقطة ركوبك: ظفر 📍</p>
+                    </div>
+                  </div>
+
+                  <!-- Departure Time Details -->
+                  <div class="p-3 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-900/40 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs text-emerald-900 dark:text-emerald-200 font-medium">موعد تحرك الباص من ظفر:</span>
+                      <span class="text-base font-black text-emerald-700 dark:text-emerald-300 font-mono">${formatTime12h(dep.zafar)} (${dep.zafar})</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-emerald-800 dark:text-emerald-300 pt-1 border-t border-emerald-200/40">
+                      <span>الوصول المتوقع للجامعة:</span>
+                      <span class="font-bold font-mono">${formatTime12h(dep.arrivalEstimate)} (${dep.arrivalEstimate})</span>
+                    </div>
+                  </div>
+
+                  <!-- Arrival Buffer Status -->
+                  <div class="text-xs space-y-1">
+                    <div class="flex items-start gap-1.5 ${dep.isEarly ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-400'}">
+                      <i data-lucide="${dep.isEarly ? 'check-circle' : 'alert-triangle'}" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                      <span>
+                        ${dep.isEarly 
+                          ? `تصل قبل أول محاضرة (${commute.firstClass.subject}) بـ <strong>${dep.waitTime} دقيقة</strong> مستريحاً وبدون أي استعجال!`
+                          : `تنبيه: هذا الباص يصل بعد بدء المحاضرة بـ ${dep.lateTime} دقيقة.`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. RETURN CARD -->
+                <div class="p-4 rounded-2xl bg-white dark:bg-warmdark-800 border-2 border-sky-500/30 dark:border-sky-500/20 shadow-xs space-y-3 relative overflow-hidden">
+                  <div class="absolute top-0 left-0 bg-sky-600 text-white text-[10px] font-bold px-3 py-0.5 rounded-br-xl shadow-2xs">
+                    أقرب باص للعودة 🏡
+                  </div>
+
+                  <div class="flex items-center gap-2 pt-1">
+                    <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 flex items-center justify-center shrink-0">
+                      <i data-lucide="home" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+                        <span>العودة من جامعة المنصورة مع ${comp.name}</span>
+                      </h4>
+                      <p class="text-[11px] text-stone-400">نفس شركة الذهاب للالتزام بالاشتراك</p>
+                    </div>
+                  </div>
+
+                  <!-- Return Time Details -->
+                  <div class="p-3 rounded-xl bg-sky-50/60 dark:bg-sky-950/30 border border-sky-200/60 dark:border-sky-900/40 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs text-sky-900 dark:text-sky-200 font-medium">موعد تحرك باص العودة:</span>
+                      <span class="text-base font-black text-sky-700 dark:text-sky-300 font-mono">${ret.label || formatTime12h(ret.time)}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-sky-800 dark:text-sky-300 pt-1 border-t border-sky-200/40">
+                      <span>انتهاء آخر حصة (${commute.lastClass.subject}):</span>
+                      <span class="font-bold font-mono">${formatTime12h(commute.lastSlot.end)} (${commute.lastSlot.end})</span>
+                    </div>
+                  </div>
+
+                  <!-- Return Buffer Status -->
+                  <div class="text-xs space-y-1">
+                    <div class="flex items-start gap-1.5 ${ret.available ? 'text-sky-700 dark:text-sky-300' : 'text-amber-600 dark:text-amber-400'}">
+                      <i data-lucide="${ret.available ? 'clock' : 'alert-circle'}" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                      <span>
+                        ${ret.available
+                          ? `يتحرك الباص بعد <strong>${ret.waitTime} دقيقة</strong> من خروجك من المحاضرة، وقت ممتاز للوصول للموقف بدون جري!`
+                          : ret.warning}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Quick Side-by-Side Comparison Snippet -->
+              <div class="p-3 rounded-2xl bg-white/70 dark:bg-warmdark-800/70 border border-stone-200/70 dark:border-warmdark-700 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-0.5">
+                  <span class="font-bold text-stone-800 dark:text-stone-200">تريد تجربة الشركة الأخرى اليوم؟</span>
+                  <p class="text-[11px] text-stone-400">
+                    ${preferredBusCompany === 'zain' 
+                      ? 'يمكنك التبديل إلى شركة الغندور لمعاينة مواعيدها لليوم بلمسة واحدة.' 
+                      : 'يمكنك التبديل إلى شركة زين لمعاينة مواعيدها لليوم بلمسة واحدة.'}
+                  </p>
+                </div>
+                <button onclick="setPreferredBusCompany('${preferredBusCompany === 'zain' ? 'ghandour' : 'zain'}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 dark:bg-warmdark-700 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 shrink-0 self-start sm:self-auto transition-colors">
+                  التبديل إلى ${preferredBusCompany === 'zain' ? 'شركة الغندور' : 'شركة زين'} 🔄
+                </button>
+              </div>
+
+            </div>
+          `;
+        }
+      }
+
+      // 4. Render All Company Cards
+      renderBusCompanyCards();
+      lucide.createIcons();
+    }
+
+    function renderBusCompanyCards() {
+      const container = document.getElementById('busCompanyCardsList');
+      if (!container) return;
+
+      const companiesToRender = [];
+      if (currentBusCompanyView === 'both' || currentBusCompanyView === 'zain') {
+        companiesToRender.push(busCompaniesData.zain);
+      }
+      if (currentBusCompanyView === 'both' || currentBusCompanyView === 'ghandour') {
+        companiesToRender.push(busCompaniesData.ghandour);
+      }
+
+      container.innerHTML = companiesToRender.map(comp => {
+        const isPreferred = preferredBusCompany === comp.id;
+        const colorClass = comp.id === 'zain' ? 'sky' : 'amber';
+
+        return `
+          <div class="rounded-3xl p-5 bg-white dark:bg-warmdark-800 border ${isPreferred ? 'border-2 border-sage-500 dark:border-sage-500 shadow-md ring-2 ring-sage-500/10' : 'border border-stone-200/80 dark:border-warmdark-700 shadow-soft'} space-y-4 flex flex-col justify-between">
+            <div class="space-y-4">
+              
+              <!-- Company Header -->
+              <div class="flex items-center justify-between border-b border-stone-100 dark:border-warmdark-700 pb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-2xl ${comp.id === 'zain' ? 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'} flex items-center justify-center font-bold text-lg shadow-xs">
+                    🚌
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h4 class="text-base font-bold text-stone-900 dark:text-white">${comp.name}</h4>
+                      ${isPreferred ? `
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sage-100 text-sage-800 dark:bg-sage-950 dark:text-sage-300 border border-sage-200 dark:border-sage-800">
+                          شركتك المفضلة ⭐
+                        </span>
+                      ` : ''}
+                    </div>
+                    <p class="text-[11px] text-stone-400">${comp.tagline}</p>
+                  </div>
+                </div>
+
+                ${!isPreferred ? `
+                  <button onclick="setPreferredBusCompany('${comp.id}')" class="px-2.5 py-1 rounded-xl text-[11px] font-medium text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
+                    تعيين كمفضلة
+                  </button>
+                ` : ''}
+              </div>
+
+              <!-- Departure Table (الذهاب من المحطات) -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
+                    <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+                    <span>مواعيد الذهاب (المحطات):</span>
+                  </span>
+                  <span class="text-[10px] px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-semibold">
+                    انطلاقك من ظفر 📍
+                  </span>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-stone-200/80 dark:border-warmdark-700 text-xs">
+                  <table class="w-full text-center">
+                    <thead class="bg-stone-50 dark:bg-warmdark-700/60 text-stone-600 dark:text-stone-300 font-semibold border-b border-stone-200/80 dark:border-warmdark-700 text-[11px]">
+                      <tr>
+                        <th class="py-2 px-2 bg-emerald-100/60 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200">ظفر 📍</th>
+                        <th class="py-2 px-2">السعودية</th>
+                        <th class="py-2 px-2">الصفا</th>
+                        <th class="py-2 px-2">البيضاء</th>
+                        <th class="py-2 px-2 text-stone-400">وصول الجامعة</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100 dark:divide-warmdark-700 font-mono text-[11px]">
+                      ${comp.departures.map(d => `
+                        <tr class="hover:bg-stone-50/50 dark:hover:bg-warmdark-700/40 transition-colors">
+                          <td class="py-2 px-2 font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50/40 dark:bg-emerald-950/20">${d.zafar}</td>
+                          <td class="py-2 px-2 text-stone-600 dark:text-stone-300">${d.saudi}</td>
+                          <td class="py-2 px-2 text-stone-600 dark:text-stone-300">${d.safa}</td>
+                          <td class="py-2 px-2 text-stone-600 dark:text-stone-300">${d.bayda}</td>
+                          <td class="py-2 px-2 text-stone-400">${d.arrivalEstimate}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Return Trips (العودة من جامعة المنصورة) -->
+              <div class="space-y-2">
+                <span class="font-bold text-xs text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
+                  <i data-lucide="arrow-left-circle" class="w-3.5 h-3.5 text-sky-600"></i>
+                  <span>مواعيد العودة (من جامعة المنصورة):</span>
+                </span>
+                
+                <div class="flex flex-wrap gap-1.5 text-xs">
+                  ${comp.returns.map(r => `
+                    <span class="px-2.5 py-1 rounded-xl bg-stone-50 dark:bg-warmdark-700/60 border border-stone-200/60 dark:border-warmdark-600 font-mono text-[11px] text-stone-700 dark:text-stone-300">
+                      ${r.label || formatTime12h(r.time)}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Company Notice -->
+              <div class="p-2.5 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-[11px] text-amber-800 dark:text-amber-300 flex items-start gap-1.5">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
+                <span>${comp.notes}</span>
+              </div>
+
+            </div>
+
+            <!-- Contact & Phone Footer -->
+            <div class="pt-3 border-t border-stone-100 dark:border-warmdark-700 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span class="text-stone-400 text-[11px]">أرقام التواصل والحجز:</span>
+              <div class="flex items-center gap-2 flex-wrap">
+                ${comp.phones.map(ph => `
+                  <a href="tel:${ph.number}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-warmdark-700 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 font-medium text-[11px] transition-colors" title="اتصال مباشر بـ ${ph.name}">
+                    <i data-lucide="phone" class="w-3 h-3 text-sage-600"></i>
+                    <span>${ph.name}: <strong class="font-mono">${ph.number}</strong></span>
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function renderTodayBusQuickBar() {
+      const bar = document.getElementById('todayBusQuickBar');
+      if (!bar) return;
+
+      const currentDay = new Date().getDay();
+      const commute = calculateSmartBusCommute(currentDay, preferredBusCompany);
+
+      if (!commute.hasClasses) {
+        bar.innerHTML = `
+          <div class="flex items-center gap-2 text-stone-500 dark:text-stone-400 text-[11px]">
+            <i data-lucide="bus" class="w-4 h-4 text-amber-500"></i>
+            <span>اليوم إجازة ولا توجد محاضرات • لا تحتاج لباص الجامعة اليوم</span>
+          </div>
+          <span class="text-[11px] text-sage-700 dark:text-sage-300 font-medium underline flex items-center gap-1">
+            <span>مواعيد الباصات</span>
+            <i data-lucide="chevron-left" class="w-3 h-3"></i>
+          </span>
+        `;
+      } else {
+        const dep = commute.bestDeparture;
+        const ret = commute.bestReturn;
+        const comp = commute.company;
+
+        bar.innerHTML = `
+          <div class="flex items-center gap-2 text-stone-700 dark:text-stone-200 text-[11px] flex-wrap">
+            <span class="px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold flex items-center gap-1">
+              <i data-lucide="bus" class="w-3 h-3"></i>
+              <span>باص اليوم (${comp.name}):</span>
+            </span>
+            <span>الذهاب من ظفر: <strong class="font-mono text-emerald-600 font-bold">${formatTime12h(dep.zafar)}</strong> (${dep.waitTime} د قبل المحاضرة)</span>
+            <span>•</span>
+            <span>العودة: <strong class="font-mono text-sky-600 font-bold">${ret.label || formatTime12h(ret.time)}</strong></span>
+          </div>
+          <span class="text-[11px] text-sage-700 dark:text-sage-300 font-semibold underline flex items-center gap-1 shrink-0">
+            <span>عرض كل المواعيد</span>
+            <i data-lucide="chevron-left" class="w-3 h-3"></i>
+          </span>
+        `;
+      }
+
+      lucide.createIcons();
     }
 
     // ----------------------------------------------------

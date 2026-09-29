@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (v5 - Drag & Drop Schedule & Class Rescheduling)
+// Service Worker for Section 6 PWA (v6 - Bus Schedules & Smart Commute Assistant)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v5';
+const CACHE_NAME = 'section6-hub-v6';
 
 const PRECACHE_ASSETS = [
   './',
