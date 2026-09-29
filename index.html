@@ -419,14 +419,23 @@
 
     <!-- VIEW 3: SUBJECTS & ATTENDANCE TRACKER -->
     <div id="view-subjects" class="hidden space-y-4">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-lg font-bold text-stone-900 dark:text-white">سجل المواد ونسب الحضور</h2>
-          <p class="text-xs text-stone-500 dark:text-stone-400">تتبع نسبة الغياب المسموح به لكل مادة (الحد الأقصى الموصى به 25%)</p>
+          <h2 class="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
+            <span>المقررات الدراسية وتوزيع الدرجات</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sage-100 text-sage-800 dark:bg-sage-950 dark:text-sage-300">الفرقة 3 • نظم</span>
+          </h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400">تتبع نسب الحضور، روابط الماتريال، وحاسبة الدرجات وفقاً للائحة الرسمية المعتمدة</p>
         </div>
-        <button onclick="resetAllAttendanceConfirm()" class="text-xs text-stone-500 hover:text-rose-600 transition-colors">
-          إعادة ضبط السجل
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="openGradeModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-200 border border-amber-200/80 dark:border-amber-800 text-xs font-semibold shadow-2xs transition-colors" title="عرض لائحة توزيع الدرجات المعتمدة رسمياً">
+            <i data-lucide="award" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>لائحة الدرجات الرسمية 📊</span>
+          </button>
+          <button onclick="resetAllAttendanceConfirm()" class="text-xs text-stone-400 hover:text-rose-600 transition-colors px-2 py-1">
+            إعادة ضبط السجل
+          </button>
+        </div>
       </div>
 
       <!-- Subjects Cards Grid -->
@@ -930,6 +939,165 @@
 
       <div class="flex items-center justify-end pt-2 border-t border-stone-100 dark:border-warmdark-700">
         <button onclick="closeCalendarModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-warmdark-700 hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 transition-colors">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GRADE DISTRIBUTION (لائحة توزيع الدرجات الرسمية) -->
+  <div id="gradeDistributionModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-3xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="award" class="w-5 h-5 text-amber-500"></i>
+            <span>توزيع درجات مقررات الفرقة الثالثة (نظم المعلومات)</span>
+          </h3>
+          <p class="text-xs text-stone-500 dark:text-stone-400">الفصل الدراسي الأول 2026-2027 • كلية الحاسبات والمعلومات (معتمدة رسمياً)</p>
+        </div>
+        <button onclick="closeGradeModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="flex items-center gap-2 p-1.5 bg-stone-100 dark:bg-warmdark-700/60 rounded-2xl">
+        <button id="gradeTabTableBtn" onclick="switchGradeTab('table')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5">
+          <i data-lucide="table" class="w-4 h-4 text-amber-600"></i>
+          <span>جدول توزيع الدرجات الرسمي 📊</span>
+        </button>
+        <button id="gradeTabImageBtn" onclick="switchGradeTab('image')" class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5">
+          <i data-lucide="image" class="w-4 h-4 text-amber-600"></i>
+          <span>صورة الوثيقة المعتمدة 🖼️</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Table & Explanations -->
+      <div id="gradeTabTableContent" class="space-y-4">
+        <!-- Explanatory Categories -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 space-y-1.5">
+            <div class="font-bold text-sky-800 dark:text-sky-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+              <span>المقررات العملية (3 مواد كودها P)</span>
+            </div>
+            <div class="text-[11px] text-stone-600 dark:text-stone-300 space-y-0.5">
+              <div>• شبكات الحاسب (IT311P)</div>
+              <div>• تحليل النظم والتصميم المنطقي (IS312P)</div>
+              <div>• قواعد بيانات II (IS313P)</div>
+            </div>
+            <div class="pt-1.5 border-t border-sky-200/60 dark:border-sky-800 text-[11px] font-semibold text-sky-900 dark:text-sky-200">
+              40 أعمال سنة (10 تحريري + 20 عملي + 10 شفهي) + 60 فاينال = 100
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 space-y-1.5">
+            <div class="font-bold text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+              <span>المقررات النظرية (مادتان كودهما T)</span>
+            </div>
+            <div class="text-[11px] text-stone-600 dark:text-stone-300 space-y-0.5">
+              <div>• نظرية المعلومات (IS311T)</div>
+              <div>• أساليب البحث العلمي (UNI311T)</div>
+            </div>
+            <div class="pt-1.5 border-t border-purple-200/60 dark:border-purple-800 text-[11px] font-semibold text-purple-900 dark:text-purple-200">
+              25 أعمال سنة (تحريري ميدتيرم) + 75 فاينال = 100
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Breakdown Table -->
+        <div class="border border-stone-200 dark:border-warmdark-700 rounded-2xl overflow-x-auto shadow-2xs">
+          <table class="w-full text-xs text-right whitespace-nowrap">
+            <thead>
+              <tr class="bg-stone-50 dark:bg-warmdark-700/80 border-b border-stone-200 dark:border-warmdark-600 text-stone-700 dark:text-stone-200">
+                <th class="p-2.5 font-bold">الكود</th>
+                <th class="p-2.5 font-bold">اسم المقرر</th>
+                <th class="p-2.5 font-bold">Course</th>
+                <th class="p-2.5 font-bold text-center bg-amber-50/60 dark:bg-amber-950/30">تحريري</th>
+                <th class="p-2.5 font-bold text-center bg-amber-50/60 dark:bg-amber-950/30">عملي</th>
+                <th class="p-2.5 font-bold text-center bg-amber-50/60 dark:bg-amber-950/30">شفهي</th>
+                <th class="p-2.5 font-bold text-center bg-amber-100/60 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">أعمال السنة</th>
+                <th class="p-2.5 font-bold text-center bg-sky-50 dark:bg-sky-950/30 text-sky-800 dark:text-sky-300">نظري (فاينال)</th>
+                <th class="p-2.5 font-bold text-center bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">الدرجة الكلية</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 dark:divide-warmdark-700 font-mono">
+              <tr class="hover:bg-stone-50 dark:hover:bg-warmdark-700/50">
+                <td class="p-2.5 text-stone-500 font-medium">IS311T</td>
+                <td class="p-2.5 font-sans font-bold text-stone-900 dark:text-white">نظرية المعلومات</td>
+                <td class="p-2.5 text-stone-500 font-sans">Information Theory</td>
+                <td class="p-2.5 text-center font-bold">25</td>
+                <td class="p-2.5 text-center text-stone-400">—</td>
+                <td class="p-2.5 text-center text-stone-400">—</td>
+                <td class="p-2.5 text-center font-bold text-amber-700 dark:text-amber-300">25</td>
+                <td class="p-2.5 text-center font-bold text-sky-700 dark:text-sky-300">75</td>
+                <td class="p-2.5 text-center font-extrabold text-emerald-700 dark:text-emerald-300">100</td>
+              </tr>
+              <tr class="hover:bg-stone-50 dark:hover:bg-warmdark-700/50">
+                <td class="p-2.5 text-stone-500 font-medium">IT311P</td>
+                <td class="p-2.5 font-sans font-bold text-stone-900 dark:text-white">شبكات الحاسب</td>
+                <td class="p-2.5 text-stone-500 font-sans">Computer Networks</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold">20</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold text-amber-700 dark:text-amber-300">40</td>
+                <td class="p-2.5 text-center font-bold text-sky-700 dark:text-sky-300">60</td>
+                <td class="p-2.5 text-center font-extrabold text-emerald-700 dark:text-emerald-300">100</td>
+              </tr>
+              <tr class="hover:bg-stone-50 dark:hover:bg-warmdark-700/50">
+                <td class="p-2.5 text-stone-500 font-medium">IS312P</td>
+                <td class="p-2.5 font-sans font-bold text-stone-900 dark:text-white">تحليل النظم والتصميم المنطقي</td>
+                <td class="p-2.5 text-stone-500 font-sans">Systems Analysis & Design</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold">20</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold text-amber-700 dark:text-amber-300">40</td>
+                <td class="p-2.5 text-center font-bold text-sky-700 dark:text-sky-300">60</td>
+                <td class="p-2.5 text-center font-extrabold text-emerald-700 dark:text-emerald-300">100</td>
+              </tr>
+              <tr class="hover:bg-stone-50 dark:hover:bg-warmdark-700/50">
+                <td class="p-2.5 text-stone-500 font-medium">IS313P</td>
+                <td class="p-2.5 font-sans font-bold text-stone-900 dark:text-white">قواعد بيانات II</td>
+                <td class="p-2.5 text-stone-500 font-sans">Database Systems II</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold">20</td>
+                <td class="p-2.5 text-center font-bold">10</td>
+                <td class="p-2.5 text-center font-bold text-amber-700 dark:text-amber-300">40</td>
+                <td class="p-2.5 text-center font-bold text-sky-700 dark:text-sky-300">60</td>
+                <td class="p-2.5 text-center font-extrabold text-emerald-700 dark:text-emerald-300">100</td>
+              </tr>
+              <tr class="hover:bg-stone-50 dark:hover:bg-warmdark-700/50">
+                <td class="p-2.5 text-stone-500 font-medium">UNI311T</td>
+                <td class="p-2.5 font-sans font-bold text-stone-900 dark:text-white">أساليب البحث العلمي</td>
+                <td class="p-2.5 text-stone-500 font-sans">Research Methods</td>
+                <td class="p-2.5 text-center font-bold">25</td>
+                <td class="p-2.5 text-center text-stone-400">—</td>
+                <td class="p-2.5 text-center text-stone-400">—</td>
+                <td class="p-2.5 text-center font-bold text-amber-700 dark:text-amber-300">25</td>
+                <td class="p-2.5 text-center font-bold text-sky-700 dark:text-sky-300">75</td>
+                <td class="p-2.5 text-center font-extrabold text-emerald-700 dark:text-emerald-300">100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Official Document Image -->
+      <div id="gradeTabImageContent" class="hidden space-y-3">
+        <div class="rounded-2xl overflow-hidden border border-stone-200 dark:border-warmdark-700 bg-stone-50 dark:bg-warmdark-900 flex items-center justify-center p-2">
+          <img src="./grade-distribution.png" alt="وثيقة توزيع الدرجات الرسمية - شعبة نظم المعلومات" class="rounded-xl max-h-[60vh] object-contain shadow-xs hover:scale-105 transition-transform duration-300" />
+        </div>
+        <div class="flex items-center justify-between text-xs text-stone-500">
+          <span>الوثيقة الرسمية المعتمدة لتوزيع الدرجات بالكلية.</span>
+          <a href="./grade-distribution.png" download="توزيع_درجات_الفرقة_الثالثة_نظم.png" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-xs">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>تحميل الوثيقة الأصلية</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end pt-2 border-t border-stone-100 dark:border-warmdark-700">
+        <button onclick="closeGradeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-warmdark-700 hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 transition-colors">إغلاق</button>
       </div>
     </div>
   </div>
@@ -1671,16 +1839,100 @@
     }
 
     // ----------------------------------------------------
-    // 6. RENDER SUBJECTS & ATTENDANCE SUMMARY
+    // 6. RENDER SUBJECTS & ATTENDANCE SUMMARY (OFFICIAL REGULATIONS)
     // ----------------------------------------------------
+    function openGradeModal() {
+      document.getElementById('gradeDistributionModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeGradeModal() {
+      document.getElementById('gradeDistributionModal').classList.add('hidden');
+    }
+
+    function switchGradeTab(tab) {
+      const tableBtn = document.getElementById('gradeTabTableBtn');
+      const imageBtn = document.getElementById('gradeTabImageBtn');
+      const tableContent = document.getElementById('gradeTabTableContent');
+      const imageContent = document.getElementById('gradeTabImageContent');
+
+      if (tab === 'table') {
+        tableBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        imageBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+        tableContent.classList.remove('hidden');
+        imageContent.classList.add('hidden');
+      } else {
+        imageBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        tableBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+        imageContent.classList.remove('hidden');
+        tableContent.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
     function renderSubjectsSummary() {
       const container = document.getElementById('subjectsListContainer');
       const uniqueSubjects = [
-        { id: "networks", name: "شبكات الحاسب", color: "sky", doc: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ", ta: "م/ محمد السيد" },
-        { id: "db2", name: "قواعد بيانات 2", color: "emerald", doc: "أ.د/ أميرة رزق", ta: "م/ آلاء جلال" },
-        { id: "sad", name: "تحليل النظم والتصميم المنطقي", color: "amber", doc: "أ.د/ سمير عبدالرازق", ta: "م/ محمود سعيد" },
-        { id: "it", name: "نظرية المعلومات", color: "purple", doc: "د/ إسراء جمال", ta: "م/ أحمد عماد الدين" },
-        { id: "methods", name: "أساليب البحث العلمي", color: "rose", doc: "د/ هالة عكاشة", ta: "م/ آية عياد" }
+        { 
+          id: "it", 
+          code: "IS311T", 
+          fullCode: "2-3-3 IS311T",
+          name: "نظرية المعلومات", 
+          enName: "Information Theory",
+          color: "purple", 
+          doc: "د/ إسراء جمال", 
+          ta: "م/ أحمد عماد الدين",
+          isPractical: false,
+          grades: { written: 25, practical: 0, oral: 0, courseworkTotal: 25, final: 75, total: 100 }
+        },
+        { 
+          id: "networks", 
+          code: "IT311P", 
+          fullCode: "2-3-3 IT311P",
+          name: "شبكات الحاسب", 
+          enName: "Computer Networks",
+          color: "sky", 
+          doc: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ", 
+          ta: "م/ محمد السيد",
+          isPractical: true,
+          grades: { written: 10, practical: 20, oral: 10, courseworkTotal: 40, final: 60, total: 100 }
+        },
+        { 
+          id: "sad", 
+          code: "IS312P", 
+          fullCode: "2-3-3 IS312P",
+          name: "تحليل النظم والتصميم المنطقي", 
+          enName: "Systems Analysis and Logical Design",
+          color: "amber", 
+          doc: "أ.د/ سمير عبدالرازق", 
+          ta: "م/ محمود سعيد",
+          isPractical: true,
+          grades: { written: 10, practical: 20, oral: 10, courseworkTotal: 40, final: 60, total: 100 }
+        },
+        { 
+          id: "db2", 
+          code: "IS313P", 
+          fullCode: "2-3-3 IS313P",
+          name: "قواعد بيانات 2", 
+          enName: "Database Systems II",
+          color: "emerald", 
+          doc: "أ.د/ أميرة رزق", 
+          ta: "م/ آلاء جلال",
+          isPractical: true,
+          grades: { written: 10, practical: 20, oral: 10, courseworkTotal: 40, final: 60, total: 100 }
+        },
+        { 
+          id: "methods", 
+          code: "UNI311T", 
+          fullCode: "2-3-3 UNI311T",
+          name: "أساليب البحث العلمي", 
+          enName: "Research Methods",
+          color: "rose", 
+          doc: "د/ هالة عكاشة", 
+          ta: "م/ آية عياد",
+          isPractical: false,
+          grades: { written: 25, practical: 0, oral: 0, courseworkTotal: 25, final: 75, total: 100 }
+        }
       ];
 
       // Calculate attendance stats
@@ -1703,14 +1955,22 @@
         const absentTotal = Math.max(0, absentCount);
         const remainingAbsence = Math.max(0, maxAllowedAbsence - absentTotal);
 
-        // Coursework Grades
+        // Coursework Grades with Official Limits
         const g = (courseworkGrades && courseworkGrades[sub.id]) ? courseworkGrades[sub.id] : {};
         const mVal = parseFloat(g.midterm) || 0;
         const lVal = parseFloat(g.lab) || 0;
         const oVal = parseFloat(g.oral) || 0;
         const fVal = parseFloat(g.final) || 0;
-        const hasAnyGrade = (g.midterm !== undefined && g.midterm !== '') || (g.lab !== undefined && g.lab !== '') || (g.oral !== undefined && g.oral !== '') || (g.final !== undefined && g.final !== '');
-        const totalGrade = Math.round((mVal + lVal + oVal + fVal) * 10) / 10;
+        
+        const hasAnyGrade = sub.isPractical 
+          ? (g.midterm !== undefined && g.midterm !== '') || (g.lab !== undefined && g.lab !== '') || (g.oral !== undefined && g.oral !== '') || (g.final !== undefined && g.final !== '')
+          : (g.midterm !== undefined && g.midterm !== '') || (g.final !== undefined && g.final !== '');
+
+        const courseworkSum = sub.isPractical 
+          ? Math.round((mVal + lVal + oVal) * 10) / 10 
+          : Math.round(mVal * 10) / 10;
+
+        const totalGrade = Math.round((courseworkSum + fVal) * 10) / 10;
         
         let gradeLetter = '—';
         if (hasAnyGrade) {
@@ -1721,7 +1981,7 @@
           else if (totalGrade >= 70) gradeLetter = 'C+ جيد';
           else if (totalGrade >= 65) gradeLetter = 'C جيد';
           else if (totalGrade >= 60) gradeLetter = 'D مقبول';
-          else gradeLetter = 'F بحاجة لرفع الدرجة ⚠️';
+          else gradeLetter = 'F راسب ⚠️';
         }
 
         const materialUrl = (subjectMaterials && subjectMaterials[sub.id]) ? subjectMaterials[sub.id] : "";
@@ -1730,12 +1990,21 @@
           <div class="rounded-2xl p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft space-y-4">
             <div class="flex items-start justify-between">
               <div>
-                <span class="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold ${theme.badge} mb-1">
-                  نظم معلومات
-                </span>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="inline-block px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-stone-100 dark:bg-warmdark-700 text-stone-600 dark:text-stone-300">
+                    ${sub.code}
+                  </span>
+                  <span class="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold ${theme.badge}">
+                    نظم معلومات
+                  </span>
+                </div>
                 <h3 class="text-base font-bold text-stone-900 dark:text-white">${sub.name}</h3>
+                <div class="text-[11px] text-stone-400 font-sans mt-0.5">${sub.enName}</div>
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${sub.isPractical ? 'bg-sky-50 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/60' : 'bg-purple-50 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200/60'} mt-1.5">
+                  <span>${sub.isPractical ? 'مقرر عملي (40 أعمال سنة + 60 فاينال)' : 'مقرر نظري (25 أعمال سنة + 75 فاينال)'}</span>
+                </div>
               </div>
-              <div class="text-left">
+              <div class="text-left shrink-0">
                 <span class="text-xl font-bold ${percent >= 75 ? 'text-sage-600 dark:text-sage-400' : 'text-rose-600 dark:text-rose-400'}">${percent}%</span>
                 <div class="text-[10px] text-stone-400">نسبة الحضور</div>
               </div>
@@ -1790,12 +2059,12 @@
               </div>
             </div>
 
-            <!-- Coursework & Grades Interactive Breakdown -->
+            <!-- Coursework & Grades Interactive Breakdown (Tailored to Regulation) -->
             <details class="group rounded-xl border border-stone-200/60 dark:border-warmdark-600 bg-stone-50/60 dark:bg-warmdark-700/40 p-2.5 text-xs">
               <summary class="flex items-center justify-between cursor-pointer list-none font-semibold text-stone-700 dark:text-stone-300 select-none">
                 <div class="flex items-center gap-1.5">
                   <i data-lucide="calculator" class="w-3.5 h-3.5 text-amber-500"></i>
-                  <span>حاسبة درجات أعمال السنة والتقدير</span>
+                  <span>حاسبة أعمال السنة والتقدير</span>
                 </div>
                 <div class="flex items-center gap-1.5">
                   <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${totalGrade >= 85 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : totalGrade >= 65 ? 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'}">
@@ -1804,23 +2073,44 @@
                   <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 group-open:rotate-180 transition-transform"></i>
                 </div>
               </summary>
-              <div class="pt-3 border-t border-stone-200/50 dark:border-warmdark-600 mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <div>
-                  <label class="block text-[10px] text-stone-400 font-medium mb-1">الميدتيرم (20)</label>
-                  <input type="number" min="0" max="20" step="0.5" value="${g.midterm !== undefined ? g.midterm : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'midterm', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+              <div class="pt-3 border-t border-stone-200/50 dark:border-warmdark-600 mt-2 space-y-2.5">
+                <div class="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400 pb-1.5 border-b border-stone-200/40 dark:border-warmdark-600">
+                  <span>أعمال السنة: <strong class="text-amber-600 dark:text-amber-400 font-mono">${courseworkSum} / ${sub.grades.courseworkTotal}</strong></span>
+                  <span>الفاينال: <strong class="text-sky-600 dark:text-sky-400 font-mono">${fVal} / ${sub.grades.final}</strong></span>
+                  <span>الإجمالي: <strong class="text-stone-800 dark:text-stone-200 font-mono font-bold">${totalGrade} / 100</strong></span>
                 </div>
-                <div>
-                  <label class="block text-[10px] text-stone-400 font-medium mb-1">العملي والشيتات (20)</label>
-                  <input type="number" min="0" max="20" step="0.5" value="${g.lab !== undefined ? g.lab : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'lab', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
-                </div>
-                <div>
-                  <label class="block text-[10px] text-stone-400 font-medium mb-1">حضور وتفاعل (10)</label>
-                  <input type="number" min="0" max="10" step="0.5" value="${g.oral !== undefined ? g.oral : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'oral', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
-                </div>
-                <div>
-                  <label class="block text-[10px] text-stone-400 font-medium mb-1">فاينال متوقع (50)</label>
-                  <input type="number" min="0" max="50" step="0.5" value="${g.final !== undefined ? g.final : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'final', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
-                </div>
+
+                ${sub.isPractical ? `
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">تحريري (10)</label>
+                      <input type="number" min="0" max="10" step="0.5" value="${g.midterm !== undefined ? g.midterm : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'midterm', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">عملي معمل (20)</label>
+                      <input type="number" min="0" max="20" step="0.5" value="${g.lab !== undefined ? g.lab : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'lab', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">شفهي وتفاعل (10)</label>
+                      <input type="number" min="0" max="10" step="0.5" value="${g.oral !== undefined ? g.oral : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'oral', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">نظري فاينال (60)</label>
+                      <input type="number" min="0" max="60" step="0.5" value="${g.final !== undefined ? g.final : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'final', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                  </div>
+                ` : `
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">تحريري وأعمال سنة (25)</label>
+                      <input type="number" min="0" max="25" step="0.5" value="${g.midterm !== undefined ? g.midterm : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'midterm', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-stone-400 font-medium mb-1">نظري فاينال (75)</label>
+                      <input type="number" min="0" max="75" step="0.5" value="${g.final !== undefined ? g.final : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'final', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                    </div>
+                  </div>
+                `}
               </div>
             </details>
           </div>

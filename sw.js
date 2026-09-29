@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v12 - Official Academic Calendar 2026-2027 Integration)
+// Service Worker for Section 6 PWA (v13 - Official Grade Distribution & Faculty Regulations)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v12';
+const CACHE_NAME = 'section6-hub-v13';
 
 const PRECACHE_ASSETS = [
   './',
@@ -10,6 +10,7 @@ const PRECACHE_ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './academic-calendar.png',
+  './grade-distribution.png',
   './vendor/tailwind.js',
   './vendor/lucide.min.js',
   './vendor/confetti.browser.min.js',
