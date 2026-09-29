@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (v6 - Bus Schedules & Smart Commute Assistant)
+// Service Worker for Section 6 PWA (v7 - Updated Google Apps Script Web App URL)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v6';
+const CACHE_NAME = 'section6-hub-v7';
 
 const PRECACHE_ASSETS = [
   './',
