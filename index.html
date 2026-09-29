@@ -1154,6 +1154,42 @@
     let activeDayView = new Date().getDay(); // 0 is Sunday, 1 Monday, 2 Tuesday, 4 Thursday...
 
     // ----------------------------------------------------
+    // 2.5 TIME FORMATTING HELPERS (12-Hour Arabic System)
+    // ----------------------------------------------------
+    function formatTime12h(timeStr) {
+      if (!timeStr) return '';
+      const [hStr, mStr] = timeStr.split(':');
+      let h = parseInt(hStr, 10);
+      const m = mStr || '00';
+      const p = h >= 12 ? 'م' : 'ص';
+      if (h > 12) h -= 12;
+      if (h === 0) h = 12;
+      const hFormatted = h.toString().padStart(2, '0');
+      return `${hFormatted}:${m} ${p}`;
+    }
+
+    function formatSlot12h(start, end) {
+      if (!start || !end) return '';
+      const to12 = (t) => {
+        const [hStr, mStr] = t.split(':');
+        let h = parseInt(hStr, 10);
+        const m = mStr || '00';
+        const p = h >= 12 ? 'م' : 'ص';
+        if (h > 12) h -= 12;
+        if (h === 0) h = 12;
+        const hFormatted = h.toString().padStart(2, '0');
+        return { h: hFormatted, m, p };
+      };
+      const s = to12(start);
+      const e = to12(end);
+      if (s.p === e.p) {
+        return `${s.h}:${s.m} - ${e.h}:${e.m} ${s.p}`;
+      } else {
+        return `${s.h}:${s.m} ${s.p} - ${e.h}:${e.m} ${e.p}`;
+      }
+    }
+
+    // ----------------------------------------------------
     // 3. SOUND EFFECT (Soft Zen Audio via Web Audio API)
     // ----------------------------------------------------
     function playChime(type = 'success') {
@@ -1279,7 +1315,7 @@
                   </span>
                   <span class="text-xs font-mono font-medium text-stone-500 dark:text-stone-400 inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2 py-0.5 rounded-lg border border-stone-200/50 dark:border-warmdark-600 shrink-0">
                     <i data-lucide="clock" class="w-3.5 h-3.5 text-stone-400"></i>
-                    <span>ف${c.period} (${slot.start} - ${slot.end})</span>
+                    <span>ف${c.period} (${formatSlot12h(slot.start, slot.end)})</span>
                   </span>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
@@ -1425,7 +1461,7 @@
                         </div>
                         <div class="flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400">
                           <span class="px-1.5 py-0.2 rounded ${theme.badge} font-medium">${c.typeLabel}</span>
-                          <span>ف${c.period} (${slot.start})</span>
+                          <span>ف${c.period} (${formatSlot12h(slot.start, slot.end)})</span>
                         </div>
                         <div class="text-[10px] text-stone-500 flex items-center justify-between pt-0.5 border-t border-stone-200/40 dark:border-warmdark-600/40">
                           <span class="font-medium text-stone-700 dark:text-stone-300 truncate max-w-[90px]">${c.room}</span>
@@ -1582,7 +1618,7 @@
         if (subjectName) subjectName.innerText = `${ongoing.subject} (${ongoing.typeLabel})`;
         if (room) room.innerText = ongoing.room;
         if (doc) doc.innerText = ongoing.doctor;
-        if (slotLabel) slotLabel.innerText = `الفترة ${ongoing.period} (${slot.start} - ${slot.end})`;
+        if (slotLabel) slotLabel.innerText = `الفترة ${ongoing.period} (${formatSlot12h(slot.start, slot.end)})`;
       } else if (nextClass) {
         if (icon) icon.setAttribute('data-lucide', 'clock');
         if (statusTitle) statusTitle.innerText = "المحاضرة القادمة";
@@ -1593,7 +1629,7 @@
         if (subjectName) subjectName.innerText = `${nextClass.subject} (${nextClass.typeLabel})`;
         if (room) room.innerText = nextClass.room;
         if (doc) doc.innerText = nextClass.doctor;
-        if (slotLabel) slotLabel.innerText = `الفترة ${nextClass.period} (${slot.start} - ${slot.end})`;
+        if (slotLabel) slotLabel.innerText = `الفترة ${nextClass.period} (${formatSlot12h(slot.start, slot.end)})`;
       } else if (isHoliday) {
         // Off-day / Weekend (Saturday, Wednesday, Friday)
         if (icon) icon.setAttribute('data-lucide', 'coffee');
@@ -2189,7 +2225,7 @@
               <input type="radio" name="move_period_radio" value="${p}" ${isSelected ? 'checked' : ''} class="text-sage-600 focus:ring-sage-500" />
               <div>
                 <span class="font-bold text-xs text-stone-800 dark:text-stone-200">${label}</span>
-                <span class="text-[11px] text-stone-400 font-mono mr-1">(${slot.start} - ${slot.end})</span>
+                <span class="text-[11px] text-stone-400 font-mono mr-1">(${formatSlot12h(slot.start, slot.end)})</span>
               </div>
             </div>
             <div>
@@ -3004,7 +3040,7 @@
                 const theme = colorThemes[c.color] || colorThemes.sky;
                 return `
                   <div class="p-1.5 rounded-lg ${theme.badge} font-medium">
-                    ف${c.period} (${slot.start} - ${slot.end}): ${c.subject} (${c.typeLabel}) - ${c.room}
+                    ف${c.period} (${formatSlot12h(slot.start, slot.end)}): ${c.subject} (${c.typeLabel}) - ${c.room}
                   </div>
                 `;
               }).join('')}
@@ -3333,17 +3369,6 @@
         bestReturn: bestReturn,
         totalClassesCount: classes.length
       };
-    }
-
-    function formatTime12h(timeStr) {
-      if (!timeStr) return '';
-      const [hStr, mStr] = timeStr.split(':');
-      let h = parseInt(hStr, 10);
-      const m = mStr || '00';
-      const p = h >= 12 ? 'م' : 'ص';
-      if (h > 12) h -= 12;
-      if (h === 0) h = 12;
-      return `${h}:${m} ${p}`;
     }
 
     function renderBusesView() {

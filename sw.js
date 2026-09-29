@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v8 - Fix view-buses nesting and display)
+// Service Worker for Section 6 PWA (v9 - 12-Hour Period Time Format)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v8';
+const CACHE_NAME = 'section6-hub-v9';
 
 const PRECACHE_ASSETS = [
   './',
