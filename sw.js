@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v10 - Updated Zain Return Bus Timetable)
+// Service Worker for Section 6 PWA (v11 - Council Enhancements: Driver Contacts, Academic Milestones, Drive Hub, Grade Calculator, Wallpaper Export)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v10';
+const CACHE_NAME = 'section6-hub-v11';
 
 const PRECACHE_ASSETS = [
   './',

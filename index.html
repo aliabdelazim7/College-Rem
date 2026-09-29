@@ -208,8 +208,28 @@
     </div>
   </section>
 
+  <!-- Academic Week & Semester Countdown Bar -->
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2">
+    <div class="flex items-center justify-between gap-2 overflow-x-auto scrollbar-none py-1 text-xs">
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sage-50 text-sage-800 dark:bg-sage-950/60 dark:text-sage-300 border border-sage-200/80 dark:border-sage-800 font-semibold shadow-2xs">
+          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-sage-600"></i>
+          <span>الأسبوع الدراسي: <strong id="academicWeekNumber">الأسبوع 1</strong> 🎓</span>
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 font-semibold shadow-2xs">
+          <i data-lucide="hourglass" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span id="midtermCountdownText">الميدتيرم: بعد 45 يوم ⏱️</span>
+        </span>
+      </div>
+      <div class="hidden sm:flex items-center gap-1 text-[11px] text-stone-400 shrink-0">
+        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+        <span>الترم الأول: 26 سبتمبر 2026 - يناير 2027</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Live Status Card (Current / Next Lecture Countdown) -->
-  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-3 sm:pt-4">
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2 sm:pt-3">
     <div id="liveBanner" class="rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 shadow-card flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
       <div class="flex items-start gap-3 w-full">
         <div id="liveStatusIconContainer" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950/60 dark:text-sage-300 flex items-center justify-center shrink-0 border border-sage-200 dark:border-sage-800/80">
@@ -813,11 +833,23 @@
     <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-2xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between">
         <div>
-          <h3 class="text-base font-bold text-stone-900 dark:text-white">كرت الجدول الجمالي (للحفظ والمشاركة)</h3>
-          <p class="text-xs text-stone-500 dark:text-stone-400">تصميم أنيق ومريح تم تنسيقه ليكون خلفية مميزة أو نسخة مطبوعة</p>
+          <h3 class="text-base font-bold text-stone-900 dark:text-white">تصدير الجدول (صورة عالية الدقة)</h3>
+          <p class="text-xs text-stone-500 dark:text-stone-400">اختر شكل التصدير المناسب: كرت للمشاركة أو خلفية شاشة لقفل الموبايل (9:16)</p>
         </div>
         <button onclick="closeExportModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
           <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Format Selector Buttons -->
+      <div class="flex items-center gap-2 p-1.5 bg-stone-100 dark:bg-warmdark-700/60 rounded-2xl">
+        <button id="exportFmtCardBtn" onclick="setExportFormat('card')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-sage-600"></i>
+          <span>كرت أفقي للمشاركة</span>
+        </button>
+        <button id="exportFmtWallpaperBtn" onclick="setExportFormat('wallpaper')" class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5">
+          <i data-lucide="smartphone" class="w-4 h-4 text-sage-600"></i>
+          <span>خلفية قفل الشاشة (9:16) 📱</span>
         </button>
       </div>
 
@@ -1152,6 +1184,9 @@
     let currentFilter = 'all';
     let currentView = 'today';
     let activeDayView = new Date().getDay(); // 0 is Sunday, 1 Monday, 2 Tuesday, 4 Thursday...
+    let subjectMaterials = JSON.parse(localStorage.getItem('sakan6_subject_materials') || "{}");
+    let courseworkGrades = JSON.parse(localStorage.getItem('sakan6_grades') || "{}");
+    let currentExportFormat = 'card'; // 'card' or 'wallpaper'
 
     // ----------------------------------------------------
     // 2.5 TIME FORMATTING HELPERS (12-Hour Arabic System)
@@ -1481,17 +1516,43 @@
       lucide.createIcons();
     }
 
+    function saveSubjectMaterial(subId, url) {
+      if (!subjectMaterials) subjectMaterials = {};
+      subjectMaterials[subId] = url;
+      localStorage.setItem('sakan6_subject_materials', JSON.stringify(subjectMaterials));
+      renderSubjectsSummary();
+      showSyncToast("تم حفظ رابط ماتريال المادة بنجاح ✨", "success");
+      syncWithGoogleSheets(false);
+    }
+
+    function editSubjectMaterial(subId, subName) {
+      const currentUrl = (subjectMaterials && subjectMaterials[subId]) ? subjectMaterials[subId] : "";
+      const newUrl = prompt(`أدخل رابط مجلد جوجل درايف أو قناة التليجرام لمادة (${subName}):`, currentUrl);
+      if (newUrl !== null) {
+        saveSubjectMaterial(subId, newUrl.trim());
+      }
+    }
+
+    function updateCourseworkGrade(subId, field, value) {
+      if (!courseworkGrades) courseworkGrades = {};
+      if (!courseworkGrades[subId]) courseworkGrades[subId] = { midterm: '', lab: '', oral: '', final: '' };
+      courseworkGrades[subId][field] = value !== '' ? (parseFloat(value) || 0) : '';
+      localStorage.setItem('sakan6_grades', JSON.stringify(courseworkGrades));
+      renderSubjectsSummary();
+      syncWithGoogleSheets(false);
+    }
+
     // ----------------------------------------------------
     // 6. RENDER SUBJECTS & ATTENDANCE SUMMARY
     // ----------------------------------------------------
     function renderSubjectsSummary() {
       const container = document.getElementById('subjectsListContainer');
       const uniqueSubjects = [
-        { name: "شبكات الحاسب", color: "sky", doc: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ", ta: "م/ محمد السيد" },
-        { name: "قواعد بيانات 2", color: "emerald", doc: "أ.د/ أميرة رزق", ta: "م/ آلاء جلال" },
-        { name: "تحليل النظم والتصميم المنطقي", color: "amber", doc: "أ.د/ سمير عبدالرازق", ta: "م/ محمود سعيد" },
-        { name: "نظرية المعلومات", color: "purple", doc: "د/ إسراء جمال", ta: "م/ أحمد عماد الدين" },
-        { name: "أساليب البحث العلمي", color: "rose", doc: "د/ هالة عكاشة", ta: "م/ آية عياد" }
+        { id: "networks", name: "شبكات الحاسب", color: "sky", doc: "أ.د/ أحمد عطوان، أ.د/ محمد محفوظ", ta: "م/ محمد السيد" },
+        { id: "db2", name: "قواعد بيانات 2", color: "emerald", doc: "أ.د/ أميرة رزق", ta: "م/ آلاء جلال" },
+        { id: "sad", name: "تحليل النظم والتصميم المنطقي", color: "amber", doc: "أ.د/ سمير عبدالرازق", ta: "م/ محمود سعيد" },
+        { id: "it", name: "نظرية المعلومات", color: "purple", doc: "د/ إسراء جمال", ta: "م/ أحمد عماد الدين" },
+        { id: "methods", name: "أساليب البحث العلمي", color: "rose", doc: "د/ هالة عكاشة", ta: "م/ آية عياد" }
       ];
 
       // Calculate attendance stats
@@ -1507,12 +1568,35 @@
           if (status === 'absent') absentCount++;
         });
 
-        // Clean realistic attendance calculation (Zero-base ready)
+        // Clean realistic attendance calculation
         const totalRecorded = presentCount + absentCount;
         const percent = totalRecorded > 0 ? Math.min(100, Math.max(0, Math.round((presentCount / totalRecorded) * 100))) : 100;
         const maxAllowedAbsence = 3; // 25% limit
         const absentTotal = Math.max(0, absentCount);
         const remainingAbsence = Math.max(0, maxAllowedAbsence - absentTotal);
+
+        // Coursework Grades
+        const g = (courseworkGrades && courseworkGrades[sub.id]) ? courseworkGrades[sub.id] : {};
+        const mVal = parseFloat(g.midterm) || 0;
+        const lVal = parseFloat(g.lab) || 0;
+        const oVal = parseFloat(g.oral) || 0;
+        const fVal = parseFloat(g.final) || 0;
+        const hasAnyGrade = (g.midterm !== undefined && g.midterm !== '') || (g.lab !== undefined && g.lab !== '') || (g.oral !== undefined && g.oral !== '') || (g.final !== undefined && g.final !== '');
+        const totalGrade = Math.round((mVal + lVal + oVal + fVal) * 10) / 10;
+        
+        let gradeLetter = '—';
+        if (hasAnyGrade) {
+          if (totalGrade >= 90) gradeLetter = 'A+ ممتاز 🌟';
+          else if (totalGrade >= 85) gradeLetter = 'A ممتاز ✨';
+          else if (totalGrade >= 80) gradeLetter = 'B+ جيد جداً 🎯';
+          else if (totalGrade >= 75) gradeLetter = 'B جيد جداً';
+          else if (totalGrade >= 70) gradeLetter = 'C+ جيد';
+          else if (totalGrade >= 65) gradeLetter = 'C جيد';
+          else if (totalGrade >= 60) gradeLetter = 'D مقبول';
+          else gradeLetter = 'F بحاجة لرفع الدرجة ⚠️';
+        }
+
+        const materialUrl = (subjectMaterials && subjectMaterials[sub.id]) ? subjectMaterials[sub.id] : "";
 
         return `
           <div class="rounded-2xl p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft space-y-4">
@@ -1551,6 +1635,66 @@
                 <span>${sub.ta}</span>
               </div>
             </div>
+
+            <!-- Subject Material & Slides Link -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 text-xs">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center shrink-0">
+                  <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
+                </span>
+                <span class="font-medium text-stone-700 dark:text-stone-300 truncate">الماتريال والسلايدات:</span>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                ${materialUrl ? `
+                  <a href="${materialUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-sage-600 hover:bg-sage-700 text-white flex items-center gap-1 shadow-2xs transition-colors">
+                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                    <span>فتح الماتريال</span>
+                  </a>
+                  <button onclick="editSubjectMaterial('${sub.id}', '${sub.name}')" class="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/60 transition-colors" title="تعديل الرابط">
+                    <i data-lucide="edit-2" class="w-3 h-3"></i>
+                  </button>
+                ` : `
+                  <button onclick="editSubjectMaterial('${sub.id}', '${sub.name}')" class="px-2.5 py-1 rounded-lg text-[11px] font-medium text-stone-600 dark:text-stone-300 bg-stone-200/70 hover:bg-stone-200 dark:bg-warmdark-600 dark:hover:bg-warmdark-500 flex items-center gap-1 transition-colors">
+                    <i data-lucide="plus" class="w-3 h-3"></i>
+                    <span>إضافة رابط درايف</span>
+                  </button>
+                `}
+              </div>
+            </div>
+
+            <!-- Coursework & Grades Interactive Breakdown -->
+            <details class="group rounded-xl border border-stone-200/60 dark:border-warmdark-600 bg-stone-50/60 dark:bg-warmdark-700/40 p-2.5 text-xs">
+              <summary class="flex items-center justify-between cursor-pointer list-none font-semibold text-stone-700 dark:text-stone-300 select-none">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="calculator" class="w-3.5 h-3.5 text-amber-500"></i>
+                  <span>حاسبة درجات أعمال السنة والتقدير</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${totalGrade >= 85 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : totalGrade >= 65 ? 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'}">
+                    ${hasAnyGrade ? `${totalGrade} / 100 (${gradeLetter})` : 'أدخل درجاتك'}
+                  </span>
+                  <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 group-open:rotate-180 transition-transform"></i>
+                </div>
+              </summary>
+              <div class="pt-3 border-t border-stone-200/50 dark:border-warmdark-600 mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div>
+                  <label class="block text-[10px] text-stone-400 font-medium mb-1">الميدتيرم (20)</label>
+                  <input type="number" min="0" max="20" step="0.5" value="${g.midterm !== undefined ? g.midterm : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'midterm', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                </div>
+                <div>
+                  <label class="block text-[10px] text-stone-400 font-medium mb-1">العملي والشيتات (20)</label>
+                  <input type="number" min="0" max="20" step="0.5" value="${g.lab !== undefined ? g.lab : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'lab', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                </div>
+                <div>
+                  <label class="block text-[10px] text-stone-400 font-medium mb-1">حضور وتفاعل (10)</label>
+                  <input type="number" min="0" max="10" step="0.5" value="${g.oral !== undefined ? g.oral : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'oral', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                </div>
+                <div>
+                  <label class="block text-[10px] text-stone-400 font-medium mb-1">فاينال متوقع (50)</label>
+                  <input type="number" min="0" max="50" step="0.5" value="${g.final !== undefined ? g.final : ''}" placeholder="0" onchange="updateCourseworkGrade('${sub.id}', 'final', this.value)" class="w-full text-xs font-mono text-center rounded-lg border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-800 p-1.5 text-stone-800 dark:text-stone-100 focus:ring-1 focus:ring-sage-500" />
+                </div>
+              </div>
+            </details>
           </div>
         `;
       }).join('');
@@ -1559,8 +1703,42 @@
     }
 
     // ----------------------------------------------------
-    // 7. LIVE BANNER & COUNTDOWN ENGINE
+    // 7. LIVE BANNER, ACADEMIC MILESTONES & COUNTDOWN ENGINE
     // ----------------------------------------------------
+    function updateAcademicMilestones() {
+      const now = new Date();
+      const semesterStart = new Date(2026, 8, 26); // Saturday 26 Sept 2026
+      const midtermStart = new Date(2026, 10, 14);  // Midterms approx Week 7 (14 Nov 2026)
+      
+      const weekElem = document.getElementById('academicWeekNumber');
+      const midtermElem = document.getElementById('midtermCountdownText');
+
+      if (weekElem) {
+        const diffMs = now.getTime() - semesterStart.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const weekNum = Math.floor(diffDays / 7) + 1;
+        if (diffDays < 0) {
+          weekElem.innerText = "قبل بداية الترم";
+        } else if (weekNum > 15) {
+          weekElem.innerText = "فترة الامتحانات النهائية 🎓";
+        } else {
+          weekElem.innerText = `الأسبوع ${weekNum}`;
+        }
+      }
+
+      if (midtermElem) {
+        const diffMid = midtermStart.getTime() - now.getTime();
+        const daysToMid = Math.ceil(diffMid / (1000 * 60 * 60 * 24));
+        if (daysToMid > 0) {
+          midtermElem.innerText = `الميدتيرم: بعد ${daysToMid} يوم ⏱️`;
+        } else if (daysToMid >= -7) {
+          midtermElem.innerText = `أسبوع امتحانات الميدتيرم جارية الآن! ✍️`;
+        } else {
+          midtermElem.innerText = `انتهت امتحانات الميدتيرم ✅`;
+        }
+      }
+    }
+
     function formatDurationArabic(mins) {
       if (mins <= 0) return "الآن";
       if (mins < 60) return `${mins} دقيقة`;
@@ -1572,6 +1750,7 @@
     }
 
     function updateLiveBanner() {
+      updateAcademicMilestones();
       const now = new Date();
       const currentDay = now.getDay(); // 0 = Sunday
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -2996,9 +3175,23 @@
     // ----------------------------------------------------
     // 12. EXPORT & DOWNLOAD CARD AS IMAGE
     // ----------------------------------------------------
+    function setExportFormat(fmt) {
+      currentExportFormat = fmt;
+      const cardBtn = document.getElementById('exportFmtCardBtn');
+      const wallBtn = document.getElementById('exportFmtWallpaperBtn');
+      if (fmt === 'card') {
+        if (cardBtn) cardBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        if (wallBtn) wallBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+      } else {
+        if (wallBtn) wallBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        if (cardBtn) cardBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+      }
+      updatePrintableCardContent();
+    }
+
     function updatePrintableCardContent() {
-      const container = document.getElementById('printableCardList');
-      if (!container) return;
+      const cardArea = document.getElementById('printableCardArea');
+      if (!cardArea) return;
 
       const days = [
         { name: "السبت", index: 6 },
@@ -3011,43 +3204,125 @@
       ];
 
       const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
-
       const activeDays = days.filter(d => scheduleData.some(c => c.dayIndex === d.index));
       const offDays = days.filter(d => !scheduleData.some(c => c.dayIndex === d.index));
+      const offDayNames = offDays.map(d => d.name).join(' و');
 
-      const headerInfo = document.getElementById('printableCardHeaderInfo');
-      if (headerInfo) {
-        const offDayNames = offDays.map(d => d.name).join(' و');
-        headerInfo.innerHTML = `
-          <div>الأيام الدراسية: ${activeDays.length} أيام</div>
-          <div class="text-sage-700 font-semibold">${offDayNames ? offDayNames + ' إجازة ✨' : 'أسبوع حافل بالنشاط ✨'}</div>
-        `;
-      }
+      if (currentExportFormat === 'wallpaper') {
+        cardArea.className = "w-full max-w-[360px] mx-auto bg-gradient-to-b from-stone-900 via-stone-850 to-stone-950 text-white p-5 rounded-3xl border border-stone-700 shadow-2xl space-y-4 font-sans";
+        
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long' });
+        const timeNow = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-      container.innerHTML = activeDays.map(d => {
-        const classes = scheduleData.filter(c => c.dayIndex === d.index);
-        classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
-
-        return `
-          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
-            <div class="font-bold text-stone-800 flex items-center justify-between text-xs">
-              <span>${d.name}</span>
-              <span class="text-[10px] text-stone-400 font-normal">${classes.length} فترات</span>
-            </div>
-            <div class="space-y-1 text-[11px]">
-              ${classes.map(c => {
-                const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
-                const theme = colorThemes[c.color] || colorThemes.sky;
-                return `
-                  <div class="p-1.5 rounded-lg ${theme.badge} font-medium">
-                    ف${c.period} (${formatSlot12h(slot.start, slot.end)}): ${c.subject} (${c.typeLabel}) - ${c.room}
-                  </div>
-                `;
-              }).join('')}
+        cardArea.innerHTML = `
+          <!-- Lockscreen Header Mockup -->
+          <div class="text-center pt-2 pb-1 border-b border-stone-800">
+            <div class="text-3xl font-extrabold tracking-tight text-white mb-0.5">${timeNow}</div>
+            <div class="text-xs text-stone-300 font-medium">${dateStr}</div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sage-500/20 text-sage-300 border border-sage-500/30 text-[10px] font-semibold mt-2">
+              <i data-lucide="sparkles" class="w-3 h-3 text-sage-400"></i>
+              <span>جدول سكشن 6 • نظم معلومات</span>
             </div>
           </div>
+
+          <!-- Schedule Days Compact Vertical -->
+          <div class="space-y-2.5">
+            ${activeDays.map(d => {
+              const classes = scheduleData.filter(c => c.dayIndex === d.index);
+              classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+              return `
+                <div class="p-2.5 rounded-2xl bg-stone-800/80 border border-stone-700/70 shadow-xs">
+                  <div class="flex items-center justify-between text-xs font-bold text-amber-300 mb-1.5 pb-1 border-b border-stone-700/50">
+                    <span class="flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      ${d.name}
+                    </span>
+                    <span class="text-[10px] text-stone-400 font-normal font-mono">${classes.length} فترات</span>
+                  </div>
+                  <div class="space-y-1">
+                    ${classes.map(c => {
+                      const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                      return `
+                        <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-stone-900/60 border border-stone-800">
+                          <div class="flex items-center gap-1.5 truncate">
+                            <span class="font-bold text-stone-200 truncate">${c.subject}</span>
+                            <span class="text-[10px] text-stone-400 shrink-0">(${c.typeLabel})</span>
+                          </div>
+                          <div class="flex items-center gap-1 shrink-0 text-[10px] font-mono text-sage-300">
+                            <span>${c.room}</span>
+                            <span class="text-stone-500">•</span>
+                            <span>${formatSlot12h(slot.start, slot.end)}</span>
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Wallpaper Footer -->
+          <div class="text-center pt-2 border-t border-stone-800 text-[10px] text-stone-400 flex items-center justify-between">
+            <span>✨ إجازة: الجمعة، السبت، الأربعاء</span>
+            <span>سكشن 6 🎓</span>
+          </div>
         `;
-      }).join('');
+      } else {
+        // Landscape Card format
+        cardArea.className = "bg-gradient-to-br from-[#FDFBF7] to-[#F5EFEB] text-stone-800 p-6 rounded-2xl border border-stone-300/70 shadow-sm space-y-4";
+        cardArea.innerHTML = `
+          <div class="flex items-center justify-between border-b border-stone-200/80 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-sage-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">
+                6
+              </div>
+              <div>
+                <div class="text-sm font-bold text-stone-900">جدول سكشن 6 • الفرقة الثالثة</div>
+                <div class="text-[11px] text-stone-500">قسم نظم معلومات • الترم الأول 2026-2027</div>
+              </div>
+            </div>
+            <div id="printableCardHeaderInfo" class="text-left text-[11px] text-stone-500">
+              <div>الأيام الدراسية: ${activeDays.length} أيام</div>
+              <div class="text-sage-700 font-semibold">${offDayNames ? offDayNames + ' إجازة ✨' : 'أسبوع حافل بالنشاط ✨'}</div>
+            </div>
+          </div>
+
+          <div id="printableCardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            ${activeDays.map(d => {
+              const classes = scheduleData.filter(c => c.dayIndex === d.index);
+              classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+              return `
+                <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+                  <div class="font-bold text-stone-800 flex items-center justify-between text-xs">
+                    <span>${d.name}</span>
+                    <span class="text-[10px] text-stone-400 font-normal">${classes.length} فترات</span>
+                  </div>
+                  <div class="space-y-1 text-[11px]">
+                    ${classes.map(c => {
+                      const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                      const theme = colorThemes[c.color] || colorThemes.sky;
+                      return `
+                        <div class="p-1.5 rounded-lg ${theme.badge} font-medium">
+                          ف${c.period} (${formatSlot12h(slot.start, slot.end)}): ${c.subject} (${c.typeLabel}) - ${c.room}
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="text-[10px] text-center text-stone-400 pt-1">
+            تم إنشاؤه عبر نظام سكشن 6 الذكي • درجات الباستيل الهادئة
+          </div>
+        `;
+      }
+      lucide.createIcons();
     }
 
     function openExportModal() {
@@ -3065,9 +3340,11 @@
       btn.innerText = "جاري الحفظ...";
       btn.disabled = true;
 
+      const filename = currentExportFormat === 'wallpaper' ? 'Section-6-Lockscreen-Wallpaper.png' : 'Section-6-Timetable.png';
+
       html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'Section-6-Timetable.png';
+        link.download = filename;
         link.href = canvas.toDataURL('image/png');
         link.click();
         btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> <span>تم الحفظ بنجاح!</span>`;
@@ -3550,6 +3827,37 @@
 
               </div>
 
+              <!-- Driver Quick Action in Recommendation -->
+              <div class="p-3 rounded-2xl bg-white/80 dark:bg-warmdark-800/80 border border-stone-200/80 dark:border-warmdark-700 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center">
+                    <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <div>
+                    <span class="font-bold text-stone-800 dark:text-stone-200">تواصل مباشر مع سائق ${comp.name}:</span>
+                    <span class="text-[11px] text-stone-400 mr-1">للتأكيد أو السؤال عن مكان الباص</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  ${comp.phones.map(ph => {
+                    const cleanNum = ph.number.replace(/^0+/, '');
+                    const waMsg = encodeURIComponent(`السلام عليكم يا كابتن ${ph.name}، بخصوص باص ${comp.name} من ظفر لجامعة المنصورة.`);
+                    return `
+                      <div class="inline-flex items-center gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-warmdark-700 border border-stone-200/80 dark:border-warmdark-600">
+                        <span class="text-[11px] font-bold text-stone-800 dark:text-stone-200 px-1">${ph.name}</span>
+                        <a href="tel:${ph.number}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-warmdark-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 text-[11px] font-semibold border border-stone-200/80 dark:border-warmdark-600 transition-colors shadow-2xs" title="اتصال مباشر بـ ${ph.name}">
+                          <i data-lucide="phone" class="w-3 h-3"></i>
+                          <span class="font-mono">${ph.number}</span>
+                        </a>
+                        <a href="https://wa.me/20${cleanNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="p-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-2xs" title="مراسلة واتساب">
+                          <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                        </a>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
               <!-- Quick Side-by-Side Comparison Snippet -->
               <div class="p-3 rounded-2xl bg-white/70 dark:bg-warmdark-800/70 border border-stone-200/70 dark:border-warmdark-700 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="space-y-0.5">
@@ -3685,14 +3993,27 @@
 
             <!-- Contact & Phone Footer -->
             <div class="pt-3 border-t border-stone-100 dark:border-warmdark-700 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span class="text-stone-400 text-[11px]">أرقام التواصل والحجز:</span>
+              <span class="text-stone-500 dark:text-stone-400 text-[11px] font-semibold flex items-center gap-1">
+                <i data-lucide="phone-call" class="w-3.5 h-3.5 text-sage-600"></i>
+                <span>أرقام التواصل والحجز المباشر:</span>
+              </span>
               <div class="flex items-center gap-2 flex-wrap">
-                ${comp.phones.map(ph => `
-                  <a href="tel:${ph.number}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-warmdark-700 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 font-medium text-[11px] transition-colors" title="اتصال مباشر بـ ${ph.name}">
-                    <i data-lucide="phone" class="w-3 h-3 text-sage-600"></i>
-                    <span>${ph.name}: <strong class="font-mono">${ph.number}</strong></span>
-                  </a>
-                `).join('')}
+                ${comp.phones.map(ph => {
+                  const cleanNum = ph.number.replace(/^0+/, '');
+                  const waMsg = encodeURIComponent(`السلام عليكم يا كابتن ${ph.name}، بخصوص باص ${comp.name} من ظفر لجامعة المنصورة.`);
+                  return `
+                    <div class="inline-flex items-center gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-warmdark-700 border border-stone-200/80 dark:border-warmdark-600">
+                      <span class="text-[11px] font-bold text-stone-800 dark:text-stone-200 px-1">${ph.name}</span>
+                      <a href="tel:${ph.number}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-warmdark-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 text-[11px] font-semibold border border-stone-200/80 dark:border-warmdark-600 transition-colors shadow-2xs" title="اتصال مباشر بـ ${ph.name}">
+                        <i data-lucide="phone" class="w-3 h-3"></i>
+                        <span class="font-mono">${ph.number}</span>
+                      </a>
+                      <a href="https://wa.me/20${cleanNum}?text=${waMsg}" target="_blank" rel="noopener noreferrer" class="p-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-2xs" title="مراسلة واتساب">
+                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                      </a>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             </div>
 
