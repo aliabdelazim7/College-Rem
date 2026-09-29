@@ -214,16 +214,22 @@
       <div class="flex items-center gap-2 shrink-0">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sage-50 text-sage-800 dark:bg-sage-950/60 dark:text-sage-300 border border-sage-200/80 dark:border-sage-800 font-semibold shadow-2xs">
           <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-sage-600"></i>
-          <span>الأسبوع الدراسي: <strong id="academicWeekNumber">الأسبوع 1</strong> 🎓</span>
+          <span>الأسبوع الدراسي: <strong id="academicWeekNumber">الأسبوع 2 • زوجي</strong> 🎓</span>
         </span>
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 font-semibold shadow-2xs">
           <i data-lucide="hourglass" class="w-3.5 h-3.5 text-amber-600"></i>
           <span id="midtermCountdownText">الميدتيرم: بعد 45 يوم ⏱️</span>
         </span>
       </div>
-      <div class="hidden sm:flex items-center gap-1 text-[11px] text-stone-400 shrink-0">
-        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-        <span>الترم الأول: 26 سبتمبر 2026 - يناير 2027</span>
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="openCalendarModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white hover:bg-stone-50 dark:bg-warmdark-800 dark:hover:bg-warmdark-700 text-stone-700 dark:text-stone-200 border border-stone-200/80 dark:border-warmdark-700 font-semibold transition-colors shadow-2xs text-[11px]" title="عرض الخريطة الزمنية الرسمية للترم بالكامل">
+          <i data-lucide="map" class="w-3.5 h-3.5 text-sage-600"></i>
+          <span>الخريطة الزمنية للترم 🗺️</span>
+        </button>
+        <div class="hidden sm:flex items-center gap-1 text-[11px] text-stone-400">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          <span>الترم الأول: 19 سبتمبر 2026 - يناير 2027</span>
+        </div>
       </div>
     </div>
   </section>
@@ -828,6 +834,106 @@
     </div>
   </div>
 
+  <!-- MODAL: ACADEMIC CALENDAR (الخريطة الزمنية للترم) -->
+  <div id="calendarModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-3xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="map" class="w-5 h-5 text-sage-600"></i>
+            <span>الخريطة الزمنية للفصل الدراسي الأول 2026 - 2027</span>
+          </h3>
+          <p class="text-xs text-stone-500 dark:text-stone-400">كلية الحاسبات والمعلومات • جامعة المنصورة (المعتمدة رسمياً)</p>
+        </div>
+        <button onclick="closeCalendarModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="flex items-center gap-2 p-1.5 bg-stone-100 dark:bg-warmdark-700/60 rounded-2xl">
+        <button id="calTabSummaryBtn" onclick="switchCalendarTab('summary')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5">
+          <i data-lucide="calendar-days" class="w-4 h-4 text-sage-600"></i>
+          <span>جدول الأسابيع والمحطات 📅</span>
+        </button>
+        <button id="calTabImageBtn" onclick="switchCalendarTab('image')" class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5">
+          <i data-lucide="image" class="w-4 h-4 text-sage-600"></i>
+          <span>الوثيقة الرسمية الأصلية 🖼️</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Summary & Weeks Grid -->
+      <div id="calTabSummaryContent" class="space-y-4">
+        <!-- Milestone Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-1">
+            <div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">🌱 بداية الدراسة</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">19 سبتمبر 2026</div>
+            <div class="text-[10px] text-stone-400">الأسبوع 1 • فردي</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-1">
+            <div class="text-[11px] font-semibold text-amber-700 dark:text-amber-300">🇪🇬 عيد القوات المسلحة</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">6 أكتوبر 2026</div>
+            <div class="text-[10px] text-stone-400">إجازة رسمية (الثلاثاء)</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 space-y-1">
+            <div class="text-[11px] font-semibold text-rose-700 dark:text-rose-300">✍️ امتحانات الميدتيرم</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">14 - 19 نوفمبر 2026</div>
+            <div class="text-[10px] text-stone-400">الأسبوع 9 • فردي</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 space-y-1">
+            <div class="text-[11px] font-semibold text-purple-700 dark:text-purple-300">🔬 العملي والشفوي</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">19 - 24 ديسمبر 2026</div>
+            <div class="text-[10px] text-stone-400">الأسبوع 14 • زوجي</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 space-y-1">
+            <div class="text-[11px] font-semibold text-sky-700 dark:text-sky-300">🎓 امتحانات الفاينال</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">2 - 21 يناير 2027</div>
+            <div class="text-[10px] text-stone-400">نهاية الفصل الأول</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-stone-100 dark:bg-warmdark-700/60 border border-stone-200 dark:border-warmdark-600 space-y-1">
+            <div class="text-[11px] font-semibold text-stone-700 dark:text-stone-300">🌴 إجازة نصف العام</div>
+            <div class="font-bold text-stone-800 dark:text-stone-100">23 يناير - 4 فبراير 2027</div>
+            <div class="text-[10px] text-stone-400">راحة مستحقة ✨</div>
+          </div>
+        </div>
+
+        <!-- 15 Weeks Interactive Timeline -->
+        <div class="border border-stone-200 dark:border-warmdark-700 rounded-2xl overflow-hidden">
+          <div class="p-3 bg-stone-50 dark:bg-warmdark-700 font-bold text-xs text-stone-800 dark:text-stone-200 flex items-center justify-between">
+            <span>توزيع الـ 15 أسبوعاً دراسياً:</span>
+            <div class="flex items-center gap-2 text-[10px]">
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span> فردي</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> زوجي</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> امتحانات</span>
+            </div>
+          </div>
+          <div id="calendarWeeksTable" class="divide-y divide-stone-100 dark:divide-warmdark-700 max-h-72 overflow-y-auto text-xs">
+            <!-- Rendered dynamically via renderCalendarWeeksTable() -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Official Document Image Viewer -->
+      <div id="calTabImageContent" class="hidden space-y-3">
+        <div class="rounded-2xl overflow-hidden border border-stone-200 dark:border-warmdark-700 bg-stone-50 dark:bg-warmdark-900 flex items-center justify-center p-2">
+          <img src="./academic-calendar.png" alt="الخريطة الزمنية الرسمية للترم الأول 2026-2027" class="rounded-xl max-h-[60vh] object-contain shadow-xs hover:scale-105 transition-transform duration-300" />
+        </div>
+        <div class="flex items-center justify-between text-xs text-stone-500">
+          <span>الوثيقة الرسمية الصادرة عن إدارة الكلية وشؤون الطلاب.</span>
+          <a href="./academic-calendar.png" download="الخريطة_الزمنية_2026_2027.png" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-sage-600 hover:bg-sage-700 text-white font-semibold shadow-xs">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>تحميل الصورة الأصلية</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end pt-2 border-t border-stone-100 dark:border-warmdark-700">
+        <button onclick="closeCalendarModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-warmdark-700 hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-800 dark:text-stone-200 transition-colors">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: EXPORT / PRINTABLE CARD -->
   <div id="exportModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-2xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
@@ -1306,8 +1412,30 @@
       }
 
       // Sort by period order
-      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
+      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 6, "on1": 7, "on2": 8 };
       dayClasses.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+      // Check for official holiday: 6 October 2026 (Armed Forces Day)
+      const isOct6 = targetDate.getFullYear() === 2026 && targetDate.getMonth() === 9 && targetDate.getDate() === 6;
+      if (isOct6) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 px-6 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 mx-auto flex items-center justify-center shadow-xs">
+              <i data-lucide="flag" class="w-7 h-7"></i>
+            </div>
+            <h3 class="text-base font-bold text-amber-900 dark:text-amber-200">
+              إجازة رسمية: ذكرى نصر 6 أكتوبر المجيد 🇪🇬✨
+            </h3>
+            <p class="text-xs text-amber-700 dark:text-amber-300 max-w-sm mx-auto">
+              إجازة رسمية معتمدة بالخريطة الزمنية للكلية بمناسبة عيد القوات المسلحة، لا توجد محاضرات أو سكاشن اليوم.
+            </p>
+          </div>
+        `;
+        const sub = document.getElementById('todaySubtitle');
+        if (sub) sub.innerText = 'إجازة رسمية • عيد القوات المسلحة 🇪🇬';
+        lucide.createIcons();
+        return;
+      }
 
       if (dayClasses.length === 0) {
         let isHoliday = [3, 5, 6].includes(activeDayView); // Wed, Fri, Sat
@@ -1703,12 +1831,109 @@
     }
 
     // ----------------------------------------------------
-    // 7. LIVE BANNER, ACADEMIC MILESTONES & COUNTDOWN ENGINE
+    // 7. LIVE BANNER, ACADEMIC MILESTONES & CALENDAR ENGINE
     // ----------------------------------------------------
+    const officialWeeksData = [
+      { week: 1, range: "19 - 25 سبتمبر 2026", type: "فردي", isOdd: true, note: "🌱 انطلاق الفصل الدراسي الأول وبداية الدراسة" },
+      { week: 2, range: "26 سبتمبر - 2 أكتوبر 2026", type: "زوجي", isOdd: false, note: "انتظام المحاضرات والسكاشن" },
+      { week: 3, range: "3 - 9 أكتوبر 2026", type: "فردي", isOdd: true, note: "🇪🇬 الثلاثاء 6 أكتوبر: إجازة رسمية (عيد القوات المسلحة)" },
+      { week: 4, range: "10 - 16 أكتوبر 2026", type: "زوجي", isOdd: false, note: "دراسة منتظمة ومتابعة الشيتات" },
+      { week: 5, range: "17 - 23 أكتوبر 2026", type: "فردي", isOdd: true, note: "دراسة منتظمة" },
+      { week: 6, range: "24 - 30 أكتوبر 2026", type: "زوجي", isOdd: false, note: "متابعة التكليفات والمعامل" },
+      { week: 7, range: "31 أكتوبر - 6 نوفمبر 2026", type: "فردي", isOdd: true, note: "دراسة منتظمة واستعداد للميدتيرم" },
+      { week: 8, range: "7 - 13 نوفمبر 2026", type: "زوجي", isOdd: false, note: "مراجعات قبل أسبوع الميدتيرم" },
+      { week: 9, range: "14 - 20 نوفمبر 2026", type: "فردي", isOdd: true, note: "✍️ بداية امتحانات منتصف الفصل الدراسي (الميدتيرم)", isExam: true },
+      { week: 10, range: "21 - 27 نوفمبر 2026", type: "زوجي", isOdd: false, note: "استئناف الدراسة ومناقشات الميدتيرم" },
+      { week: 11, range: "28 نوفمبر - 4 ديسمبر 2026", type: "فردي", isOdd: true, note: "دراسة منتظمة وتسليم شيتات" },
+      { week: 12, range: "5 - 11 ديسمبر 2026", type: "زوجي", isOdd: false, note: "دراسة منتظمة" },
+      { week: 13, range: "12 - 18 ديسمبر 2026", type: "فردي", isOdd: true, note: "مراجعات واستعداد لامتحانات العملي" },
+      { week: 14, range: "19 - 25 ديسمبر 2026", type: "زوجي", isOdd: false, note: "🔬 بداية امتحانات العملي والشفوي بالمعامل", isExam: true },
+      { week: 15, range: "26 - 31 ديسمبر 2026", type: "فردي", isOdd: true, note: "🏁 ختام الفصل الدراسي الأول والاستعداد للفاينال", isExam: true }
+    ];
+
+    function renderCalendarWeeksTable() {
+      const container = document.getElementById('calendarWeeksTable');
+      if (!container) return;
+
+      const now = new Date();
+      const semesterStart = new Date(2026, 8, 19);
+      const diffMs = now.getTime() - semesterStart.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const currentWeekNum = Math.floor(diffDays / 7) + 1;
+
+      container.innerHTML = officialWeeksData.map(w => {
+        const isCurrent = (w.week === currentWeekNum && diffDays >= 0);
+        const bgClass = isCurrent 
+          ? 'bg-sage-50/90 dark:bg-sage-950/70 border-l-4 border-sage-600 dark:border-sage-400 font-semibold' 
+          : 'hover:bg-stone-50/80 dark:hover:bg-warmdark-700/40';
+
+        const typeBadge = w.isExam
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">امتحانات</span>`
+          : w.isOdd
+            ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300">فردي</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">زوجي</span>`;
+
+        return `
+          <div class="p-3 flex items-center justify-between gap-3 transition-colors ${bgClass}">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-xl ${isCurrent ? 'bg-sage-600 text-white shadow-xs' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-700 dark:text-stone-300'} flex items-center justify-center font-bold text-xs shrink-0">
+                ${w.week}
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-stone-900 dark:text-stone-100">الأسبوع ${w.week}</span>
+                  ${typeBadge}
+                  ${isCurrent ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white animate-pulse">الأسبوع الحالي 👈</span>` : ''}
+                </div>
+                <div class="text-[11px] text-stone-500 dark:text-stone-400 font-mono mt-0.5">${w.range}</div>
+              </div>
+            </div>
+            <div class="text-left text-[11px] text-stone-600 dark:text-stone-300 max-w-[220px] sm:max-w-xs shrink-0">
+              ${w.note}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCalendarModal() {
+      renderCalendarWeeksTable();
+      document.getElementById('calendarModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeCalendarModal() {
+      document.getElementById('calendarModal').classList.add('hidden');
+    }
+
+    function switchCalendarTab(tab) {
+      const summaryBtn = document.getElementById('calTabSummaryBtn');
+      const imageBtn = document.getElementById('calTabImageBtn');
+      const summaryContent = document.getElementById('calTabSummaryContent');
+      const imageContent = document.getElementById('calTabImageContent');
+
+      if (tab === 'summary') {
+        summaryBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        imageBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+        summaryContent.classList.remove('hidden');
+        imageContent.classList.add('hidden');
+      } else {
+        imageBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white dark:bg-warmdark-800 text-stone-900 dark:text-white shadow-xs flex items-center justify-center gap-1.5";
+        summaryBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-semibold transition-all text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white flex items-center justify-center gap-1.5";
+        imageContent.classList.remove('hidden');
+        summaryContent.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
     function updateAcademicMilestones() {
       const now = new Date();
-      const semesterStart = new Date(2026, 8, 26); // Saturday 26 Sept 2026
-      const midtermStart = new Date(2026, 10, 14);  // Midterms approx Week 7 (14 Nov 2026)
+      // Official faculty start date: Saturday 19 September 2026
+      const semesterStart = new Date(2026, 8, 19); 
+      const midtermStart = new Date(2026, 10, 14); // Midterms: 14 Nov - 19 Nov 2026 (Week 9)
+      const oralPracticalStart = new Date(2026, 11, 19); // Practical & Oral: 19 Dec - 24 Dec 2026 (Week 14)
+      const finalsStart = new Date(2027, 0, 2); // Final exams: 2 Jan - 21 Jan 2027
+      const midyearVacation = new Date(2027, 0, 23); // Mid-year vacation: 23 Jan - 4 Feb 2027
       
       const weekElem = document.getElementById('academicWeekNumber');
       const midtermElem = document.getElementById('midtermCountdownText');
@@ -1717,24 +1942,46 @@
         const diffMs = now.getTime() - semesterStart.getTime();
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
         const weekNum = Math.floor(diffDays / 7) + 1;
+        const isOdd = weekNum % 2 !== 0;
+        const weekTypeLabel = isOdd ? 'فردي' : 'زوجي';
+
         if (diffDays < 0) {
-          weekElem.innerText = "قبل بداية الترم";
-        } else if (weekNum > 15) {
-          weekElem.innerText = "فترة الامتحانات النهائية 🎓";
+          weekElem.innerHTML = `قبل بداية الترم ⏳`;
+        } else if (weekNum <= 15) {
+          weekElem.innerHTML = `الأسبوع ${weekNum} • <span class="${isOdd ? 'text-sky-600 dark:text-sky-400' : 'text-indigo-600 dark:text-indigo-400'} font-bold">${weekTypeLabel}</span> 🎓`;
+        } else if (now < finalsStart) {
+          weekElem.innerHTML = `فترة الاستعداد للامتحانات 📚`;
+        } else if (now < midyearVacation) {
+          weekElem.innerHTML = `امتحانات نهاية الفصل 📝`;
         } else {
-          weekElem.innerText = `الأسبوع ${weekNum}`;
+          weekElem.innerHTML = `إجازة منتصف العام 🎉`;
         }
       }
 
       if (midtermElem) {
-        const diffMid = midtermStart.getTime() - now.getTime();
-        const daysToMid = Math.ceil(diffMid / (1000 * 60 * 60 * 24));
+        const msToMid = midtermStart.getTime() - now.getTime();
+        const daysToMid = Math.ceil(msToMid / (1000 * 60 * 60 * 24));
+
+        const msToOral = oralPracticalStart.getTime() - now.getTime();
+        const daysToOral = Math.ceil(msToOral / (1000 * 60 * 60 * 24));
+
+        const msToFinals = finalsStart.getTime() - now.getTime();
+        const daysToFinals = Math.ceil(msToFinals / (1000 * 60 * 60 * 24));
+
         if (daysToMid > 0) {
-          midtermElem.innerText = `الميدتيرم: بعد ${daysToMid} يوم ⏱️`;
-        } else if (daysToMid >= -7) {
-          midtermElem.innerText = `أسبوع امتحانات الميدتيرم جارية الآن! ✍️`;
+          midtermElem.innerText = `الميدتيرم: بعد ${daysToMid} يوم ⏱️ (14 نوفمبر)`;
+        } else if (daysToMid >= -6) {
+          midtermElem.innerText = `أسبوع امتحانات الميدتيرم جاري الآن! ✍️`;
+        } else if (daysToOral > 0) {
+          midtermElem.innerText = `العملي والشفوي: بعد ${daysToOral} يوم 🔬 (19 ديسمبر)`;
+        } else if (daysToOral >= -6) {
+          midtermElem.innerText = `امتحانات العملي والشفوي جارية الآن! 💻`;
+        } else if (daysToFinals > 0) {
+          midtermElem.innerText = `الفاينال: بعد ${daysToFinals} يوم 🎓 (2 يناير)`;
+        } else if (daysToFinals >= -20) {
+          midtermElem.innerText = `امتحانات نهاية الفصل جارية الآن! 📝`;
         } else {
-          midtermElem.innerText = `انتهت امتحانات الميدتيرم ✅`;
+          midtermElem.innerText = `إجازة نصف العام مستمرة 🎉`;
         }
       }
     }
@@ -1786,6 +2033,20 @@
       const icon = document.getElementById('liveStatusIcon');
 
       const isHoliday = [3, 5, 6].includes(currentDay); // 3=Wed, 5=Fri, 6=Sat
+
+      const isOct6Today = now.getFullYear() === 2026 && now.getMonth() === 9 && now.getDate() === 6;
+      if (isOct6Today) {
+        if (icon) icon.setAttribute('data-lucide', 'flag');
+        if (statusTitle) statusTitle.innerText = "إجازة رسمية 🇪🇬";
+        if (timeRemaining) timeRemaining.innerText = "عيد القوات المسلحة (6 أكتوبر)";
+        if (subjectName) subjectName.innerText = "إجازة رسمية معتمدة بالخريطة الزمنية لجامعة المنصورة بمناسبة ذكرى نصر أكتوبر المجيد ✨";
+        if (room) room.innerText = "إجازة رسمية لكافة الكليات";
+        if (doc) doc.innerText = "كل عام وأنتم بخير وسلام";
+        if (slotLabel) slotLabel.innerText = "لا توجد محاضرات اليوم";
+        if (actions) actions.classList.add('hidden');
+        lucide.createIcons();
+        return;
+      }
 
       if (ongoing) {
         if (icon) icon.setAttribute('data-lucide', 'play-circle');

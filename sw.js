@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v11 - Council Enhancements: Driver Contacts, Academic Milestones, Drive Hub, Grade Calculator, Wallpaper Export)
+// Service Worker for Section 6 PWA (v12 - Official Academic Calendar 2026-2027 Integration)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v11';
+const CACHE_NAME = 'section6-hub-v12';
 
 const PRECACHE_ASSETS = [
   './',
@@ -9,6 +9,7 @@ const PRECACHE_ASSETS = [
   './icon.svg',
   './icon-192.png',
   './icon-512.png',
+  './academic-calendar.png',
   './vendor/tailwind.js',
   './vendor/lucide.min.js',
   './vendor/confetti.browser.min.js',
