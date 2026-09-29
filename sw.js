@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v9 - 12-Hour Period Time Format)
+// Service Worker for Section 6 PWA (v10 - Updated Zain Return Bus Timetable)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v9';
+const CACHE_NAME = 'section6-hub-v10';
 
 const PRECACHE_ASSETS = [
   './',
