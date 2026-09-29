@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v13 - Official Grade Distribution & Faculty Regulations)
+// Service Worker for Section 6 PWA (v14 - Dynamic Study Days & Custom Schedule Detection)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v13';
+const CACHE_NAME = 'section6-hub-v14';
 
 const PRECACHE_ASSETS = [
   './',

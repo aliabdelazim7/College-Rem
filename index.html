@@ -202,7 +202,7 @@
         <div class="h-7 w-px bg-stone-200 dark:bg-warmdark-700 shrink-0"></div>
         <div class="min-w-0 text-left">
           <div class="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate">أيام الدراسة هذا الأسبوع</div>
-          <div class="text-sm sm:text-lg font-bold text-stone-800 dark:text-stone-100 whitespace-nowrap">4 <span class="text-[10px] sm:text-xs font-normal text-stone-500">أيام ✨</span></div>
+          <div class="text-sm sm:text-lg font-bold text-stone-800 dark:text-stone-100 whitespace-nowrap"><span id="headerStudyDaysCount">4</span> <span class="text-[10px] sm:text-xs font-normal text-stone-500">أيام ✨</span></div>
         </div>
       </div>
     </div>
@@ -1606,14 +1606,14 @@
       }
 
       if (dayClasses.length === 0) {
-        let isHoliday = [3, 5, 6].includes(activeDayView); // Wed, Fri, Sat
+        let isHoliday = !scheduleData.some(c => c.dayIndex === activeDayView);
         container.innerHTML = `
           <div class="col-span-full py-12 px-6 rounded-2xl bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 text-center space-y-3">
             <div class="w-14 h-14 rounded-2xl bg-sage-50 dark:bg-sage-950/60 text-sage-600 dark:text-sage-300 mx-auto flex items-center justify-center">
               <i data-lucide="${isHoliday ? 'coffee' : 'calendar-x'}" class="w-7 h-7"></i>
             </div>
             <h3 class="text-base font-bold text-stone-900 dark:text-white">
-              ${isHoliday ? 'يوم راحة وإجازة رسمية لسكشن 6 🎉' : 'لا توجد حصص مجدولة لهذا اليوم'}
+              ${isHoliday ? 'يوم راحة وإجازة (لا توجد محاضرات مقررة) 🎉' : 'لا توجد حصص مجدولة لهذا اليوم'}
             </h3>
             <p class="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
               ${isHoliday ? 'استمتع بوقتك في شحن طاقتك، أو يمكنك سحب ونقل أي محاضرة إلى هذا اليوم من الجدول الأسبوعي!' : 'يمكنك تبديل التصفية أو سحب أي حصة وإفلاتها هنا.'}
@@ -2322,7 +2322,7 @@
       const actions = document.getElementById('liveAttendanceActions');
       const icon = document.getElementById('liveStatusIcon');
 
-      const isHoliday = [3, 5, 6].includes(currentDay); // 3=Wed, 5=Fri, 6=Sat
+      const isHoliday = !scheduleData.some(c => c.dayIndex === currentDay);
 
       const isOct6Today = now.getFullYear() === 2026 && now.getMonth() === 9 && now.getDate() === 6;
       if (isOct6Today) {
@@ -2361,11 +2361,11 @@
         if (doc) doc.innerText = nextClass.doctor;
         if (slotLabel) slotLabel.innerText = `الفترة ${nextClass.period} (${formatSlot12h(slot.start, slot.end)})`;
       } else if (isHoliday) {
-        // Off-day / Weekend (Saturday, Wednesday, Friday)
+        // Off-day / Day without scheduled classes
         if (icon) icon.setAttribute('data-lucide', 'coffee');
-        if (statusTitle) statusTitle.innerText = "يوم راحة وإجازة رسمية 🎉";
+        if (statusTitle) statusTitle.innerText = "يوم راحة وإجازة 🎉";
         if (timeRemaining) timeRemaining.innerText = "عطلة سعيدة وراحة مستحقة ☕";
-        if (subjectName) subjectName.innerText = "لا توجد أي محاضرات أو سكاشن مقررة لسكشن 6 اليوم";
+        if (subjectName) subjectName.innerText = "لا توجد أي محاضرات أو سكاشن مقررة لجدولك اليوم";
         if (room) room.innerText = "يوم راحة واستجمام";
         if (doc) doc.innerText = "استمتع بعطلتك، أو راجع شيتاتك في هدوء";
         if (slotLabel) slotLabel.innerText = "سكشن 6 • نظم معلومات";
@@ -2503,6 +2503,14 @@
           badgeEl.innerText = 'تنبيه غياب';
           badgeEl.className = 'text-[10px] px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-semibold';
         }
+      }
+
+      // Calculate dynamic active study days count from current scheduleData
+      const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+      const studyDaysCount = activeStudyDays.size;
+      const countEl = document.getElementById('headerStudyDaysCount');
+      if (countEl) {
+        countEl.innerText = studyDaysCount;
       }
     }
 
