@@ -1,7 +1,7 @@
 // ----------------------------------------------------
-// Service Worker for Section 6 PWA (v4 - Fall 2026 Official Timetable & Offline)
+// Service Worker for Section 6 PWA (v5 - Drag & Drop Schedule & Class Rescheduling)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v4';
+const CACHE_NAME = 'section6-hub-v5';
 
 const PRECACHE_ASSETS = [
   './',

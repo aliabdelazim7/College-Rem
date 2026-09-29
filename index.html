@@ -351,10 +351,25 @@
           <h2 class="text-lg font-bold text-stone-900 dark:text-white">الجدول الأسبوعي الشامل</h2>
           <p class="text-xs text-stone-500 dark:text-stone-400">توزيع جميع محاضرات وسكاشن سكشن 6 على مدار أيام الأسبوع</p>
         </div>
-        <button onclick="openExportModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-warmdark-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-warmdark-700 hover:bg-stone-50 shadow-xs">
-          <i data-lucide="image" class="w-3.5 h-3.5"></i>
-          <span>حفظ صورة الجدول</span>
-        </button>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="resetScheduleToDefaultConfirm()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-warmdark-800 border border-stone-200 dark:border-warmdark-700 hover:bg-stone-50 transition-colors shadow-xs" title="إعادة ضبط الجدول إلى التوزيع الأصلي المعتمد للكلية">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>استعادة الجدول الأصلي</span>
+          </button>
+          <button onclick="openExportModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-warmdark-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-warmdark-700 hover:bg-stone-50 shadow-xs">
+            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+            <span>حفظ صورة الجدول</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Drag & Drop Helper Tip -->
+      <div class="p-2.5 px-3.5 rounded-2xl bg-sage-50/80 dark:bg-warmdark-800/80 border border-sage-200/60 dark:border-warmdark-700 flex items-center justify-between gap-2 text-xs text-sage-800 dark:text-sage-300">
+        <div class="flex items-center gap-2">
+          <i data-lucide="move" class="w-4 h-4 text-sage-600 shrink-0"></i>
+          <span>💡 <strong>ميزة السحب والإفلات:</strong> يمكنك سحب أي محاضرة أو سكشن وإفلاته في أي يوم آخر لتعديل موعده وفترته فوراً!</span>
+        </div>
+        <span class="text-[10px] text-stone-400 hidden sm:inline">Drag & Drop Active ✨</span>
       </div>
 
       <!-- Weekly Grid by Day Columns -->
@@ -726,63 +741,15 @@
               <div class="text-[11px] text-stone-500">قسم نظم معلومات • الترم الأول 2026-2027</div>
             </div>
           </div>
-          <div class="text-left text-[11px] text-stone-500">
+          <div id="printableCardHeaderInfo" class="text-left text-[11px] text-stone-500">
             <div>الأيام الدراسية: 4 أيام</div>
             <div class="text-sage-700 font-semibold">الجمعة والسبت والأربعاء إجازة ✨</div>
           </div>
         </div>
 
         <!-- Compact Schedule List for Export -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <!-- Sunday -->
-          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
-            <div class="font-bold text-sage-800 flex items-center justify-between text-xs">
-              <span>الأحد</span>
-              <span class="text-[10px] text-stone-400 font-normal">4 فترات</span>
-            </div>
-            <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف1 (08:30 - 10:10): محاضرة شبكات (مدرج 3)</div>
-              <div class="p-1 rounded bg-emerald-50 text-emerald-900 font-medium">ف2 (10:20 - 12:00): سكشن قواعد بيانات 2 (قاعة B4 Hardware)</div>
-              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف3 (12:20 - 14:00): محاضرة أساليب البحث العلمي (مدرج 2)</div>
-              <div class="p-1 rounded bg-sky-50 text-sky-900 font-medium">ف4 (14:10 - 15:50): سكشن شبكات الحاسب (قاعة D8)</div>
-            </div>
-          </div>
-
-          <!-- Monday -->
-          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
-            <div class="font-bold text-amber-800 flex items-center justify-between text-xs">
-              <span>الاثنين</span>
-              <span class="text-[10px] text-stone-400 font-normal">2 فترات</span>
-            </div>
-            <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف2 (10:20 - 12:00): محاضرة تحليل النظم والتصميم (مدرج 3)</div>
-              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف3 (12:20 - 14:00): محاضرة نظرية المعلومات (مدرج 3)</div>
-            </div>
-          </div>
-
-          <!-- Tuesday -->
-          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
-            <div class="font-bold text-purple-800 flex items-center justify-between text-xs">
-              <span>الثلاثاء</span>
-              <span class="text-[10px] text-stone-400 font-normal">3 سكاشن</span>
-            </div>
-            <div class="space-y-1 text-[11px]">
-              <div class="p-1 rounded bg-purple-50 text-purple-900 font-medium">ف4 (14:10 - 15:50): سكشن نظرية المعلومات (قاعة 6)</div>
-              <div class="p-1 rounded bg-rose-50 text-rose-900 font-medium">ف5 (16:00 - 17:40): سكشن أساليب البحث العلمي (قاعة 6)</div>
-              <div class="p-1 rounded bg-amber-50 text-amber-900 font-medium">ف6 (17:50 - 19:30): سكشن تحليل النظم (قاعة B5)</div>
-            </div>
-          </div>
-
-          <!-- Thursday -->
-          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
-            <div class="font-bold text-emerald-800 flex items-center justify-between text-xs">
-              <span>الخميس</span>
-              <span class="text-[10px] text-stone-400 font-normal">فترة واحدة صباحية</span>
-            </div>
-            <div class="space-y-1 text-[11px]">
-              <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 font-medium">ف1 (08:30 - 10:10): محاضرة قواعد بيانات 2 (مدرج 2) - أ.د/ أميرة رزق</div>
-            </div>
-          </div>
+        <div id="printableCardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <!-- Rendered dynamically via updatePrintableCardContent() -->
         </div>
 
         <div class="text-[10px] text-center text-stone-400 pt-1">
@@ -818,6 +785,55 @@
       <button onclick="closeMotivationModal()" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">
         متحمس ومكمل! 💪
       </button>
+    </div>
+  </div>
+
+  <!-- MOVE / RESCHEDULE CLASS MODAL -->
+  <div id="moveClassModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center shadow-xs">
+            <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-stone-900 dark:text-white">نقل موعد الحصة</h3>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400">تغيير اليوم أو الفترة الدراسية للمحاضرة/السكشن</p>
+          </div>
+        </div>
+        <button onclick="closeMoveClassModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Selected Class Info Card -->
+      <div id="moveClassSummary" class="p-3 rounded-2xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 space-y-1 text-xs">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Choose Day -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-stone-800 dark:text-stone-200">اليوم الجديد:</label>
+        <div id="moveDayPills" class="grid grid-cols-4 sm:grid-cols-7 gap-1.5 text-xs">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Choose Period -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-stone-800 dark:text-stone-200">الفترة الدراسية والتوقيت:</label>
+        <div id="movePeriodPills" class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-stone-100 dark:border-warmdark-700">
+        <button onclick="closeMoveClassModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700">إلغاء</button>
+        <button onclick="confirmMoveClass()" id="confirmMoveBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>تأكيد ونقل الحصة</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1022,6 +1038,14 @@
       localStorage.setItem('sakan6_periodTimes', JSON.stringify(defaultPeriodTimes));
     }
     let periodTimes = storedPeriodTimes;
+
+    // Load dynamic schedule from localStorage, or initialize from initialSchedule
+    let scheduleData = JSON.parse(localStorage.getItem('sakan6_schedule'));
+    if (!scheduleData || !Array.isArray(scheduleData) || scheduleData.length === 0) {
+      scheduleData = JSON.parse(JSON.stringify(initialSchedule));
+      localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+    }
+
     let attendanceData = JSON.parse(localStorage.getItem('sakan6_attendance')) || {};
     let streakCount = parseInt(localStorage.getItem('sakan6_streak') || "0", 10);
     let tasksList = JSON.parse(localStorage.getItem('sakan6_tasks')) || [];
@@ -1092,20 +1116,28 @@
         }
       } catch (e) {}
       
-      // Update day buttons state
+      // Update day buttons state & drop targets
       document.querySelectorAll('.day-btn').forEach(btn => {
-        if (parseInt(btn.getAttribute('data-day'), 10) === activeDayView) {
-          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold shadow-xs border border-sage-200/80 dark:border-sage-800";
+        const bDay = parseInt(btn.getAttribute('data-day'), 10);
+        btn.setAttribute('ondragover', 'handleDayBtnDragOver(event)');
+        btn.setAttribute('ondragleave', 'handleDayBtnDragLeave(event)');
+        btn.setAttribute('ondrop', `handleDayBtnDrop(event, ${bDay})`);
+        if (bDay === activeDayView) {
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold shadow-xs border border-sage-200/80 dark:border-sage-800 transition-all";
         } else {
-          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 font-medium border border-transparent";
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 font-medium border border-transparent transition-all";
         }
       });
 
-      // Filter classes for the active day
-      let dayClasses = initialSchedule.filter(c => c.dayIndex === activeDayView);
+      // Filter classes for the active day using dynamic scheduleData
+      let dayClasses = scheduleData.filter(c => c.dayIndex === activeDayView);
       if (currentFilter !== 'all') {
         dayClasses = dayClasses.filter(c => c.type === currentFilter);
       }
+
+      // Sort by period order
+      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
+      dayClasses.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
 
       if (dayClasses.length === 0) {
         let isHoliday = [3, 5, 6].includes(activeDayView); // Wed, Fri, Sat
@@ -1115,10 +1147,10 @@
               <i data-lucide="${isHoliday ? 'coffee' : 'calendar-x'}" class="w-7 h-7"></i>
             </div>
             <h3 class="text-base font-bold text-stone-900 dark:text-white">
-              ${isHoliday ? 'يوم راحة وإجازة رسمية لسكشن 6 🎉' : 'لا توجد حصص مطابقة للتصفية'}
+              ${isHoliday ? 'يوم راحة وإجازة رسمية لسكشن 6 🎉' : 'لا توجد حصص مجدولة لهذا اليوم'}
             </h3>
             <p class="text-xs text-stone-500 dark:text-stone-400 max-w-sm mx-auto">
-              ${isHoliday ? 'استمتع بوقتك في شحن طاقتك، مراجعة التكليفات السابقة، أو قضاء أوقات ممتعة!' : 'يمكنك تبديل التصفية لعرض جميع المحاضرات والسكاشن.'}
+              ${isHoliday ? 'استمتع بوقتك في شحن طاقتك، أو يمكنك سحب ونقل أي محاضرة إلى هذا اليوم من الجدول الأسبوعي!' : 'يمكنك تبديل التصفية أو سحب أي حصة وإفلاتها هنا.'}
             </p>
           </div>
         `;
@@ -1135,11 +1167,14 @@
         const attStatus = attendanceData[c.id] || 'pending'; // 'present', 'absent', 'excused', 'pending'
 
         return `
-          <div class="rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3.5 group">
+          <div id="class-card-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3.5 group select-none cursor-grab active:cursor-grabbing">
             <div class="space-y-3">
-              <!-- Top Row: Period & Type Badge -->
+              <!-- Top Row: Drag Handle, Period & Type Badge, Move Button -->
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="flex flex-wrap items-center gap-2">
+                  <span class="drag-handle touch-none cursor-grab active:cursor-grabbing p-1 -m-1 text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200 transition-colors" title="اسحب لنقل الحصة ليوم أو فترة أخرى">
+                    <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                  </span>
                   <span class="px-2.5 py-1 rounded-xl text-xs font-semibold ${theme.badge} shrink-0">
                     ${c.typeLabel}
                   </span>
@@ -1149,6 +1184,9 @@
                   </span>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="openMoveClassModal('${c.id}')" title="تغيير الموعد أو اليوم" class="p-1.5 rounded-lg text-stone-400 hover:text-sage-600 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
+                    <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                  </button>
                   ${attStatus === 'present' ? `
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800 shadow-xs">
                       <i data-lucide="check" class="w-3.5 h-3.5"></i>
@@ -1193,7 +1231,7 @@
               </div>
             </div>
 
-            <!-- Attendance Action Buttons -->
+            <!-- Attendance Action Buttons & Move helper -->
             <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-stone-100 dark:border-warmdark-700 text-xs">
               <span class="text-stone-400 text-xs font-medium">تسجيل الحضور:</span>
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -1220,6 +1258,7 @@
         `;
       }).join('');
 
+      initTouchDragSupport();
       lucide.createIcons();
     }
 
@@ -1229,35 +1268,43 @@
     function renderWeeklyGrid() {
       const container = document.getElementById('weeklyGridContainer');
       const days = [
-        { name: "السبت", index: 6, isHoliday: true },
-        { name: "الأحد", index: 0, isHoliday: false },
-        { name: "الاثنين", index: 1, isHoliday: false },
-        { name: "الثلاثاء", index: 2, isHoliday: false },
-        { name: "الأربعاء", index: 3, isHoliday: true },
-        { name: "الخميس", index: 4, isHoliday: false },
-        { name: "الجمعة", index: 5, isHoliday: true }
+        { name: "السبت", index: 6 },
+        { name: "الأحد", index: 0 },
+        { name: "الاثنين", index: 1 },
+        { name: "الثلاثاء", index: 2 },
+        { name: "الأربعاء", index: 3 },
+        { name: "الخميس", index: 4 },
+        { name: "الجمعة", index: 5 }
       ];
 
+      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
+
       container.innerHTML = days.map(day => {
-        let classes = initialSchedule.filter(c => c.dayIndex === day.index);
+        let classes = scheduleData.filter(c => c.dayIndex === day.index);
         if (currentFilter !== 'all') {
           classes = classes.filter(c => c.type === currentFilter);
         }
+        classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+        const isEmpty = classes.length === 0;
 
         return `
-          <div class="rounded-2xl p-4 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 flex flex-col justify-between shadow-soft">
+          <div data-day-index="${day.index}" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDropOnDay(event, ${day.index})" class="weekly-day-card rounded-2xl p-3.5 sm:p-4 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 flex flex-col justify-between shadow-soft transition-all duration-200">
             <div class="space-y-3">
               <div class="flex items-center justify-between border-b border-stone-100 dark:border-warmdark-700 pb-2">
                 <span class="font-bold text-sm text-stone-900 dark:text-white">${day.name}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full ${day.isHoliday ? 'bg-stone-100 text-stone-500 dark:bg-warmdark-700' : 'bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300'} font-semibold">
-                  ${day.isHoliday ? 'إجازة' : `${classes.length} حصص`}
+                <span class="text-[10px] px-2 py-0.5 rounded-full ${isEmpty ? 'bg-stone-100 text-stone-500 dark:bg-warmdark-700' : 'bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300'} font-semibold">
+                  ${isEmpty ? 'يوم حر' : `${classes.length} حصص`}
                 </span>
               </div>
 
-              ${day.isHoliday ? `
-                <div class="py-8 text-center space-y-1 text-stone-400">
-                  <i data-lucide="coffee" class="w-6 h-6 mx-auto opacity-70"></i>
+              ${isEmpty ? `
+                <div class="py-7 text-center space-y-2 text-stone-400">
+                  <i data-lucide="coffee" class="w-6 h-6 mx-auto opacity-60"></i>
                   <p class="text-xs">راحة واستجمام</p>
+                  <div class="py-1.5 px-2 rounded-xl border border-dashed border-stone-200 dark:border-warmdark-700 text-[10px] text-stone-400 bg-stone-50/50 dark:bg-warmdark-700/30">
+                    أفلت أي حصة هنا لنقلها
+                  </div>
                 </div>
               ` : `
                 <div class="space-y-2">
@@ -1265,14 +1312,25 @@
                     const theme = colorThemes[c.color] || colorThemes.sky;
                     const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
                     return `
-                      <div class="p-2.5 rounded-xl border ${theme.border} bg-stone-50/70 dark:bg-warmdark-700/50 space-y-1 text-xs">
-                        <div class="flex items-center justify-between">
-                          <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 line-clamp-1">${c.subject}</span>
-                          <span class="text-[9px] px-1.5 py-0.5 rounded ${theme.badge} shrink-0">${c.typeLabel}</span>
+                      <div id="grid-class-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable p-2.5 rounded-xl border ${theme.border} bg-stone-50/70 dark:bg-warmdark-700/50 space-y-1.5 text-xs shadow-2xs hover:shadow-xs transition-all select-none cursor-grab active:cursor-grabbing group">
+                        <div class="flex items-center justify-between gap-1">
+                          <div class="flex items-center gap-1 min-w-0">
+                            <span class="drag-handle touch-none cursor-grab active:cursor-grabbing text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200">
+                              <i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 truncate" title="${c.subject}">${c.subject}</span>
+                          </div>
+                          <button onclick="openMoveClassModal('${c.id}')" title="تعديل الموعد أو اليوم" class="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-stone-600 transition-opacity">
+                            <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
+                          </button>
                         </div>
-                        <div class="text-[10px] text-stone-500 flex items-center justify-between">
+                        <div class="flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400">
+                          <span class="px-1.5 py-0.2 rounded ${theme.badge} font-medium">${c.typeLabel}</span>
                           <span>ف${c.period} (${slot.start})</span>
-                          <span class="font-medium text-stone-700 dark:text-stone-300">${c.room}</span>
+                        </div>
+                        <div class="text-[10px] text-stone-500 flex items-center justify-between pt-0.5 border-t border-stone-200/40 dark:border-warmdark-600/40">
+                          <span class="font-medium text-stone-700 dark:text-stone-300 truncate max-w-[90px]">${c.room}</span>
+                          <span class="text-stone-400 truncate max-w-[80px]">${c.doctor ? c.doctor.split(' ')[0] : ''}</span>
                         </div>
                       </div>
                     `;
@@ -1284,6 +1342,7 @@
         `;
       }).join('');
 
+      initTouchDragSupport();
       lucide.createIcons();
     }
 
@@ -1303,7 +1362,7 @@
       // Calculate attendance stats
       container.innerHTML = uniqueSubjects.map(sub => {
         const theme = colorThemes[sub.color] || colorThemes.sky;
-        const subClasses = initialSchedule.filter(c => c.subject === sub.name);
+        const subClasses = scheduleData.filter(c => c.subject === sub.name);
         
         let presentCount = 0;
         let absentCount = 0;
@@ -1383,7 +1442,7 @@
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
       // Find upcoming or ongoing class today
-      const todayClasses = initialSchedule.filter(c => c.dayIndex === currentDay);
+      const todayClasses = scheduleData.filter(c => c.dayIndex === currentDay);
       let ongoing = null;
       let nextClass = null;
 
@@ -1552,7 +1611,7 @@
       let totalPresent = 0;
       let totalAbsent = 0;
       uniqueSubjects.forEach(subName => {
-        const subClasses = initialSchedule.filter(c => c.subject === subName);
+        const subClasses = scheduleData.filter(c => c.subject === subName);
         subClasses.forEach(c => {
           const status = attendanceData[c.id];
           if (status === 'present') totalPresent++;
@@ -1585,7 +1644,7 @@
       const now = new Date();
       const currentDay = now.getDay();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const todayClasses = initialSchedule.filter(c => c.dayIndex === currentDay);
+      const todayClasses = scheduleData.filter(c => c.dayIndex === currentDay);
       if (todayClasses.length === 0) return;
 
       let target = null;
@@ -1754,6 +1813,367 @@
       periodTimes = JSON.parse(JSON.stringify(defaultPeriodTimes));
       localStorage.removeItem('sakan6_periodTimes');
       openTimeSettingsModal();
+    }
+
+    // ----------------------------------------------------
+    // 10.5 DRAG & DROP AND CLASS RESCHEDULING ENGINE
+    // ----------------------------------------------------
+    let draggedClassId = null;
+    let moveModalCurrentClassId = null;
+    let moveModalSelectedDayIndex = null;
+    let moveModalSelectedPeriod = null;
+
+    const dayIndexNames = {
+      0: "الأحد",
+      1: "الاثنين",
+      2: "الثلاثاء",
+      3: "الأربعاء",
+      4: "الخميس",
+      5: "الجمعة",
+      6: "السبت"
+    };
+
+    function handleDragStart(e, classId) {
+      draggedClassId = classId;
+      if (e.dataTransfer) {
+        e.dataTransfer.setData('text/plain', classId);
+        e.dataTransfer.effectAllowed = 'move';
+      }
+      const el = e.currentTarget;
+      if (el) {
+        el.classList.add('opacity-50', 'scale-95');
+      }
+    }
+
+    function handleDragEnd(e) {
+      const el = e.currentTarget;
+      if (el) {
+        el.classList.remove('opacity-50', 'scale-95');
+      }
+      document.querySelectorAll('.weekly-day-card, .day-btn').forEach(card => {
+        card.classList.remove('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40', 'border-sage-400', 'scale-[1.02]');
+      });
+      draggedClassId = null;
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'move';
+      }
+      const dayCard = e.currentTarget;
+      if (dayCard && !dayCard.classList.contains('ring-2')) {
+        dayCard.classList.add('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40', 'border-sage-400');
+      }
+    }
+
+    function handleDragLeave(e) {
+      const dayCard = e.currentTarget;
+      if (dayCard && !dayCard.contains(e.relatedTarget)) {
+        dayCard.classList.remove('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40', 'border-sage-400');
+      }
+    }
+
+    function handleDropOnDay(e, targetDayIndex) {
+      e.preventDefault();
+      const dayCard = e.currentTarget;
+      if (dayCard) {
+        dayCard.classList.remove('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40', 'border-sage-400');
+      }
+      const classId = (e.dataTransfer ? e.dataTransfer.getData('text/plain') : null) || draggedClassId;
+      if (!classId) return;
+
+      openMoveClassModal(classId, targetDayIndex);
+    }
+
+    // Handlers for Day Buttons in Today View
+    function handleDayBtnDragOver(e) {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('ring-2', 'ring-sage-500', 'scale-105');
+    }
+
+    function handleDayBtnDragLeave(e) {
+      e.currentTarget.classList.remove('ring-2', 'ring-sage-500', 'scale-105');
+    }
+
+    function handleDayBtnDrop(e, targetDayIndex) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('ring-2', 'ring-sage-500', 'scale-105');
+      const classId = (e.dataTransfer ? e.dataTransfer.getData('text/plain') : null) || draggedClassId;
+      if (!classId) return;
+      openMoveClassModal(classId, targetDayIndex);
+    }
+
+    // Touch Drag & Drop for Mobile
+    let touchDragging = false;
+    let touchDraggedClassId = null;
+    let touchAvatar = null;
+
+    function initTouchDragSupport() {
+      document.querySelectorAll('.drag-handle').forEach(handle => {
+        if (handle.dataset.touchInit) return;
+        handle.dataset.touchInit = "true";
+
+        handle.addEventListener('touchstart', (e) => {
+          const parentCard = handle.closest('.class-draggable');
+          if (!parentCard) return;
+          const classId = parentCard.id.replace('class-card-', '').replace('grid-class-', '');
+          touchDraggedClassId = classId;
+          draggedClassId = classId;
+        }, { passive: true });
+
+        handle.addEventListener('touchmove', (e) => {
+          if (!touchDraggedClassId) return;
+          const touch = e.touches[0];
+
+          if (!touchDragging) {
+            touchDragging = true;
+            const c = scheduleData.find(item => item.id === touchDraggedClassId);
+            touchAvatar = document.createElement('div');
+            touchAvatar.className = 'fixed z-50 pointer-events-none px-3 py-1.5 rounded-xl bg-sage-700 text-white text-xs font-semibold shadow-xl opacity-90 border border-white/20';
+            touchAvatar.innerText = c ? `${c.subject} (ف${c.period})` : 'جاري النقل...';
+            document.body.appendChild(touchAvatar);
+          }
+
+          if (touchAvatar) {
+            touchAvatar.style.left = `${touch.clientX + 10}px`;
+            touchAvatar.style.top = `${touch.clientY + 10}px`;
+          }
+
+          const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+          const targetDayCard = elemBelow ? elemBelow.closest('.weekly-day-card, .day-btn') : null;
+
+          document.querySelectorAll('.weekly-day-card, .day-btn').forEach(card => {
+            if (card === targetDayCard) {
+              card.classList.add('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40');
+            } else {
+              card.classList.remove('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40');
+            }
+          });
+        }, { passive: false });
+
+        handle.addEventListener('touchend', (e) => {
+          if (touchAvatar) {
+            touchAvatar.remove();
+            touchAvatar = null;
+          }
+
+          if (touchDragging && touchDraggedClassId) {
+            const touch = e.changedTouches[0];
+            const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const targetDayCard = elemBelow ? elemBelow.closest('.weekly-day-card, .day-btn') : null;
+
+            if (targetDayCard) {
+              let targetDayIndex = targetDayCard.getAttribute('data-day-index') || targetDayCard.getAttribute('data-day');
+              if (targetDayIndex !== null) {
+                targetDayIndex = parseInt(targetDayIndex, 10);
+                openMoveClassModal(touchDraggedClassId, targetDayIndex);
+              }
+            }
+          }
+
+          document.querySelectorAll('.weekly-day-card, .day-btn').forEach(card => {
+            card.classList.remove('ring-2', 'ring-sage-500', 'bg-sage-50/70', 'dark:bg-sage-950/40');
+          });
+
+          touchDragging = false;
+          touchDraggedClassId = null;
+          draggedClassId = null;
+        }, { passive: true });
+      });
+    }
+
+    // Modal Control & Logic
+    function openMoveClassModal(classId, suggestedDayIndex = null) {
+      const c = scheduleData.find(item => item.id === classId);
+      if (!c) return;
+
+      moveModalCurrentClassId = classId;
+      moveModalSelectedDayIndex = (suggestedDayIndex !== null) ? suggestedDayIndex : c.dayIndex;
+      moveModalSelectedPeriod = c.period;
+
+      const theme = colorThemes[c.color] || colorThemes.sky;
+      const currentSlot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+
+      // Summary Card
+      const summaryContainer = document.getElementById('moveClassSummary');
+      summaryContainer.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-sm text-stone-900 dark:text-white">${c.subject}</span>
+          <span class="px-2 py-0.5 rounded-lg text-[10px] font-semibold ${theme.badge}">${c.typeLabel}</span>
+        </div>
+        <div class="text-[11px] text-stone-500 dark:text-stone-400 flex flex-wrap items-center gap-2 pt-1">
+          <span>الموقع الحالي: <strong>${c.day}</strong></span>
+          <span>•</span>
+          <span>ف${c.period} (${currentSlot.start} - ${currentSlot.end})</span>
+          <span>•</span>
+          <span>${c.room}</span>
+        </div>
+      `;
+
+      renderMoveModalDayPills();
+      renderMoveModalPeriodPills();
+
+      document.getElementById('moveClassModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeMoveClassModal() {
+      document.getElementById('moveClassModal').classList.add('hidden');
+      moveModalCurrentClassId = null;
+      moveModalSelectedDayIndex = null;
+      moveModalSelectedPeriod = null;
+    }
+
+    function renderMoveModalDayPills() {
+      const container = document.getElementById('moveDayPills');
+      const days = [
+        { name: "السبت", index: 6 },
+        { name: "الأحد", index: 0 },
+        { name: "الاثنين", index: 1 },
+        { name: "الثلاثاء", index: 2 },
+        { name: "الأربعاء", index: 3 },
+        { name: "الخميس", index: 4 },
+        { name: "الجمعة", index: 5 }
+      ];
+
+      container.innerHTML = days.map(d => {
+        const isSelected = d.index === moveModalSelectedDayIndex;
+        const classesInDay = scheduleData.filter(item => item.dayIndex === d.index && item.id !== moveModalCurrentClassId);
+        return `
+          <button type="button" onclick="selectMoveDay(${d.index})" class="p-2 rounded-xl text-center border transition-all ${
+            isSelected
+              ? 'bg-sage-600 text-white border-sage-600 font-bold shadow-xs'
+              : 'bg-white dark:bg-warmdark-700 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-warmdark-600 hover:bg-stone-50'
+          }">
+            <div class="text-xs">${d.name}</div>
+            <div class="text-[9px] opacity-75 mt-0.5">${classesInDay.length} حصص</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectMoveDay(dayIndex) {
+      moveModalSelectedDayIndex = dayIndex;
+      renderMoveModalDayPills();
+      renderMoveModalPeriodPills();
+    }
+
+    function renderMoveModalPeriodPills() {
+      const container = document.getElementById('movePeriodPills');
+      const periodKeys = [1, 2, 3, 4, 5, 6, "on1", "on2"];
+
+      // Check which periods are already occupied in this target day
+      const occupiedInTargetDay = {};
+      scheduleData.forEach(item => {
+        if (item.dayIndex === moveModalSelectedDayIndex && item.id !== moveModalCurrentClassId) {
+          occupiedInTargetDay[item.period] = item;
+        }
+      });
+
+      container.innerHTML = periodKeys.map(p => {
+        const slot = periodTimes[p] || defaultPeriodTimes[p];
+        const label = slot.label || (typeof p === 'number' ? `الفترة ${p}` : p);
+        const occupiedBy = occupiedInTargetDay[p];
+        const isSelected = String(moveModalSelectedPeriod) === String(p);
+
+        return `
+          <div onclick="selectMovePeriod('${p}')" class="flex items-center justify-between p-2.5 rounded-xl border cursor-pointer transition-all ${
+            isSelected
+              ? 'bg-sage-50 dark:bg-sage-950/40 border-sage-500 ring-2 ring-sage-500/20'
+              : 'bg-stone-50/70 dark:bg-warmdark-700/50 border-stone-200/60 dark:border-warmdark-600 hover:bg-stone-100/70'
+          }">
+            <div class="flex items-center gap-2">
+              <input type="radio" name="move_period_radio" value="${p}" ${isSelected ? 'checked' : ''} class="text-sage-600 focus:ring-sage-500" />
+              <div>
+                <span class="font-bold text-xs text-stone-800 dark:text-stone-200">${label}</span>
+                <span class="text-[11px] text-stone-400 font-mono mr-1">(${slot.start} - ${slot.end})</span>
+              </div>
+            </div>
+            <div>
+              ${occupiedBy ? `
+                <span class="px-2 py-0.5 rounded-md text-[10px] bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 font-medium">
+                  مشغولة: ${occupiedBy.subject.split(' ')[0]}
+                </span>
+              ` : `
+                <span class="px-2 py-0.5 rounded-md text-[10px] bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-semibold">
+                  متاحة ✨
+                </span>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectMovePeriod(period) {
+      moveModalSelectedPeriod = period;
+      renderMoveModalPeriodPills();
+    }
+
+    function confirmMoveClass() {
+      if (!moveModalCurrentClassId || moveModalSelectedDayIndex === null || !moveModalSelectedPeriod) return;
+
+      const c = scheduleData.find(item => item.id === moveModalCurrentClassId);
+      if (!c) return;
+
+      const targetDayName = dayIndexNames[moveModalSelectedDayIndex];
+
+      // Check if period is already occupied in target day
+      const existingOccupant = scheduleData.find(item => 
+        item.dayIndex === moveModalSelectedDayIndex && 
+        String(item.period) === String(moveModalSelectedPeriod) && 
+        item.id !== c.id
+      );
+
+      if (existingOccupant) {
+        const swapConfirm = confirm(`الفترة المختارة (${defaultPeriodTimes[moveModalSelectedPeriod]?.label || moveModalSelectedPeriod}) مشغولة حالياً بـ (${existingOccupant.subject}).\n\nهل تريد تبديل الفترات والأيام بين الحصتين؟`);
+        if (swapConfirm) {
+          existingOccupant.dayIndex = c.dayIndex;
+          existingOccupant.day = c.day;
+          existingOccupant.period = c.period;
+        } else {
+          return;
+        }
+      }
+
+      c.dayIndex = moveModalSelectedDayIndex;
+      c.day = targetDayName;
+      c.period = (typeof c.period === 'number' && !isNaN(Number(moveModalSelectedPeriod))) 
+        ? Number(moveModalSelectedPeriod) 
+        : moveModalSelectedPeriod;
+
+      localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+      closeMoveClassModal();
+
+      // Re-render
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      playChime('success');
+
+      showSyncToast(`تم نقل ${c.subject} إلى يوم ${c.day} (${defaultPeriodTimes[c.period]?.label || 'ف' + c.period}) بنجاح ✨`, 'success');
+      syncWithGoogleSheets(false);
+    }
+
+    function resetScheduleToDefaultConfirm() {
+      const ok = confirm("هل تريد بالتأكيد استعادة التوزيع الأصلي المعتمد للجدول الدراسي (الفرقة الثالثة سكشن 6) وإلغاء أي تعديلات في أيام وفترات الحصص؟");
+      if (!ok) return;
+
+      scheduleData = JSON.parse(JSON.stringify(initialSchedule));
+      localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      playChime('success');
+      showSyncToast("تمت استعادة الجدول الدراسي الأصلي بنجاح 🔄", 'success');
+      syncWithGoogleSheets(false);
     }
 
     // ----------------------------------------------------
@@ -2262,11 +2682,12 @@
 
       // Build metadata map for classes
       const meta = {};
-      initialSchedule.forEach(c => {
+      scheduleData.forEach(c => {
         meta[c.id] = {
           subject: c.subject,
           typeLabel: c.typeLabel,
           day: c.day,
+          dayIndex: c.dayIndex,
           period: c.period,
           room: c.room,
           doctor: c.doctor
@@ -2280,6 +2701,7 @@
           tasks: tasksList,
           streak: streakCount,
           periodTimes: periodTimes,
+          schedule: scheduleData,
           meta: meta
         }
       };
@@ -2355,6 +2777,10 @@
             periodTimes = d.periodTimes;
             localStorage.setItem('sakan6_periodTimes', JSON.stringify(periodTimes));
           }
+          if (d.schedule && Array.isArray(d.schedule) && d.schedule.length > 0) {
+            scheduleData = d.schedule;
+            localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+          }
 
           const nowFormatted = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
           localStorage.setItem('sakan6_last_sync_time', nowFormatted);
@@ -2390,12 +2816,14 @@
       tasksList = [];
       streakCount = 0;
       periodTimes = defaultPeriodTimes;
+      scheduleData = JSON.parse(JSON.stringify(initialSchedule));
 
       // 2. Clear localStorage (keep theme and gas_url)
       localStorage.removeItem('sakan6_attendance');
       localStorage.removeItem('sakan6_tasks');
       localStorage.removeItem('sakan6_streak');
       localStorage.removeItem('sakan6_periodTimes');
+      localStorage.removeItem('sakan6_schedule');
       localStorage.removeItem('sakan6_last_sync_time');
 
       // 3. Update GAS if connected
@@ -2431,7 +2859,62 @@
     // ----------------------------------------------------
     // 12. EXPORT & DOWNLOAD CARD AS IMAGE
     // ----------------------------------------------------
+    function updatePrintableCardContent() {
+      const container = document.getElementById('printableCardList');
+      if (!container) return;
+
+      const days = [
+        { name: "السبت", index: 6 },
+        { name: "الأحد", index: 0 },
+        { name: "الاثنين", index: 1 },
+        { name: "الثلاثاء", index: 2 },
+        { name: "الأربعاء", index: 3 },
+        { name: "الخميس", index: 4 },
+        { name: "الجمعة", index: 5 }
+      ];
+
+      const periodOrder = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, "on1": 7, "on2": 8 };
+
+      const activeDays = days.filter(d => scheduleData.some(c => c.dayIndex === d.index));
+      const offDays = days.filter(d => !scheduleData.some(c => c.dayIndex === d.index));
+
+      const headerInfo = document.getElementById('printableCardHeaderInfo');
+      if (headerInfo) {
+        const offDayNames = offDays.map(d => d.name).join(' و');
+        headerInfo.innerHTML = `
+          <div>الأيام الدراسية: ${activeDays.length} أيام</div>
+          <div class="text-sage-700 font-semibold">${offDayNames ? offDayNames + ' إجازة ✨' : 'أسبوع حافل بالنشاط ✨'}</div>
+        `;
+      }
+
+      container.innerHTML = activeDays.map(d => {
+        const classes = scheduleData.filter(c => c.dayIndex === d.index);
+        classes.sort((a, b) => (periodOrder[a.period] || 99) - (periodOrder[b.period] || 99));
+
+        return `
+          <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80 space-y-1.5">
+            <div class="font-bold text-stone-800 flex items-center justify-between text-xs">
+              <span>${d.name}</span>
+              <span class="text-[10px] text-stone-400 font-normal">${classes.length} فترات</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              ${classes.map(c => {
+                const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                const theme = colorThemes[c.color] || colorThemes.sky;
+                return `
+                  <div class="p-1.5 rounded-lg ${theme.badge} font-medium">
+                    ف${c.period} (${slot.start} - ${slot.end}): ${c.subject} (${c.typeLabel}) - ${c.room}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function openExportModal() {
+      updatePrintableCardContent();
       document.getElementById('exportModal').classList.remove('hidden');
     }
 

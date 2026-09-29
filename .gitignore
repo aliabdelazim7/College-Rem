@@ -1,0 +1,6 @@
+# Temporary test artifacts and inspection images
+sec6_*.png
+crop_sec6.png
+page_full.png
+diff_pdf.txt
+blocks.txt
