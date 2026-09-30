@@ -374,6 +374,11 @@
           <button onclick="changeDayView(3)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="3">الأربعاء</button>
           <button onclick="changeDayView(4)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="4">الخميس</button>
           <button onclick="changeDayView(5)" class="day-btn px-3 py-1.5 rounded-xl text-xs shrink-0 whitespace-nowrap font-medium" data-day="5">الجمعة</button>
+          <div class="w-px h-5 bg-stone-200 dark:bg-warmdark-700 shrink-0"></div>
+          <button onclick="openClassModal(null, activeDayView)" class="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95 shrink-0" title="إضافة حصة دراسية جديدة لهذا اليوم">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>إضافة حصة</span>
+          </button>
         </div>
       </div>
 
@@ -391,6 +396,10 @@
           <p class="text-xs text-stone-500 dark:text-stone-400">توزيع جميع محاضرات وسكاشن سكشن 6 على مدار أيام الأسبوع</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="openClassModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95" title="إضافة محاضرة أو سكشن جديد إلى الجدول">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>إضافة حصة / سكشن</span>
+          </button>
           <button onclick="resetScheduleToDefaultConfirm()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-warmdark-800 border border-stone-200 dark:border-warmdark-700 hover:bg-stone-50 transition-colors shadow-xs" title="إعادة ضبط الجدول إلى التوزيع الأصلي المعتمد للكلية">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
             <span>استعادة الجدول الأصلي</span>
@@ -1235,6 +1244,170 @@
     </div>
   </div>
 
+  <!-- MODAL: ADD / EDIT CLASS (إضافة أو تعديل محاضرة / سكشن) -->
+  <div id="classEditorModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] overflow-y-auto">
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-warmdark-700">
+        <div class="flex items-center gap-2.5">
+          <div id="classEditorIconBg" class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center shadow-xs">
+            <i id="classEditorIcon" data-lucide="plus-circle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="classEditorTitle" class="text-base font-bold text-stone-900 dark:text-white">إضافة حصة دراسية جديدة</h3>
+            <p id="classEditorSubtitle" class="text-xs text-stone-500 dark:text-stone-400">أضف محاضرة أو سكشن عملي لجدولك الدراسي</p>
+          </div>
+        </div>
+        <button onclick="closeClassEditorModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1 rounded-xl">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Hidden ID for Editing -->
+      <input type="hidden" id="editClassId" value="" />
+
+      <!-- Form Inputs -->
+      <div class="space-y-3.5 text-xs">
+        <!-- 1. Subject Name -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-800 dark:text-stone-200">اسم المادة الدراسية: <span class="text-rose-500">*</span></label>
+          <input id="editClassSubject" type="text" list="defaultSubjectsList" placeholder="مثال: شبكات الحاسب، قواعد بيانات 2..." class="w-full text-xs font-semibold rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" required />
+          <datalist id="defaultSubjectsList">
+            <option value="شبكات الحاسب"></option>
+            <option value="قواعد بيانات 2"></option>
+            <option value="أساليب البحث العلمي"></option>
+            <option value="نظرية المعلومات والترميز"></option>
+            <option value="تحليل وتصميم النظم 2"></option>
+            <option value="مشروع التخرج"></option>
+          </datalist>
+        </div>
+
+        <!-- 2. Type: Lecture or Section -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-800 dark:text-stone-200">نوع الحصة: <span class="text-rose-500">*</span></label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassType" value="lecture" id="typeRadioLecture" class="peer sr-only" checked onchange="handleClassTypeChange('lecture')">
+              <div class="p-2.5 rounded-xl border border-stone-200 dark:border-warmdark-600 peer-checked:border-sky-500 peer-checked:bg-sky-50 peer-checked:text-sky-800 dark:peer-checked:bg-sky-950/60 dark:peer-checked:text-sky-300 flex items-center justify-center gap-2 transition-all font-semibold">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>محاضرة نظرية</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassType" value="section" id="typeRadioSection" class="peer sr-only" onchange="handleClassTypeChange('section')">
+              <div class="p-2.5 rounded-xl border border-stone-200 dark:border-warmdark-600 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-800 dark:peer-checked:bg-emerald-950/60 dark:peer-checked:text-emerald-300 flex items-center justify-center gap-2 transition-all font-semibold">
+                <i data-lucide="cpu" class="w-4 h-4"></i>
+                <span>سكشن عملي</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3. Day Selection -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-800 dark:text-stone-200">اليوم الدراسي: <span class="text-rose-500">*</span></label>
+          <select id="editClassDay" class="w-full text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="6">السبت</option>
+            <option value="0" selected>الأحد</option>
+            <option value="1">الاثنين</option>
+            <option value="2">الثلاثاء</option>
+            <option value="3">الأربعاء</option>
+            <option value="4">الخميس</option>
+            <option value="5">الجمعة</option>
+          </select>
+        </div>
+
+        <!-- 4. Period Selection -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-800 dark:text-stone-200">الفترة والتوقيت: <span class="text-rose-500">*</span></label>
+          <select id="editClassPeriod" class="w-full text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="1">الفترة 1 (08:30 ص - 10:10 ص)</option>
+            <option value="2">الفترة 2 (10:20 ص - 12:00 م)</option>
+            <option value="3">الفترة 3 (12:20 م - 02:00 م)</option>
+            <option value="4">الفترة 4 (02:10 م - 03:50 م)</option>
+            <option value="5">الفترة 5 (04:00 م - 05:40 م)</option>
+            <option value="6">الفترة 6 (05:50 م - 07:30 م)</option>
+            <option value="on1">فترة أونلاين 1 (06:00 م - 07:40 م)</option>
+            <option value="on2">فترة أونلاين 2 (08:00 م - 09:40 م)</option>
+          </select>
+        </div>
+
+        <!-- 5. Hall / Room & Doctor Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div class="space-y-1.5">
+            <label class="block font-bold text-stone-800 dark:text-stone-200">القاعة / المدرج / المعمل:</label>
+            <input id="editClassRoom" type="text" list="defaultRoomsList" placeholder="مثال: مدرج 3، قاعة B4..." class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <datalist id="defaultRoomsList">
+              <option value="مدرج 1"></option>
+              <option value="مدرج 2"></option>
+              <option value="مدرج 3"></option>
+              <option value="قاعة B4 (Hardware)"></option>
+              <option value="قاعة B5"></option>
+              <option value="قاعة 6"></option>
+              <option value="معمل 1"></option>
+              <option value="معمل 2"></option>
+              <option value="معمل الشبكات"></option>
+              <option value="معمل البرمجة"></option>
+              <option value="أونلاين عبر Teams"></option>
+            </datalist>
+          </div>
+          <div class="space-y-1.5">
+            <label class="block font-bold text-stone-800 dark:text-stone-200">المحاضر (دكتور / معيد):</label>
+            <input id="editClassDoctor" type="text" placeholder="مثال: أ.د/ أحمد عطوان..." class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+        </div>
+
+        <!-- 6. Card Color Picker -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-stone-800 dark:text-stone-200">لون تمييز البطاقة:</label>
+          <div class="flex items-center gap-2.5">
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="sky" class="peer sr-only" checked />
+              <div class="w-7 h-7 rounded-xl bg-sky-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-sky-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="emerald" class="peer sr-only" />
+              <div class="w-7 h-7 rounded-xl bg-emerald-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-emerald-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="amber" class="peer sr-only" />
+              <div class="w-7 h-7 rounded-xl bg-amber-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-amber-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="rose" class="peer sr-only" />
+              <div class="w-7 h-7 rounded-xl bg-rose-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-rose-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="indigo" class="peer sr-only" />
+              <div class="w-7 h-7 rounded-xl bg-indigo-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-indigo-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="editClassColor" value="purple" class="peer sr-only" />
+              <div class="w-7 h-7 rounded-xl bg-purple-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-purple-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between pt-3 border-t border-stone-100 dark:border-warmdark-700">
+        <div>
+          <button id="deleteClassModalBtn" type="button" onclick="deleteCurrentEditingClass()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <span>حذف هذه الحصة</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeClassEditorModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">إلغاء</button>
+          <button type="button" onclick="saveClassFromEditor()" id="saveClassEditorBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span id="saveClassEditorBtnText">إضافة للجدول</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
     // ----------------------------------------------------
@@ -1650,8 +1823,14 @@
                   </span>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="openClassModal('${c.id}')" title="تعديل تفاصيل وموعد الحصة" class="p-1.5 rounded-lg text-stone-400 hover:text-emerald-600 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
+                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                  </button>
                   <button onclick="openMoveClassModal('${c.id}')" title="تغيير الموعد أو اليوم" class="p-1.5 rounded-lg text-stone-400 hover:text-sage-600 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
                     <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                  </button>
+                  <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة من الجدول" class="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
                   </button>
                   ${attStatus === 'present' ? `
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800 shadow-xs">
@@ -1758,18 +1937,27 @@
           <div data-day-index="${day.index}" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDropOnDay(event, ${day.index})" class="weekly-day-card rounded-2xl p-3.5 sm:p-4 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 flex flex-col justify-between shadow-soft transition-all duration-200">
             <div class="space-y-3">
               <div class="flex items-center justify-between border-b border-stone-100 dark:border-warmdark-700 pb-2">
-                <span class="font-bold text-sm text-stone-900 dark:text-white">${day.name}</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-bold text-sm text-stone-900 dark:text-white">${day.name}</span>
+                  <button onclick="openClassModal(null, ${day.index})" title="إضافة حصة ليوم ${day.name}" class="w-5 h-5 rounded-md flex items-center justify-center text-stone-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
                 <span class="text-[10px] px-2 py-0.5 rounded-full ${isEmpty ? 'bg-stone-100 text-stone-500 dark:bg-warmdark-700' : 'bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300'} font-semibold">
                   ${isEmpty ? 'يوم حر' : `${classes.length} حصص`}
                 </span>
               </div>
 
               ${isEmpty ? `
-                <div class="py-7 text-center space-y-2 text-stone-400">
+                <div class="py-6 text-center space-y-2 text-stone-400">
                   <i data-lucide="coffee" class="w-6 h-6 mx-auto opacity-60"></i>
                   <p class="text-xs">راحة واستجمام</p>
-                  <div class="py-1.5 px-2 rounded-xl border border-dashed border-stone-200 dark:border-warmdark-700 text-[10px] text-stone-400 bg-stone-50/50 dark:bg-warmdark-700/30">
-                    أفلت أي حصة هنا لنقلها
+                  <button onclick="openClassModal(null, ${day.index})" class="inline-flex items-center gap-1 py-1 px-2.5 rounded-xl bg-stone-100 dark:bg-warmdark-700 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950 dark:hover:text-emerald-300 text-[11px] font-semibold transition-all">
+                    <i data-lucide="plus" class="w-3 h-3"></i>
+                    <span>إضافة حصة</span>
+                  </button>
+                  <div class="py-1 px-2 rounded-xl border border-dashed border-stone-200 dark:border-warmdark-700 text-[9px] text-stone-400 bg-stone-50/50 dark:bg-warmdark-700/30">
+                    أو اسحب وأفلت أي حصة هنا
                   </div>
                 </div>
               ` : `
@@ -1784,11 +1972,19 @@
                             <span class="drag-handle touch-none cursor-grab active:cursor-grabbing text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200">
                               <i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>
                             </span>
-                            <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 truncate" title="${c.subject}">${c.subject}</span>
+                            <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 truncate cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline" onclick="openClassModal('${c.id}')" title="انقر لتعديل تفاصيل الحصة: ${c.subject}">${c.subject}</span>
                           </div>
-                          <button onclick="openMoveClassModal('${c.id}')" title="تعديل الموعد أو اليوم" class="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-stone-600 transition-opacity">
-                            <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
-                          </button>
+                          <div class="flex items-center gap-0.5 shrink-0">
+                            <button onclick="openClassModal('${c.id}')" title="تعديل تفاصيل الحصة والمادة" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-emerald-600 transition-colors">
+                              <i data-lucide="pencil" class="w-3 h-3"></i>
+                            </button>
+                            <button onclick="openMoveClassModal('${c.id}')" title="تعديل الموعد أو اليوم" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-sage-600 transition-colors">
+                              <i data-lucide="calendar-clock" class="w-3 h-3"></i>
+                            </button>
+                            <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة من الجدول" class="p-1 rounded hover:bg-rose-100 dark:hover:bg-rose-950/50 text-stone-400 hover:text-rose-600 transition-colors">
+                              <i data-lucide="trash-2" class="w-3 h-3"></i>
+                            </button>
+                          </div>
                         </div>
                         <div class="flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400">
                           <span class="px-1.5 py-0.2 rounded ${theme.badge} font-medium">${c.typeLabel}</span>
@@ -3041,6 +3237,11 @@
       scheduleData = JSON.parse(JSON.stringify(initialSchedule));
       localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
 
+      // Recalculate dynamic study days
+      const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+      const countEl = document.getElementById('headerStudyDaysCount');
+      if (countEl) countEl.innerText = activeStudyDays.size;
+
       renderTodayView();
       renderWeeklyGrid();
       renderSubjectsSummary();
@@ -3048,6 +3249,228 @@
       updateLiveBanner();
       playChime('success');
       showSyncToast("تمت استعادة الجدول الدراسي الأصلي بنجاح 🔄", 'success');
+      syncWithGoogleSheets(false);
+    }
+
+    // ----------------------------------------------------
+    // 10. CLASS / SECTION CRUD (إضافة وتعديل وحذف الحصص)
+    // ----------------------------------------------------
+    function openClassModal(classId = null, defaultDayIndex = null) {
+      const modal = document.getElementById('classEditorModal');
+      if (!modal) return;
+
+      const titleEl = document.getElementById('classEditorTitle');
+      const subtitleEl = document.getElementById('classEditorSubtitle');
+      const saveBtnText = document.getElementById('saveClassEditorBtnText');
+      const deleteBtn = document.getElementById('deleteClassModalBtn');
+      const idInput = document.getElementById('editClassId');
+      const subjectInput = document.getElementById('editClassSubject');
+      const daySelect = document.getElementById('editClassDay');
+      const periodSelect = document.getElementById('editClassPeriod');
+      const roomInput = document.getElementById('editClassRoom');
+      const doctorInput = document.getElementById('editClassDoctor');
+
+      if (classId) {
+        // EDIT MODE
+        const c = scheduleData.find(item => item.id === classId);
+        if (!c) return;
+
+        idInput.value = c.id;
+        if (titleEl) titleEl.innerText = `تعديل: ${c.subject}`;
+        if (subtitleEl) subtitleEl.innerText = `تعديل تفاصيل وموعد ${c.typeLabel} في الجدول`;
+        if (saveBtnText) saveBtnText.innerText = "حفظ التعديلات";
+        if (deleteBtn) {
+          deleteBtn.classList.remove('hidden');
+          deleteBtn.classList.add('inline-flex');
+        }
+
+        if (subjectInput) subjectInput.value = c.subject || '';
+        if (daySelect) daySelect.value = c.dayIndex.toString();
+        if (periodSelect) periodSelect.value = c.period.toString();
+        if (roomInput) roomInput.value = c.room || '';
+        if (doctorInput) doctorInput.value = c.doctor || '';
+
+        // Set type radio
+        const isLecture = (c.type === 'lecture');
+        const lecRadio = document.getElementById('typeRadioLecture');
+        const secRadio = document.getElementById('typeRadioSection');
+        if (lecRadio) lecRadio.checked = isLecture;
+        if (secRadio) secRadio.checked = !isLecture;
+
+        // Set color radio
+        const colorRadios = document.querySelectorAll('input[name="editClassColor"]');
+        colorRadios.forEach(r => {
+          r.checked = (r.value === (c.color || 'sky'));
+        });
+      } else {
+        // ADD NEW MODE
+        idInput.value = '';
+        if (titleEl) titleEl.innerText = "إضافة حصة دراسية جديدة";
+        if (subtitleEl) subtitleEl.innerText = "أضف محاضرة أو سكشن عملي لجدولك الدراسي";
+        if (saveBtnText) saveBtnText.innerText = "إضافة للجدول";
+        if (deleteBtn) {
+          deleteBtn.classList.add('hidden');
+          deleteBtn.classList.remove('inline-flex');
+        }
+
+        if (subjectInput) subjectInput.value = '';
+        if (daySelect) {
+          const targetDay = (defaultDayIndex !== null && defaultDayIndex !== undefined) ? defaultDayIndex : 0;
+          daySelect.value = targetDay.toString();
+        }
+        if (periodSelect) periodSelect.value = "1";
+        if (roomInput) roomInput.value = '';
+        if (doctorInput) doctorInput.value = '';
+
+        const lecRadio = document.getElementById('typeRadioLecture');
+        if (lecRadio) lecRadio.checked = true;
+
+        const colorRadios = document.querySelectorAll('input[name="editClassColor"]');
+        colorRadios.forEach(r => {
+          r.checked = (r.value === 'sky');
+        });
+      }
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+      setTimeout(() => {
+        if (subjectInput) subjectInput.focus();
+      }, 100);
+    }
+
+    function closeClassEditorModal() {
+      const modal = document.getElementById('classEditorModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleClassTypeChange(type) {
+      const defaultColors = { lecture: 'sky', section: 'emerald' };
+      const targetColor = defaultColors[type] || 'sky';
+      const colorRadio = document.querySelector(`input[name="editClassColor"][value="${targetColor}"]`);
+      if (colorRadio) colorRadio.checked = true;
+    }
+
+    function deleteClassConfirm(classId) {
+      const c = scheduleData.find(item => item.id === classId);
+      if (!c) return;
+
+      const ok = confirm(`هل أنت متأكد من حذف (${c.subject} - ${c.typeLabel} ف${c.period}) نهائياً من الجدول؟`);
+      if (!ok) return;
+
+      scheduleData = scheduleData.filter(item => item.id !== classId);
+      localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+
+      // Recalculate dynamic study days
+      const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+      const countEl = document.getElementById('headerStudyDaysCount');
+      if (countEl) countEl.innerText = activeStudyDays.size;
+
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      closeClassEditorModal();
+      playChime('undo');
+      showSyncToast(`تم حذف (${c.subject}) من الجدول بنجاح 🗑️`, "success");
+      syncWithGoogleSheets(false);
+    }
+
+    function deleteCurrentEditingClass() {
+      const id = document.getElementById('editClassId').value;
+      if (id) {
+        deleteClassConfirm(id);
+      }
+    }
+
+    function saveClassFromEditor() {
+      const id = document.getElementById('editClassId').value.trim();
+      const subjectInput = document.getElementById('editClassSubject');
+      const subject = subjectInput ? subjectInput.value.trim() : '';
+
+      if (!subject) {
+        alert("يرجى كتابة اسم المادة الدراسية أولاً!");
+        if (subjectInput) subjectInput.focus();
+        return;
+      }
+
+      const typeRadio = document.querySelector('input[name="editClassType"]:checked');
+      const type = typeRadio ? typeRadio.value : 'lecture';
+      const typeLabel = (type === 'lecture') ? 'محاضرة' : 'سكشن عملي';
+
+      const dayIndex = parseInt(document.getElementById('editClassDay').value, 10);
+      const dayNames = {
+        0: "الأحد",
+        1: "الاثنين",
+        2: "الثلاثاء",
+        3: "الأربعاء",
+        4: "الخميس",
+        5: "الجمعة",
+        6: "السبت"
+      };
+      const day = dayNames[dayIndex] || "الأحد";
+
+      const periodVal = document.getElementById('editClassPeriod').value;
+      const period = isNaN(parseInt(periodVal, 10)) ? periodVal : parseInt(periodVal, 10);
+
+      const room = document.getElementById('editClassRoom').value.trim() || 'قاعة دراسية';
+      const doctor = document.getElementById('editClassDoctor').value.trim() || '';
+
+      const colorRadio = document.querySelector('input[name="editClassColor"]:checked');
+      const color = colorRadio ? colorRadio.value : (type === 'lecture' ? 'sky' : 'emerald');
+
+      if (id) {
+        // Edit existing
+        const idx = scheduleData.findIndex(item => item.id === id);
+        if (idx !== -1) {
+          scheduleData[idx] = {
+            ...scheduleData[idx],
+            subject,
+            type,
+            typeLabel,
+            day,
+            dayIndex,
+            period,
+            room,
+            doctor,
+            color
+          };
+          showSyncToast(`تم تحديث بيانات (${subject}) بنجاح ✨`, "success");
+        }
+      } else {
+        // Add new class
+        const newId = `custom_${Date.now()}`;
+        const newClass = {
+          id: newId,
+          subject,
+          type,
+          typeLabel,
+          day,
+          dayIndex,
+          period,
+          room,
+          doctor,
+          color
+        };
+        scheduleData.push(newClass);
+        showSyncToast(`تمت إضافة (${subject}) إلى الجدول بنجاح 🎉`, "success");
+      }
+
+      // Persist to storage
+      localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+
+      // Recalculate dynamic study days
+      const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+      const countEl = document.getElementById('headerStudyDaysCount');
+      if (countEl) countEl.innerText = activeStudyDays.size;
+
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      closeClassEditorModal();
+      playChime('success');
       syncWithGoogleSheets(false);
     }
 

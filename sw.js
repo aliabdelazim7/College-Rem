@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v15 - UI/UX Pro Max Mobile & Touch Optimization)
+// Service Worker for Section 6 PWA (v16 - Class CRUD & Schedule Customization)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v15';
+const CACHE_NAME = 'section6-hub-v16';
 
 const PRECACHE_ASSETS = [
   './',
