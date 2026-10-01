@@ -141,33 +141,59 @@
         </div>
       </div>
 
-      <!-- Action Buttons & Controls (Touch-Friendly & Spaced) -->
-      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+      <!-- Action Buttons & Controls (Touch-Friendly, Clean & Uncluttered) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <!-- Streak Counter -->
-        <button id="streakBadge" onclick="showMotivationModal()" class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 transition-all text-xs font-semibold shadow-xs shrink-0">
+        <button id="streakBadge" onclick="showMotivationModal()" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 transition-all text-xs font-semibold shadow-xs shrink-0 cursor-pointer active:scale-95" title="سلسلة الحضور المتواصل">
           <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-bounce"></i>
           <span><span id="streakDays">0</span> يوم</span>
         </button>
 
         <!-- Live Network & Cloud Sync Badge -->
-        <button onclick="openSyncModal()" id="networkSyncBadge" class="flex items-center gap-1.5 px-2 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 shrink-0" title="حالة الاتصال والمزامنة مع جوجل شيت (انقر للتفاصيل)">
+        <button onclick="openSyncModal()" id="networkSyncBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all shadow-2xs active:scale-95 bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 shrink-0 cursor-pointer" title="حالة الاتصال والمزامنة مع جوجل شيت والنسخ الاحتياطي">
           <i data-lucide="sheet" class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0"></i>
           <span id="networkSyncDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span id="networkSyncText" class="text-[11px] whitespace-nowrap hidden min-[440px]:inline">متزامن ✓</span>
+          <span id="networkSyncText" class="text-[11px] whitespace-nowrap hidden min-[540px]:inline">متزامن ✓</span>
         </button>
 
-        <!-- Time Settings Modal Trigger -->
-        <button onclick="openTimeSettingsModal()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="ضبط مواعيد الفترات">
-          <i data-lucide="clock" class="w-4 h-4"></i>
-        </button>
-
-        <!-- Export Modal Trigger -->
-        <button onclick="openExportModal()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="تصدير كرت الجدول">
-          <i data-lucide="download" class="w-4 h-4"></i>
-        </button>
+        <!-- Quick Tools Dropdown Menu -->
+        <div class="relative shrink-0">
+          <button id="quickToolsMenuBtn" onclick="toggleQuickToolsMenu(event)" class="p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-all border border-stone-200/60 dark:border-warmdark-700 flex items-center justify-center cursor-pointer active:scale-95" title="أدوات وإعدادات سريعة">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+          </button>
+          
+          <!-- Dropdown Popover -->
+          <div id="quickToolsDropdown" class="hidden absolute left-0 mt-2 w-56 rounded-2xl bg-white dark:bg-warmdark-800 border border-stone-200 dark:border-warmdark-700 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 space-y-1">
+            <button onclick="openTimeSettingsModal(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="clock" class="w-4 h-4 text-amber-500 shrink-0"></i>
+              <span>ضبط مواعيد الفترات</span>
+            </button>
+            <button onclick="openCalendarModal(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="map" class="w-4 h-4 text-sage-600 shrink-0"></i>
+              <span>الخريطة الزمنية للترم</span>
+            </button>
+            <button onclick="openGradeModal(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="award" class="w-4 h-4 text-amber-600 shrink-0"></i>
+              <span>لائحة توزيع الدرجات</span>
+            </button>
+            <button onclick="openExportModal(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="download" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span>تصدير صورة الجدول</span>
+            </button>
+            <button onclick="openSyncModal(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="sheet" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+              <span>مزامنة ونسخ احتياطي</span>
+            </button>
+            <div class="h-px bg-stone-100 dark:bg-warmdark-700 my-1"></div>
+            <button onclick="forceAppUpdate(); closeQuickToolsMenu();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors text-right">
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-500 shrink-0"></i>
+              <span>تحديث التطبيق ومسح الكاش</span>
+            </button>
+          </div>
+        </div>
 
         <!-- Theme Toggle -->
-        <button onclick="toggleDarkMode()" class="p-1.5 sm:p-2.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors shrink-0" title="تبديل المظهر">
+        <button onclick="toggleDarkMode()" class="p-2 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-white dark:hover:bg-warmdark-700 transition-colors border border-stone-200/60 dark:border-warmdark-700 shrink-0 cursor-pointer active:scale-95" title="تبديل المظهر الليلي/النهاري">
           <i id="themeIcon" data-lucide="moon" class="w-4 h-4"></i>
         </button>
       </div>
@@ -1629,6 +1655,18 @@
         border: "border-rose-200 dark:border-rose-900/50",
         accent: "text-rose-600 dark:text-rose-400",
         dot: "bg-rose-500"
+      },
+      indigo: {
+        badge: "bg-indigo-50 text-indigo-800 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800",
+        border: "border-indigo-200 dark:border-indigo-900/50",
+        accent: "text-indigo-600 dark:text-indigo-400",
+        dot: "bg-indigo-500"
+      },
+      stone: {
+        badge: "bg-stone-100 text-stone-800 border-stone-200 dark:bg-warmdark-700 dark:text-stone-300 dark:border-warmdark-600",
+        border: "border-stone-200 dark:border-warmdark-700",
+        accent: "text-stone-600 dark:text-stone-300",
+        dot: "bg-stone-500"
       }
     };
 
@@ -1775,9 +1813,9 @@
         btn.setAttribute('ondragleave', 'handleDayBtnDragLeave(event)');
         btn.setAttribute('ondrop', `handleDayBtnDrop(event, ${bDay})`);
         if (bDay === activeDayView) {
-          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap bg-sage-50 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold shadow-xs border border-sage-200/80 dark:border-sage-800 transition-all";
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap bg-sage-600 text-white dark:bg-sage-600 dark:text-white font-bold shadow-xs transition-all cursor-pointer";
         } else {
-          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 font-medium border border-transparent transition-all";
+          btn.className = "day-btn px-3.5 py-1.5 rounded-xl shrink-0 whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-warmdark-700 font-medium border border-transparent transition-all cursor-pointer";
         }
       });
 
@@ -1840,56 +1878,42 @@
         const theme = colorThemes[c.color] || colorThemes.sky;
         const attStatus = attendanceData[c.id] || 'pending'; // 'present', 'absent', 'excused', 'pending'
 
+        const accentBorderClass = c.color === 'emerald' ? 'border-r-emerald-500' :
+                                  c.color === 'sky' ? 'border-r-sky-500' :
+                                  c.color === 'amber' ? 'border-r-amber-500' :
+                                  c.color === 'rose' ? 'border-r-rose-500' :
+                                  c.color === 'purple' ? 'border-r-purple-500' :
+                                  c.color === 'indigo' ? 'border-r-indigo-500' : 'border-r-stone-400';
+
         return `
-          <div id="class-card-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3.5 group select-none cursor-grab active:cursor-grabbing">
+          <div id="class-card-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 border-r-4 ${accentBorderClass} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-4 group select-none cursor-grab active:cursor-grabbing">
             <div class="space-y-3">
-              <!-- Top Row: Drag Handle, Period & Type Badge, Move Button -->
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="drag-handle touch-none cursor-grab active:cursor-grabbing p-1 -m-1 text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200 transition-colors" title="اسحب لنقل الحصة ليوم أو فترة أخرى">
+              <!-- Top Row: Type, Time & Clean Action Pill -->
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5 flex-wrap min-w-0">
+                  <span class="drag-handle touch-none cursor-grab active:cursor-grabbing p-1 text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200 transition-colors" title="اسحب لنقل الحصة ليوم أو فترة أخرى">
                     <i data-lucide="grip-vertical" class="w-4 h-4"></i>
                   </span>
-                  <span class="px-2.5 py-1 rounded-xl text-xs font-semibold ${theme.badge} shrink-0">
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${theme.badge} shrink-0">
                     ${c.typeLabel}
                   </span>
-                  <span class="text-xs font-mono font-medium text-stone-500 dark:text-stone-400 inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2 py-0.5 rounded-lg border border-stone-200/50 dark:border-warmdark-600 shrink-0">
-                    <i data-lucide="clock" class="w-3.5 h-3.5 text-stone-400"></i>
+                  <span class="text-[11px] font-mono font-medium text-stone-500 dark:text-stone-400 inline-flex items-center gap-1 bg-stone-50 dark:bg-warmdark-700/60 px-2 py-0.5 rounded-lg border border-stone-200/50 dark:border-warmdark-600 shrink-0">
+                    <i data-lucide="clock" class="w-3 h-3 text-stone-400"></i>
                     <span>ف${c.period} (${formatSlot12h(slot.start, slot.end)})</span>
                   </span>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <button onclick="openClassModal('${c.id}')" title="تعديل تفاصيل وموعد الحصة" class="p-1.5 rounded-lg text-stone-400 hover:text-emerald-600 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
-                    <i data-lucide="pencil" class="w-4 h-4"></i>
+
+                <!-- Clean Actions Cluster -->
+                <div class="flex items-center gap-0.5 bg-stone-100/70 dark:bg-warmdark-700/60 p-0.5 rounded-xl border border-stone-200/50 dark:border-warmdark-600 shrink-0">
+                  <button onclick="openClassModal('${c.id}')" title="تعديل تفاصيل الحصة" class="p-1.5 rounded-lg text-stone-500 hover:text-emerald-600 hover:bg-white dark:hover:bg-warmdark-800 transition-all cursor-pointer">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                   </button>
-                  <button onclick="openMoveClassModal('${c.id}')" title="تغيير الموعد أو اليوم" class="p-1.5 rounded-lg text-stone-400 hover:text-sage-600 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">
-                    <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                  <button onclick="openMoveClassModal('${c.id}')" title="نقل الموعد أو اليوم" class="p-1.5 rounded-lg text-stone-500 hover:text-sage-600 hover:bg-white dark:hover:bg-warmdark-800 transition-all cursor-pointer">
+                    <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
                   </button>
-                  <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة من الجدول" class="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة من الجدول" class="p-1.5 rounded-lg text-stone-500 hover:text-rose-600 hover:bg-white dark:hover:bg-warmdark-800 transition-all cursor-pointer">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                   </button>
-                  ${attStatus === 'present' ? `
-                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800 shadow-xs">
-                      <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                      <span>حاضر</span>
-                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-emerald-200/60 dark:hover:bg-emerald-900/80 rounded-md p-0.5 text-emerald-700 dark:text-emerald-300 transition-colors">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                      </button>
-                    </div>` : ''}
-                  ${attStatus === 'absent' ? `
-                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950 dark:text-rose-300 dark:border-rose-800 shadow-xs">
-                      <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                      <span>غائب</span>
-                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-rose-200/60 dark:hover:bg-rose-900/80 rounded-md p-0.5 text-rose-700 dark:text-rose-300 transition-colors">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                      </button>
-                    </div>` : ''}
-                  ${attStatus === 'excused' ? `
-                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-stone-100 text-stone-600 border border-stone-200 dark:bg-warmdark-700 dark:text-stone-300 dark:border-warmdark-600 shadow-xs">
-                      <span>ملغاة / اعتذار</span>
-                      <button onclick="setAttendance('${c.id}', null)" title="إلغاء الاختيار وحذف التسجيل" class="mr-0.5 hover:bg-stone-200 dark:hover:bg-warmdark-600 rounded-md p-0.5 text-stone-500 transition-colors">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                      </button>
-                    </div>` : ''}
                 </div>
               </div>
 
@@ -1898,7 +1922,7 @@
                 <h3 class="text-base sm:text-lg font-bold text-stone-900 dark:text-white group-hover:${theme.accent} transition-colors leading-snug">
                   ${c.subject}
                 </h3>
-                <div class="flex flex-wrap items-center gap-2 text-xs text-stone-600 dark:text-stone-400 mt-2.5">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-stone-600 dark:text-stone-400 mt-2">
                   <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600 shrink-0">
                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600"></i>
                     <span>${c.room}</span>
@@ -1911,25 +1935,24 @@
               </div>
             </div>
 
-            <!-- Attendance Action Buttons & Move helper -->
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-stone-100 dark:border-warmdark-700 text-xs">
-              <span class="text-stone-400 text-xs font-medium">تسجيل الحضور:</span>
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <button onclick="setAttendance('${c.id}', 'present')" title="${attStatus === 'present' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'تسجيل حاضر'}" class="py-1.5 px-3 rounded-xl ${attStatus === 'present' ? 'bg-emerald-600 text-white shadow-xs font-semibold ring-2 ring-emerald-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-600 dark:text-stone-300 hover:bg-emerald-50 hover:text-emerald-700 font-medium'} active:scale-95 transition-all inline-flex items-center gap-1.5 text-xs">
+            <!-- Attendance Segmented Controller -->
+            <div class="pt-3 border-t border-stone-100 dark:border-warmdark-700 flex items-center justify-between gap-2">
+              <span class="text-[11px] font-semibold text-stone-400">تسجيل الحضور:</span>
+              <div class="flex items-center gap-1 bg-stone-100/80 dark:bg-warmdark-900/60 p-1 rounded-xl border border-stone-200/60 dark:border-warmdark-700">
+                <button onclick="setAttendance('${c.id}', ${attStatus === 'present' ? 'null' : "'present'"})" title="${attStatus === 'present' ? 'انقر لإلغاء التسجيل' : 'تسجيل حاضر'}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${attStatus === 'present' ? 'bg-emerald-600 text-white shadow-xs' : 'text-stone-600 dark:text-stone-300 hover:text-emerald-700 hover:bg-white dark:hover:bg-warmdark-700'}">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i>
                   <span>حاضر</span>
                 </button>
-                <button onclick="setAttendance('${c.id}', 'absent')" title="${attStatus === 'absent' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'تسجيل غائب'}" class="py-1.5 px-3 rounded-xl ${attStatus === 'absent' ? 'bg-rose-600 text-white shadow-xs font-semibold ring-2 ring-rose-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-600 dark:text-stone-300 hover:bg-rose-50 hover:text-rose-700 font-medium'} active:scale-95 transition-all inline-flex items-center gap-1.5 text-xs">
+                <button onclick="setAttendance('${c.id}', ${attStatus === 'absent' ? 'null' : "'absent'"})" title="${attStatus === 'absent' ? 'انقر لإلغاء التسجيل' : 'تسجيل غائب'}" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${attStatus === 'absent' ? 'bg-rose-600 text-white shadow-xs' : 'text-stone-600 dark:text-stone-300 hover:text-rose-700 hover:bg-white dark:hover:bg-warmdark-700'}">
                   <i data-lucide="x" class="w-3.5 h-3.5"></i>
                   <span>غياب</span>
                 </button>
-                <button onclick="setAttendance('${c.id}', 'excused')" title="${attStatus === 'excused' ? 'انقر لإلغاء التحديد وحذف الاختيار' : 'ملغاة'}" class="py-1.5 px-2.5 rounded-xl ${attStatus === 'excused' ? 'bg-stone-600 text-white shadow-xs font-semibold ring-2 ring-stone-500/30' : 'bg-stone-100 dark:bg-warmdark-700 text-stone-400 hover:text-stone-600 font-medium'} active:scale-95 transition-all text-xs">
-                  ملغاة
+                <button onclick="setAttendance('${c.id}', ${attStatus === 'excused' ? 'null' : "'excused'"})" title="${attStatus === 'excused' ? 'انقر لإلغاء التسجيل' : 'حصة ملغاة'}" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${attStatus === 'excused' ? 'bg-stone-700 text-white shadow-xs dark:bg-warmdark-600' : 'text-stone-500 hover:text-stone-800 hover:bg-white dark:hover:bg-warmdark-700'}">
+                  <span>ملغاة</span>
                 </button>
                 ${attStatus !== 'pending' ? `
-                  <button onclick="setAttendance('${c.id}', null)" title="إلغاء التحديد وحذف الاختيار" class="py-1.5 px-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60 active:scale-95 transition-all inline-flex items-center gap-1 text-[11px] font-semibold">
+                  <button onclick="setAttendance('${c.id}', null)" title="إلغاء التحديد وحذف الاختيار" class="p-1 rounded-lg text-stone-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-warmdark-700 transition-colors" title="إلغاء الاختيار">
                     <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
-                    <span>إلغاء الاختيار</span>
                   </button>
                 ` : ''}
               </div>
@@ -2000,33 +2023,43 @@
                   ${classes.map(c => {
                     const theme = colorThemes[c.color] || colorThemes.sky;
                     const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                    const accentBorderClass = c.color === 'emerald' ? 'border-r-emerald-500' :
+                                              c.color === 'sky' ? 'border-r-sky-500' :
+                                              c.color === 'amber' ? 'border-r-amber-500' :
+                                              c.color === 'rose' ? 'border-r-rose-500' :
+                                              c.color === 'purple' ? 'border-r-purple-500' :
+                                              c.color === 'indigo' ? 'border-r-indigo-500' : 'border-r-stone-400';
+
                     return `
-                      <div id="grid-class-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable p-2.5 rounded-xl border ${theme.border} bg-stone-50/70 dark:bg-warmdark-700/50 space-y-1.5 text-xs shadow-2xs hover:shadow-xs transition-all select-none cursor-grab active:cursor-grabbing group">
+                      <div id="grid-class-${c.id}" draggable="true" ondragstart="handleDragStart(event, '${c.id}')" ondragend="handleDragEnd(event)" class="class-draggable p-3 rounded-xl border border-stone-200/80 dark:border-warmdark-600/80 border-r-3 ${accentBorderClass} bg-stone-50/70 dark:bg-warmdark-700/50 space-y-2 text-xs shadow-2xs hover:shadow-xs transition-all select-none cursor-grab active:cursor-grabbing group">
                         <div class="flex items-center justify-between gap-1">
                           <div class="flex items-center gap-1 min-w-0">
                             <span class="drag-handle touch-none cursor-grab active:cursor-grabbing text-stone-300 dark:text-warmdark-500 hover:text-stone-600 dark:hover:text-stone-200">
                               <i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i>
                             </span>
-                            <span class="font-bold text-[11px] text-stone-800 dark:text-stone-200 truncate cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline" onclick="openClassModal('${c.id}')" title="انقر لتعديل تفاصيل الحصة: ${c.subject}">${c.subject}</span>
+                            <span class="font-bold text-xs text-stone-900 dark:text-stone-100 truncate cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" onclick="openClassModal('${c.id}')" title="انقر لتعديل الحصة: ${c.subject}">${c.subject}</span>
                           </div>
-                          <div class="flex items-center gap-0.5 shrink-0">
-                            <button onclick="openClassModal('${c.id}')" title="تعديل تفاصيل الحصة والمادة" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-emerald-600 transition-colors">
+                          <div class="flex items-center gap-0.5 shrink-0 bg-white/70 dark:bg-warmdark-800/70 rounded-lg p-0.5 border border-stone-200/40 dark:border-warmdark-600/40">
+                            <button onclick="openClassModal('${c.id}')" title="تعديل الحصة" class="p-1 rounded hover:bg-stone-100 dark:hover:bg-warmdark-600 text-stone-400 hover:text-emerald-600 transition-colors cursor-pointer">
                               <i data-lucide="pencil" class="w-3 h-3"></i>
                             </button>
-                            <button onclick="openMoveClassModal('${c.id}')" title="تعديل الموعد أو اليوم" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-warmdark-600 text-stone-400 hover:text-sage-600 transition-colors">
+                            <button onclick="openMoveClassModal('${c.id}')" title="نقل الموعد" class="p-1 rounded hover:bg-stone-100 dark:hover:bg-warmdark-600 text-stone-400 hover:text-sage-600 transition-colors cursor-pointer">
                               <i data-lucide="calendar-clock" class="w-3 h-3"></i>
                             </button>
-                            <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة من الجدول" class="p-1 rounded hover:bg-rose-100 dark:hover:bg-rose-950/50 text-stone-400 hover:text-rose-600 transition-colors">
+                            <button onclick="deleteClassConfirm('${c.id}')" title="حذف الحصة" class="p-1 rounded hover:bg-rose-50 dark:hover:bg-rose-950/50 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer">
                               <i data-lucide="trash-2" class="w-3 h-3"></i>
                             </button>
                           </div>
                         </div>
                         <div class="flex items-center justify-between text-[10px] text-stone-500 dark:text-stone-400">
-                          <span class="px-1.5 py-0.2 rounded ${theme.badge} font-medium">${c.typeLabel}</span>
-                          <span>ف${c.period} (${formatSlot12h(slot.start, slot.end)})</span>
+                          <span class="px-2 py-0.5 rounded-full ${theme.badge} font-semibold">${c.typeLabel}</span>
+                          <span class="font-mono">ف${c.period} (${formatSlot12h(slot.start, slot.end)})</span>
                         </div>
-                        <div class="text-[10px] text-stone-500 flex items-center justify-between pt-0.5 border-t border-stone-200/40 dark:border-warmdark-600/40">
-                          <span class="font-medium text-stone-700 dark:text-stone-300 truncate max-w-[90px]">${c.room}</span>
+                        <div class="text-[10px] text-stone-500 flex items-center justify-between pt-1 border-t border-stone-200/50 dark:border-warmdark-600/50">
+                          <span class="font-medium text-stone-700 dark:text-stone-300 truncate max-w-[100px] flex items-center gap-1">
+                            <i data-lucide="map-pin" class="w-2.5 h-2.5 text-sage-600"></i>
+                            <span>${c.room}</span>
+                          </span>
                           <span class="text-stone-400 truncate max-w-[80px]">${c.doctor ? c.doctor.split(' ')[0] : ''}</span>
                         </div>
                       </div>
@@ -3796,6 +3829,34 @@
     // ----------------------------------------------------
     // 12. GOOGLE APPS SCRIPT / CLOUD SYNC LOGIC
     // ----------------------------------------------------
+    function toggleQuickToolsMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('quickToolsDropdown');
+      if (dd) {
+        dd.classList.toggle('hidden');
+        if (!dd.classList.contains('hidden')) {
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function closeQuickToolsMenu() {
+      const dd = document.getElementById('quickToolsDropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        dd.classList.add('hidden');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('quickToolsDropdown');
+      const btn = document.getElementById('quickToolsMenuBtn');
+      if (dd && !dd.classList.contains('hidden')) {
+        if (!dd.contains(e.target) && !btn.contains(e.target)) {
+          closeQuickToolsMenu();
+        }
+      }
+    });
+
     function openSyncModal() {
       const input = document.getElementById('gasUrlInput');
       if (input) input.value = gasUrl || DEFAULT_GAS_URL;

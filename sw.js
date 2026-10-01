@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v17 - Full Offline Backup & Auto Cloud Sync)
+// Service Worker for Section 6 PWA (v18 - Clean & Elegant UI/UX Pro Max)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v17';
+const CACHE_NAME = 'section6-hub-v18';
 
 const PRECACHE_ASSETS = [
   './',
