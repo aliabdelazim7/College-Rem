@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v19 - Mobile-First Bottom Sheets & Haptics)
+// Service Worker for Section 6 PWA (v20 - Spacious Weekly Grid & Clear Subject Cards)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v19';
+const CACHE_NAME = 'section6-hub-v20';
 
 const PRECACHE_ASSETS = [
   './',
