@@ -201,70 +201,11 @@
     </div>
   </header>
 
-  <!-- Motivational Quote Banner -->
+  <!-- 1. Live Status Card (Current / Next Lecture Countdown) - Primary Mobile Focus -->
   <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-3 sm:pt-4">
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sage-50 via-cream-100 to-amber-50 dark:from-warmdark-800 dark:via-warmdark-800 dark:to-warmdark-700 border border-stone-200/80 dark:border-warmdark-600 p-4 sm:p-5 shadow-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="inline-flex p-1.5 rounded-lg bg-sage-500/10 text-sage-600 dark:text-sage-400">
-            <i data-lucide="sparkles" class="w-4 h-4"></i>
-          </span>
-          <span class="text-xs font-semibold uppercase tracking-wider text-sage-700 dark:text-sage-300">رسالة اليوم التشجيعية</span>
-        </div>
-        <p id="motivationalText" class="text-xs sm:text-base font-medium text-stone-800 dark:text-stone-200 leading-relaxed">
-          "الحضور خطوة بسيطة اليوم، لكنها تصنع فارقاً حقيقياً في فهمك ومعدلك غداً. كل يوم تحضره هو استثمار في مستقبلك!"
-        </p>
-      </div>
-
-      <!-- Quick Stats Pill -->
-      <div class="flex items-center gap-2 sm:gap-3 shrink-0 w-full md:w-auto justify-between bg-white/70 dark:bg-warmdark-900/60 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-stone-200/60 dark:border-warmdark-600 overflow-hidden">
-        <div class="min-w-0">
-          <div class="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate">معدل حضورك الإجمالي</div>
-          <div class="flex items-center gap-1.5">
-            <span id="overallAttendancePercent" class="text-sm sm:text-lg font-bold text-sage-600 dark:text-sage-400">100%</span>
-            <span id="overallAttendanceBadge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold truncate">بداية جديدة ✨</span>
-          </div>
-        </div>
-        <div class="h-7 w-px bg-stone-200 dark:bg-warmdark-700 shrink-0"></div>
-        <div class="min-w-0 text-left">
-          <div class="text-[10px] sm:text-[11px] text-stone-500 dark:text-stone-400 truncate">أيام الدراسة هذا الأسبوع</div>
-          <div class="text-sm sm:text-lg font-bold text-stone-800 dark:text-stone-100 whitespace-nowrap"><span id="headerStudyDaysCount">4</span> <span class="text-[10px] sm:text-xs font-normal text-stone-500">أيام ✨</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Academic Week & Semester Countdown Bar -->
-  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2">
-    <div class="flex items-center justify-between gap-2 overflow-x-auto scrollbar-none py-1 text-xs">
-      <div class="flex items-center gap-2 shrink-0">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sage-50 text-sage-800 dark:bg-sage-950/60 dark:text-sage-300 border border-sage-200/80 dark:border-sage-800 font-semibold shadow-2xs">
-          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-sage-600"></i>
-          <span>الأسبوع الدراسي: <strong id="academicWeekNumber">الأسبوع 2 • زوجي</strong> 🎓</span>
-        </span>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 font-semibold shadow-2xs">
-          <i data-lucide="hourglass" class="w-3.5 h-3.5 text-amber-600"></i>
-          <span id="midtermCountdownText">الميدتيرم: بعد 45 يوم ⏱️</span>
-        </span>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <button onclick="openCalendarModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white hover:bg-stone-50 dark:bg-warmdark-800 dark:hover:bg-warmdark-700 text-stone-700 dark:text-stone-200 border border-stone-200/80 dark:border-warmdark-700 font-semibold transition-colors shadow-2xs text-[11px]" title="عرض الخريطة الزمنية الرسمية للترم بالكامل">
-          <i data-lucide="map" class="w-3.5 h-3.5 text-sage-600"></i>
-          <span>الخريطة الزمنية للترم 🗺️</span>
-        </button>
-        <div class="hidden sm:flex items-center gap-1 text-[11px] text-stone-400">
-          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-          <span>الترم الأول: 19 سبتمبر 2026 - يناير 2027</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Live Status Card (Current / Next Lecture Countdown) -->
-  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2 sm:pt-3">
-    <div id="liveBanner" class="rounded-2xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 shadow-card flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
+    <div id="liveBanner" class="rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-white dark:bg-warmdark-800 border border-stone-200/80 dark:border-warmdark-700 shadow-soft hover:shadow-card transition-all flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
       <div class="flex items-start gap-3 w-full">
-        <div id="liveStatusIconContainer" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950/60 dark:text-sage-300 flex items-center justify-center shrink-0 border border-sage-200 dark:border-sage-800/80">
+        <div id="liveStatusIconContainer" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950/60 dark:text-sage-300 flex items-center justify-center shrink-0 border border-sage-200 dark:border-sage-800/80 shadow-2xs">
           <i id="liveStatusIcon" data-lucide="coffee" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -275,11 +216,11 @@
             </span>
             <span id="liveTimeRemaining" class="text-[11px] sm:text-xs font-medium text-stone-500 dark:text-stone-400">عطلة سعيدة وراحة مستحقة ☕</span>
           </div>
-          <h2 id="liveSubjectName" class="text-sm sm:text-lg font-bold text-stone-900 dark:text-white break-words leading-snug">
+          <h2 id="liveSubjectName" class="text-base sm:text-lg font-bold text-stone-900 dark:text-white break-words leading-snug">
             لا توجد أي محاضرات أو سكاشن مقررة لسكشن 6 اليوم
           </h2>
           <div class="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs text-stone-600 dark:text-stone-400 mt-2.5">
-            <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+            <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600 shrink-0">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600 shrink-0"></i>
               <span id="liveRoom">يوم راحة واستجمام</span>
             </span>
@@ -297,11 +238,11 @@
 
       <!-- Quick Attendance Quick Log Action -->
       <div id="liveAttendanceActions" class="flex items-center gap-2 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-stone-100 dark:border-warmdark-700 hidden">
-        <button id="quickBtnPresent" onclick="quickMarkCurrent('present')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 active:scale-95 text-white font-medium text-xs transition-all shadow-sm">
+        <button id="quickBtnPresent" onclick="quickMarkCurrent('present')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-sage-600 hover:bg-sage-700 active:scale-95 text-white font-medium text-xs transition-all shadow-sm cursor-pointer min-h-[44px]">
           <i data-lucide="check" class="w-4 h-4"></i>
           <span id="quickPresentText">سجلني حاضر</span>
         </button>
-        <button id="quickBtnAbsent" onclick="quickMarkCurrent('absent')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-stone-100 hover:bg-rose-50 hover:text-rose-700 active:scale-95 text-stone-600 dark:bg-warmdark-700 dark:text-stone-300 dark:hover:bg-rose-950/40 dark:hover:text-rose-300 font-medium text-xs transition-all">
+        <button id="quickBtnAbsent" onclick="quickMarkCurrent('absent')" class="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-stone-100 hover:bg-rose-50 hover:text-rose-700 active:scale-95 text-stone-600 dark:bg-warmdark-700 dark:text-stone-300 dark:hover:bg-rose-950/40 dark:hover:text-rose-300 font-medium text-xs transition-all cursor-pointer min-h-[44px]">
           <i data-lucide="x" class="w-4 h-4"></i>
           <span id="quickAbsentText">غائب</span>
         </button>
@@ -310,6 +251,61 @@
       <!-- Smart Commute Bus Quick Bar -->
       <div id="todayBusQuickBar" onclick="switchView('buses')" class="w-full mt-2 pt-3 border-t border-stone-100 dark:border-warmdark-700/80 flex flex-wrap items-center justify-between gap-2 text-xs cursor-pointer hover:opacity-95 transition-opacity">
         <!-- Dynamically rendered via renderTodayBusQuickBar() -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Academic Week & Semester Countdown Bar -->
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2.5">
+    <div class="flex items-center justify-between gap-2 overflow-x-auto scrollbar-none py-1 text-xs">
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sage-50 text-sage-800 dark:bg-sage-950/60 dark:text-sage-300 border border-sage-200/80 dark:border-sage-800 font-semibold shadow-2xs">
+          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-sage-600"></i>
+          <span>الأسبوع: <strong id="academicWeekNumber">الأسبوع 2 • زوجي</strong> 🎓</span>
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 font-semibold shadow-2xs">
+          <i data-lucide="hourglass" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span id="midtermCountdownText">الميدتيرم: بعد 45 يوم ⏱️</span>
+        </span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="openCalendarModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-stone-50 dark:bg-warmdark-800 dark:hover:bg-warmdark-700 text-stone-700 dark:text-stone-200 border border-stone-200/80 dark:border-warmdark-700 font-semibold transition-colors shadow-2xs text-[11px]" title="عرض الخريطة الزمنية الرسمية للترم بالكامل">
+          <i data-lucide="map" class="w-3.5 h-3.5 text-sage-600"></i>
+          <span>الخريطة الزمنية 🗺️</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Motivational Quote Banner (Sleek & Compact) -->
+  <section class="max-w-6xl mx-auto px-3.5 sm:px-6 pt-2">
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sage-50 via-cream-100 to-amber-50 dark:from-warmdark-800 dark:via-warmdark-800 dark:to-warmdark-700/80 border border-stone-200/70 dark:border-warmdark-700 p-3 sm:p-4 shadow-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="space-y-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="inline-flex p-1 rounded-lg bg-sage-500/10 text-sage-600 dark:text-sage-400">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          </span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-sage-700 dark:text-sage-300">رسالة اليوم التشجيعية</span>
+        </div>
+        <p id="motivationalText" class="text-xs font-medium text-stone-800 dark:text-stone-200 leading-relaxed truncate-2 sm:truncate-none">
+          "الحضور خطوة بسيطة اليوم، لكنها تصنع فارقاً حقيقياً في فهمك ومعدلك غداً."
+        </p>
+      </div>
+
+      <!-- Quick Stats Pill -->
+      <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto justify-between sm:justify-end bg-white/80 dark:bg-warmdark-900/60 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-stone-200/60 dark:border-warmdark-600">
+        <div class="min-w-0">
+          <div class="text-[10px] text-stone-500 dark:text-stone-400 truncate">معدل الحضور</div>
+          <div class="flex items-center gap-1">
+            <span id="overallAttendancePercent" class="text-xs sm:text-sm font-bold text-sage-600 dark:text-sage-400">100%</span>
+            <span id="overallAttendanceBadge" class="text-[9px] px-1 py-0.2 rounded bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 font-semibold truncate">بداية جديدة ✨</span>
+          </div>
+        </div>
+        <div class="h-6 w-px bg-stone-200 dark:bg-warmdark-700 shrink-0"></div>
+        <div class="min-w-0 text-left">
+          <div class="text-[10px] text-stone-500 dark:text-stone-400 truncate">أيام الدراسة</div>
+          <div class="text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-100 whitespace-nowrap"><span id="headerStudyDaysCount">4</span> أيام</div>
+        </div>
       </div>
     </div>
   </section>
@@ -712,8 +708,9 @@
   </main>
 
   <!-- MODAL: TIME SETTINGS -->
-  <div id="timeSettingsModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all animate-in fade-in zoom-in-95">
+  <div id="timeSettingsModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center">
@@ -721,7 +718,7 @@
           </div>
           <h3 class="text-base font-bold text-stone-900 dark:text-white">تخصيص مواعيد الفترات</h3>
         </div>
-        <button onclick="closeTimeSettingsModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeTimeSettingsModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -736,18 +733,19 @@
       </div>
 
       <div class="flex items-center justify-between pt-2 border-t border-stone-100 dark:border-warmdark-700">
-        <button onclick="resetDefaultPeriodTimes()" class="text-xs text-stone-500 hover:underline">استعادة الافتراضي</button>
+        <button onclick="resetDefaultPeriodTimes()" class="text-xs text-stone-500 hover:underline min-h-[44px]">استعادة الافتراضي</button>
         <div class="flex items-center gap-2">
-          <button onclick="closeTimeSettingsModal()" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700">إلغاء</button>
-          <button onclick="savePeriodTimes()" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">حفظ المواعيد</button>
+          <button onclick="closeTimeSettingsModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700 min-h-[44px]">إلغاء</button>
+          <button onclick="savePeriodTimes()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs min-h-[44px]">حفظ المواعيد</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- MODAL: GOOGLE SHEETS / APPS SCRIPT SYNC -->
-  <div id="syncModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all">
+  <div id="syncModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center">
@@ -873,8 +871,9 @@
   </div>
 
   <!-- MODAL: TASKS & ASSIGNMENTS (شيتات وتكليفات) -->
-  <div id="tasksModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 transition-all">
+  <div id="tasksModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 flex items-center justify-center">
@@ -885,7 +884,7 @@
             <p class="text-xs text-stone-500 dark:text-stone-400">سجل المطلوب تسليمه للمعيدين والدكاترة</p>
           </div>
         </div>
-        <button onclick="closeTasksModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeTasksModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -914,8 +913,9 @@
   </div>
 
   <!-- MODAL: ACADEMIC CALENDAR (الخريطة الزمنية للترم) -->
-  <div id="calendarModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-3xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+  <div id="calendarModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-3xl p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
@@ -924,7 +924,7 @@
           </h3>
           <p class="text-xs text-stone-500 dark:text-stone-400">كلية الحاسبات والمعلومات • جامعة المنصورة (المعتمدة رسمياً)</p>
         </div>
-        <button onclick="closeCalendarModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeCalendarModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1014,8 +1014,9 @@
   </div>
 
   <!-- MODAL: GRADE DISTRIBUTION (لائحة توزيع الدرجات الرسمية) -->
-  <div id="gradeDistributionModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-3xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+  <div id="gradeDistributionModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-3xl p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
@@ -1024,7 +1025,7 @@
           </h3>
           <p class="text-xs text-stone-500 dark:text-stone-400">الفصل الدراسي الأول 2026-2027 • كلية الحاسبات والمعلومات (معتمدة رسمياً)</p>
         </div>
-        <button onclick="closeGradeModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeGradeModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1173,14 +1174,15 @@
   </div>
 
   <!-- MODAL: EXPORT / PRINTABLE CARD -->
-  <div id="exportModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-2xl p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto">
+  <div id="exportModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-2xl p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] sm:max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-base font-bold text-stone-900 dark:text-white">تصدير الجدول (صورة عالية الدقة)</h3>
           <p class="text-xs text-stone-500 dark:text-stone-400">اختر شكل التصدير المناسب: كرت للمشاركة أو خلفية شاشة لقفل الموبايل (9:16)</p>
         </div>
-        <button onclick="closeExportModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeExportModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1257,8 +1259,9 @@
   </div>
 
   <!-- MOVE / RESCHEDULE CLASS MODAL -->
-  <div id="moveClassModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4">
+  <div id="moveClassModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[90vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-2xl bg-sage-100 text-sage-700 dark:bg-sage-950 dark:text-sage-300 flex items-center justify-center shadow-xs">
@@ -1269,7 +1272,7 @@
             <p class="text-[11px] text-stone-500 dark:text-stone-400">تغيير اليوم أو الفترة الدراسية للمحاضرة/السكشن</p>
           </div>
         </div>
-        <button onclick="closeMoveClassModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <button onclick="closeMoveClassModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1296,8 +1299,8 @@
       </div>
 
       <div class="flex items-center justify-between pt-3 border-t border-stone-100 dark:border-warmdark-700">
-        <button onclick="closeMoveClassModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700">إلغاء</button>
-        <button onclick="confirmMoveClass()" id="confirmMoveBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs">
+        <button onclick="closeMoveClassModal()" class="px-4 py-2.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700 min-h-[44px]">إلغاء</button>
+        <button onclick="confirmMoveClass()" id="confirmMoveBtn" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shadow-xs min-h-[44px] cursor-pointer">
           <i data-lucide="check" class="w-4 h-4"></i>
           <span>تأكيد ونقل الحصة</span>
         </button>
@@ -1306,8 +1309,9 @@
   </div>
 
   <!-- MODAL: ADD / EDIT CLASS (إضافة أو تعديل محاضرة / سكشن) -->
-  <div id="classEditorModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-warmdark-800 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] overflow-y-auto">
+  <div id="classEditorModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white dark:bg-warmdark-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-warmdark-700 space-y-4 max-h-[92vh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-warmdark-600 mx-auto mb-1 sm:hidden shrink-0"></div>
       <!-- Header -->
       <div class="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-warmdark-700">
         <div class="flex items-center gap-2.5">
@@ -1319,7 +1323,7 @@
             <p id="classEditorSubtitle" class="text-xs text-stone-500 dark:text-stone-400">أضف محاضرة أو سكشن عملي لجدولك الدراسي</p>
           </div>
         </div>
-        <button onclick="closeClassEditorModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1 rounded-xl">
+        <button onclick="closeClassEditorModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-2 rounded-xl">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1332,7 +1336,7 @@
         <!-- 1. Subject Name -->
         <div class="space-y-1.5">
           <label class="block font-bold text-stone-800 dark:text-stone-200">اسم المادة الدراسية: <span class="text-rose-500">*</span></label>
-          <input id="editClassSubject" type="text" list="defaultSubjectsList" placeholder="مثال: شبكات الحاسب، قواعد بيانات 2..." class="w-full text-xs font-semibold rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" required />
+          <input id="editClassSubject" type="text" list="defaultSubjectsList" placeholder="مثال: شبكات الحاسب، قواعد بيانات 2..." class="w-full text-base sm:text-xs font-semibold rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]" required />
           <datalist id="defaultSubjectsList">
             <option value="شبكات الحاسب"></option>
             <option value="قواعد بيانات 2"></option>
@@ -1367,7 +1371,7 @@
         <!-- 3. Day Selection -->
         <div class="space-y-1.5">
           <label class="block font-bold text-stone-800 dark:text-stone-200">اليوم الدراسي: <span class="text-rose-500">*</span></label>
-          <select id="editClassDay" class="w-full text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <select id="editClassDay" class="w-full text-base sm:text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]">
             <option value="6">السبت</option>
             <option value="0" selected>الأحد</option>
             <option value="1">الاثنين</option>
@@ -1381,7 +1385,7 @@
         <!-- 4. Period Selection -->
         <div class="space-y-1.5">
           <label class="block font-bold text-stone-800 dark:text-stone-200">الفترة والتوقيت: <span class="text-rose-500">*</span></label>
-          <select id="editClassPeriod" class="w-full text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <select id="editClassPeriod" class="w-full text-base sm:text-xs font-medium rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3.5 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]">
             <option value="1">الفترة 1 (08:30 ص - 10:10 ص)</option>
             <option value="2">الفترة 2 (10:20 ص - 12:00 م)</option>
             <option value="3">الفترة 3 (12:20 م - 02:00 م)</option>
@@ -1397,7 +1401,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div class="space-y-1.5">
             <label class="block font-bold text-stone-800 dark:text-stone-200">القاعة / المدرج / المعمل:</label>
-            <input id="editClassRoom" type="text" list="defaultRoomsList" placeholder="مثال: مدرج 3، قاعة B4..." class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <input id="editClassRoom" type="text" list="defaultRoomsList" placeholder="مثال: مدرج 3، قاعة B4..." class="w-full text-base sm:text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]" />
             <datalist id="defaultRoomsList">
               <option value="مدرج 1"></option>
               <option value="مدرج 2"></option>
@@ -1414,37 +1418,37 @@
           </div>
           <div class="space-y-1.5">
             <label class="block font-bold text-stone-800 dark:text-stone-200">المحاضر (دكتور / معيد):</label>
-            <input id="editClassDoctor" type="text" placeholder="مثال: أ.د/ أحمد عطوان..." class="w-full text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            <input id="editClassDoctor" type="text" placeholder="مثال: أ.د/ أحمد عطوان..." class="w-full text-base sm:text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2.5 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[44px]" />
           </div>
         </div>
 
         <!-- 6. Card Color Picker -->
         <div class="space-y-1.5">
           <label class="block font-bold text-stone-800 dark:text-stone-200">لون تمييز البطاقة:</label>
-          <div class="flex items-center gap-2.5">
+          <div class="flex items-center gap-2.5 flex-wrap">
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="sky" class="peer sr-only" checked />
-              <div class="w-7 h-7 rounded-xl bg-sky-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-sky-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-sky-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-sky-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="emerald" class="peer sr-only" />
-              <div class="w-7 h-7 rounded-xl bg-emerald-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-emerald-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-emerald-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-emerald-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="amber" class="peer sr-only" />
-              <div class="w-7 h-7 rounded-xl bg-amber-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-amber-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-amber-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-amber-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="rose" class="peer sr-only" />
-              <div class="w-7 h-7 rounded-xl bg-rose-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-rose-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-rose-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-rose-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="indigo" class="peer sr-only" />
-              <div class="w-7 h-7 rounded-xl bg-indigo-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-indigo-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-indigo-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-indigo-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
             <label class="cursor-pointer">
               <input type="radio" name="editClassColor" value="purple" class="peer sr-only" />
-              <div class="w-7 h-7 rounded-xl bg-purple-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-purple-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
+              <div class="w-9 h-9 rounded-2xl bg-purple-500 ring-2 ring-transparent peer-checked:ring-offset-2 peer-checked:ring-purple-500 dark:peer-checked:ring-offset-warmdark-800 transition-all"></div>
             </label>
           </div>
         </div>
@@ -1453,14 +1457,14 @@
       <!-- Action Buttons -->
       <div class="flex items-center justify-between pt-3 border-t border-stone-100 dark:border-warmdark-700">
         <div>
-          <button id="deleteClassModalBtn" type="button" onclick="deleteCurrentEditingClass()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors">
+          <button id="deleteClassModalBtn" type="button" onclick="deleteCurrentEditingClass()" class="hidden items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors min-h-[44px]">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
             <span>حذف هذه الحصة</span>
           </button>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="closeClassEditorModal()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors">إلغاء</button>
-          <button type="button" onclick="saveClassFromEditor()" id="saveClassEditorBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95">
+          <button type="button" onclick="closeClassEditorModal()" class="px-4 py-2.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-warmdark-700 transition-colors min-h-[44px]">إلغاء</button>
+          <button type="button" onclick="saveClassFromEditor()" id="saveClassEditorBtn" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95 min-h-[44px] cursor-pointer">
             <i data-lucide="check" class="w-4 h-4"></i>
             <span id="saveClassEditorBtnText">إضافة للجدول</span>
           </button>
@@ -2685,6 +2689,7 @@
     // 8. ATTENDANCE & STREAK ACTIONS
     // ----------------------------------------------------
     function setAttendance(classId, status) {
+      try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(15); } catch (e) {}
       const currentStatus = attendanceData[classId];
 
       // Case 1: Toggle off / deselect / cancel
@@ -2830,6 +2835,7 @@
     let currentTasksFilter = 'all'; // 'all', 'pending', 'completed'
 
     function switchView(view) {
+      try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(12); } catch (e) {}
       currentView = view;
       ['today', 'week', 'subjects', 'tasks', 'buses'].forEach(v => {
         // Desktop top tabs
@@ -2880,6 +2886,7 @@
     }
 
     function changeDayView(dayIdx) {
+      try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10); } catch (e) {}
       activeDayView = dayIdx;
       renderTodayView();
     }

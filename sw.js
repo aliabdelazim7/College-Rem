@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v18 - Clean & Elegant UI/UX Pro Max)
+// Service Worker for Section 6 PWA (v19 - Mobile-First Bottom Sheets & Haptics)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v18';
+const CACHE_NAME = 'section6-hub-v19';
 
 const PRECACHE_ASSETS = [
   './',
