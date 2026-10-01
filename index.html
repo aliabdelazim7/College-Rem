@@ -545,7 +545,7 @@
                 <optgroup label="سكاشن ومعامل سكشن 6">
                   <option value="قواعد بيانات 2|سكشن عملي (م/ آلاء جلال - B4 Hardware)|emerald" selected>سكشن قواعد بيانات 2 (م/ آلاء جلال - B4)</option>
                   <option value="شبكات الحاسب|سكشن عملي (م/ محمد السيد - D8)|sky">سكشن شبكات الحاسب (م/ محمد السيد - D8)</option>
-                  <option value="تحليل النظم والتصميم المنطقي|سكشن عملي (م/ محمود سعيد - B5)|amber">سكشن تحليل النظم (م/ محمود سعيد - B5)</option>
+                  <option value="تحليل النظم والتصميم المنطقي|سكشن عملي (م/ أحمد كرد - B5)|amber">سكشن تحليل النظم (م/ أحمد كرد - B5)</option>
                   <option value="نظرية المعلومات|سكشن عملي (م/ أحمد عماد الدين - قاعة 6)|purple">سكشن نظرية المعلومات (م/ أحمد عماد - قاعة 6)</option>
                   <option value="أساليب البحث العلمي|سكشن عملي (م/ آية عياد - قاعة 6)|rose">سكشن أساليب البحث العلمي (م/ آية عياد - قاعة 6)</option>
                 </optgroup>
@@ -1597,7 +1597,7 @@
         subject: "تحليل النظم والتصميم المنطقي",
         type: "section",
         typeLabel: "سكشن عملي",
-        doctor: "م/ محمود سعيد",
+        doctor: "م/ أحمد كرد",
         room: "قاعة B5",
         color: "amber"
       },
@@ -2259,7 +2259,7 @@
           enName: "Systems Analysis and Logical Design",
           color: "amber", 
           doc: "أ.د/ سمير عبدالرازق", 
-          ta: "م/ محمود سعيد",
+          ta: "م/ أحمد كرد",
           isPractical: true,
           grades: { written: 10, practical: 20, oral: 10, courseworkTotal: 40, final: 60, total: 100 }
         },
@@ -2288,6 +2288,14 @@
           grades: { written: 25, practical: 0, oral: 0, courseworkTotal: 25, final: 75, total: 100 }
         }
       ];
+
+      // Dynamically reflect any updated doctor or TA from active scheduleData
+      uniqueSubjects.forEach(sub => {
+        const lecture = scheduleData.find(c => c.subject === sub.name && c.type === 'lecture');
+        const section = scheduleData.find(c => c.subject === sub.name && c.type === 'section');
+        if (lecture && lecture.doctor) sub.doc = lecture.doctor;
+        if (section && section.doctor) sub.ta = section.doctor;
+      });
 
       // Calculate attendance stats
       container.innerHTML = uniqueSubjects.map(sub => {
@@ -2952,7 +2960,10 @@
       if (view === 'today') renderTodayView();
       if (view === 'week') renderWeeklyGrid();
       if (view === 'subjects') renderSubjectsSummary();
-      if (view === 'tasks') renderTasksView();
+      if (view === 'tasks') {
+        populateTaskClassDropdown();
+        renderTasksView();
+      }
       if (view === 'buses') renderBusesView();
     }
 
@@ -3408,6 +3419,7 @@
       renderSubjectsSummary();
       updateOverallStats();
       updateLiveBanner();
+      populateTaskClassDropdown();
       playChime('success');
       showSyncToast("تمت استعادة الجدول الدراسي الأصلي بنجاح 🔄", 'success');
       syncWithGoogleSheets(false);
@@ -3531,6 +3543,7 @@
       renderSubjectsSummary();
       updateOverallStats();
       updateLiveBanner();
+      populateTaskClassDropdown();
       closeClassEditorModal();
       playChime('undo');
       showSyncToast(`تم حذف (${c.subject}) من الجدول بنجاح 🗑️`, "success");
@@ -3584,6 +3597,7 @@
         // Edit existing
         const idx = scheduleData.findIndex(item => item.id === id);
         if (idx !== -1) {
+          const oldDoctor = scheduleData[idx].doctor;
           scheduleData[idx] = {
             ...scheduleData[idx],
             subject,
@@ -3596,6 +3610,22 @@
             doctor,
             color
           };
+
+          // Auto-sync updated doctor/TA into existing tasks in tasksList
+          if (oldDoctor && doctor && oldDoctor !== doctor) {
+            let tasksChanged = false;
+            tasksList.forEach(t => {
+              if (t.sectionLabel && (t.sectionLabel.includes(oldDoctor) || (t.subject === subject && t.sectionLabel.includes('محمود سعيد')))) {
+                t.sectionLabel = t.sectionLabel.replace(new RegExp(oldDoctor, 'g'), doctor).replace(/محمود سعيد/g, doctor);
+                tasksChanged = true;
+              }
+            });
+            if (tasksChanged) {
+              localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+              renderTasksView();
+              renderTasksList();
+            }
+          }
           showSyncToast(`تم تحديث بيانات (${subject}) بنجاح ✨`, "success");
         }
       } else {
@@ -3630,6 +3660,7 @@
       renderSubjectsSummary();
       updateOverallStats();
       updateLiveBanner();
+      populateTaskClassDropdown();
       closeClassEditorModal();
       playChime('success');
       syncWithGoogleSheets(false);
@@ -3638,6 +3669,85 @@
     // ----------------------------------------------------
     // 11. TASKS / ASSIGNMENTS (TAB & MODAL)
     // ----------------------------------------------------
+    function populateTaskClassDropdown() {
+      const select = document.getElementById('formTaskClass');
+      if (!select) return;
+
+      const currentSelectedVal = select.value;
+
+      const sections = [];
+      const lectures = [];
+      const seenSectionKeys = new Set();
+      const seenLectureKeys = new Set();
+
+      // Gather from active scheduleData
+      scheduleData.forEach(c => {
+        const isSection = c.type === 'section';
+        const docFormatted = c.doctor ? (c.doctor.startsWith('م/') || c.doctor.startsWith('د/') || c.doctor.startsWith('أ.د/') ? c.doctor : (isSection ? 'م/ ' + c.doctor : 'د/ ' + c.doctor)) : '';
+        const docText = docFormatted ? ` (${docFormatted})` : '';
+        const roomText = c.room ? ` - ${c.room}` : '';
+
+        const fullLabel = isSection 
+          ? `سكشن ${c.subject}${docText}${roomText}`
+          : `محاضرة ${c.subject} (${c.room || 'مدرج'})`;
+
+        const sectionLabel = isSection
+          ? `سكشن عملي (${docFormatted || 'معيد المادة'}${c.room ? ` - ${c.room}` : ''})`
+          : `محاضرة (${docFormatted || 'أستاذ المادة'}${c.room ? ` - ${c.room}` : ''})`;
+
+        const val = `${c.subject}|${sectionLabel}|${c.color || 'sky'}`;
+        const key = `${c.subject}|${c.type}|${c.doctor}|${c.room}`;
+
+        if (isSection) {
+          if (!seenSectionKeys.has(key)) {
+            seenSectionKeys.add(key);
+            sections.push({ val, fullLabel });
+          }
+        } else {
+          if (!seenLectureKeys.has(key)) {
+            seenLectureKeys.add(key);
+            lectures.push({ val, fullLabel });
+          }
+        }
+      });
+
+      let html = '';
+      if (sections.length > 0) {
+        html += `<optgroup label="سكاشن ومعامل سكشن 6">`;
+        sections.forEach(s => {
+          html += `<option value="${s.val}">${s.fullLabel}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+
+      if (lectures.length > 0) {
+        html += `<optgroup label="المحاضرات النظرية">`;
+        lectures.forEach(l => {
+          html += `<option value="${l.val}">${l.fullLabel}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+
+      html += `
+        <optgroup label="أخرى">
+          <option value="تكليف عام|مشروع أو مادة عامة|stone">تكليف أو مشروع عام</option>
+        </optgroup>
+      `;
+
+      select.innerHTML = html;
+
+      // Restore selection if exists or matching subject
+      if (currentSelectedVal) {
+        const exists = Array.from(select.options).some(opt => opt.value === currentSelectedVal);
+        if (exists) {
+          select.value = currentSelectedVal;
+        } else {
+          const oldSubject = currentSelectedVal.split('|')[0];
+          const matched = Array.from(select.options).find(opt => opt.value.startsWith(oldSubject + '|'));
+          if (matched) select.value = matched.value;
+        }
+      }
+    }
     function updateTasksBadges() {
       const pendingCount = tasksList.filter(t => !t.completed).length;
       
@@ -5443,6 +5553,32 @@
 
       // Update tasks badges (header & tab)
       updateTasksBadges();
+
+      // Auto-migrate TA Mahmud Said -> Ahmed Kord across saved tasks & scheduleData if needed
+      let tasksMigrated = false;
+      tasksList.forEach(t => {
+        if (t.sectionLabel && t.sectionLabel.includes('محمود سعيد')) {
+          t.sectionLabel = t.sectionLabel.replace(/محمود سعيد/g, 'أحمد كرد');
+          tasksMigrated = true;
+        }
+      });
+      if (tasksMigrated) {
+        localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+      }
+
+      let scheduleMigrated = false;
+      scheduleData.forEach(c => {
+        if (c.doctor && c.doctor.includes('محمود سعيد')) {
+          c.doctor = c.doctor.replace(/محمود سعيد/g, 'أحمد كرد');
+          scheduleMigrated = true;
+        }
+      });
+      if (scheduleMigrated) {
+        localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+      }
+
+      // Populate dynamic task class options from live scheduleData
+      populateTaskClassDropdown();
 
       // Render default view
       renderTodayView();

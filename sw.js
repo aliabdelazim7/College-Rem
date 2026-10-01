@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v20 - Spacious Weekly Grid & Clear Subject Cards)
+// Service Worker for Section 6 PWA (v21 - Dynamic Task TA Sync & Ahmed Kord Update)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v20';
+const CACHE_NAME = 'section6-hub-v21';
 
 const PRECACHE_ASSETS = [
   './',
