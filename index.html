@@ -782,6 +782,41 @@
         </p>
       </div>
 
+      <!-- Backup & Restore Data (نقل واستعادة البيانات والجدول) -->
+      <div class="p-3 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2 text-xs">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 font-bold text-amber-900 dark:text-amber-200">
+            <i data-lucide="hard-drive-download" class="w-4 h-4 text-amber-600"></i>
+            <span>النسخ الاحتياطي ونقل البيانات (بين الأجهزة):</span>
+          </div>
+          <span class="text-[10px] text-amber-700/80 dark:text-amber-300/80 font-bold">بدون نت ⚡</span>
+        </div>
+        <p class="text-[11px] text-stone-600 dark:text-stone-300">
+          احفظ جدولك وتكليفاتك وحضورك في ملف لنقلها فوراً لموبايلك أو استرجاعها بأي وقت إذا قمت بعمل ريفريش أو مسح للكاش:
+        </p>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button type="button" onclick="exportAllDataBackup()" class="py-2 px-2.5 rounded-xl font-semibold bg-white dark:bg-warmdark-700 text-stone-800 dark:text-stone-100 hover:bg-stone-50 border border-stone-200 dark:border-warmdark-600 shadow-2xs flex items-center justify-center gap-1.5 text-xs transition-all active:scale-95">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>تصدير نسخة (JSON)</span>
+          </button>
+          <button type="button" onclick="document.getElementById('importBackupFileInput').click()" class="py-2 px-2.5 rounded-xl font-semibold bg-white dark:bg-warmdark-700 text-stone-800 dark:text-stone-100 hover:bg-stone-50 border border-stone-200 dark:border-warmdark-600 shadow-2xs flex items-center justify-center gap-1.5 text-xs transition-all active:scale-95">
+            <i data-lucide="upload" class="w-3.5 h-3.5 text-sky-600"></i>
+            <span>استرجاع نسخة (ملف)</span>
+          </button>
+          <input type="file" id="importBackupFileInput" accept=".json,application/json" class="hidden" onchange="importBackupFromFile(event)" />
+        </div>
+        <div class="flex items-center gap-2 pt-1">
+          <button type="button" onclick="copyDataCodeForMobile()" class="flex-1 py-1.5 px-2 rounded-xl text-[11px] font-medium text-amber-800 dark:text-amber-300 hover:bg-amber-100/60 dark:hover:bg-amber-900/40 transition-colors flex items-center justify-center gap-1 border border-dashed border-amber-300 dark:border-amber-700">
+            <i data-lucide="copy" class="w-3 h-3"></i>
+            <span>نسخ كود البيانات لنقله لواتساب</span>
+          </button>
+          <button type="button" onclick="pasteDataCodePrompt()" class="flex-1 py-1.5 px-2 rounded-xl text-[11px] font-medium text-amber-800 dark:text-amber-300 hover:bg-amber-100/60 dark:hover:bg-amber-900/40 transition-colors flex items-center justify-center gap-1 border border-dashed border-amber-300 dark:border-amber-700">
+            <i data-lucide="clipboard" class="w-3 h-3"></i>
+            <span>لصق كود البيانات</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="pt-2 border-t border-stone-100 dark:border-warmdark-700 flex flex-wrap items-center justify-between gap-2">
         <button onclick="clearAllDataConfirm()" class="px-3 py-2 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors flex items-center gap-1.5" title="تصفير ومسح قاعدة البيانات تماماً للبدء من جديد">
@@ -4105,6 +4140,186 @@
       }
     }
 
+    // ----------------------------------------------------
+    // 12.5 FULL BACKUP & RESTORE (OFFLINE & BETWEEN DEVICES)
+    // ----------------------------------------------------
+    function exportAllDataBackup() {
+      const backup = {
+        version: '1.0',
+        exportedAt: new Date().toISOString(),
+        schedule: scheduleData,
+        attendance: attendanceData,
+        tasks: tasksList,
+        streak: streakCount,
+        periodTimes: periodTimes,
+        subjectMaterials: subjectMaterials,
+        courseworkGrades: courseworkGrades
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `سكن6_نسخة_احتياطية_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      showSyncToast("تم تنزيل النسخة الاحتياطية بنجاح 📥", "success");
+    }
+
+    function importBackupFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          applyBackupData(data);
+          showSyncToast("تم استعادة كافة بياناتك بنجاح! 🎉", "success");
+        } catch (err) {
+          alert("الملف غير صالح أو تالف! يرجى اختيار ملف نسخة احتياطية سليم.");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function copyDataCodeForMobile() {
+      const backup = {
+        schedule: scheduleData,
+        attendance: attendanceData,
+        tasks: tasksList,
+        streak: streakCount,
+        periodTimes: periodTimes,
+        subjectMaterials: subjectMaterials,
+        courseworkGrades: courseworkGrades
+      };
+
+      const code = btoa(unescape(encodeURIComponent(JSON.stringify(backup))));
+      navigator.clipboard.writeText(code).then(() => {
+        alert("تم نسخ كود البيانات بنجاح! 📋\n\nأرسله لنفسك على واتساب أو تيليجرام، وافتحه في الموبايل ثم اضغط 'لصق كود البيانات' لتنتقل كافة تعديلاتك وجدولك فوراً!");
+        showSyncToast("تم نسخ كود البيانات للحافظة 📋", "success");
+      }).catch(() => {
+        prompt("انسخ هذا الكود بالكامل لنقله لموبايلك:", code);
+      });
+    }
+
+    function pasteDataCodePrompt() {
+      const code = prompt("الصق كود البيانات المنسوخ هنا:");
+      if (!code || !code.trim()) return;
+
+      try {
+        const jsonStr = decodeURIComponent(escape(atob(code.trim())));
+        const data = JSON.parse(jsonStr);
+        applyBackupData(data);
+        showSyncToast("تم استيراد كافة البيانات بنجاح! 🚀", "success");
+      } catch (err) {
+        alert("كود البيانات غير صحيح أو غير مكتمل!");
+      }
+    }
+
+    function applyBackupData(d) {
+      if (d.schedule && Array.isArray(d.schedule) && d.schedule.length > 0) {
+        scheduleData = d.schedule;
+        localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+      }
+      if (d.attendance) {
+        attendanceData = d.attendance;
+        localStorage.setItem('sakan6_attendance', JSON.stringify(attendanceData));
+      }
+      if (d.tasks && Array.isArray(d.tasks)) {
+        tasksList = d.tasks;
+        localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+      }
+      if (d.streak !== undefined && d.streak !== null) {
+        streakCount = parseInt(d.streak, 10) || 0;
+        localStorage.setItem('sakan6_streak', streakCount.toString());
+        const sEl = document.getElementById('streakDays');
+        if (sEl) sEl.innerText = streakCount;
+      }
+      if (d.periodTimes && Object.keys(d.periodTimes).length > 0) {
+        periodTimes = d.periodTimes;
+        localStorage.setItem('sakan6_periodTimes', JSON.stringify(periodTimes));
+      }
+      if (d.subjectMaterials) {
+        subjectMaterials = d.subjectMaterials;
+        localStorage.setItem('sakan6_subject_materials', JSON.stringify(subjectMaterials));
+      }
+      if (d.courseworkGrades) {
+        courseworkGrades = d.courseworkGrades;
+        localStorage.setItem('sakan6_grades', JSON.stringify(courseworkGrades));
+      }
+
+      // Recalculate dynamic study days
+      const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+      const countEl = document.getElementById('headerStudyDaysCount');
+      if (countEl) countEl.innerText = activeStudyDays.size;
+
+      renderTodayView();
+      renderWeeklyGrid();
+      renderSubjectsSummary();
+      updateOverallStats();
+      updateLiveBanner();
+      updateTasksBadges();
+      playChime('success');
+      closeSyncModal();
+      syncWithGoogleSheets(false);
+    }
+
+    async function autoPullFromCloud() {
+      if (!navigator.onLine || !gasUrl) return;
+      try {
+        const fetchUrl = gasUrl + (gasUrl.includes('?') ? '&' : '?') + 'action=getData&_t=' + Date.now();
+        const res = await fetch(fetchUrl);
+        if (res.status === 403 || res.status === 401) {
+          console.warn("Google Apps Script returned 403 Forbidden. Access needs to be 'Anyone'.");
+          return;
+        }
+        const result = await res.json();
+        if (result && result.status === 'success' && result.data) {
+          const d = result.data;
+          let hasUpdate = false;
+          if (d.schedule && Array.isArray(d.schedule) && d.schedule.length > 0) {
+            if (JSON.stringify(d.schedule) !== JSON.stringify(scheduleData)) {
+              scheduleData = d.schedule;
+              localStorage.setItem('sakan6_schedule', JSON.stringify(scheduleData));
+              hasUpdate = true;
+            }
+          }
+          if (d.attendance && Object.keys(d.attendance).length > 0) {
+            if (JSON.stringify(d.attendance) !== JSON.stringify(attendanceData)) {
+              attendanceData = d.attendance;
+              localStorage.setItem('sakan6_attendance', JSON.stringify(attendanceData));
+              hasUpdate = true;
+            }
+          }
+          if (d.tasks && Array.isArray(d.tasks) && d.tasks.length > 0) {
+            if (JSON.stringify(d.tasks) !== JSON.stringify(tasksList)) {
+              tasksList = d.tasks;
+              localStorage.setItem('sakan6_tasks', JSON.stringify(tasksList));
+              hasUpdate = true;
+            }
+          }
+          if (hasUpdate) {
+            const activeStudyDays = new Set(scheduleData.map(c => c.dayIndex));
+            const countEl = document.getElementById('headerStudyDaysCount');
+            if (countEl) countEl.innerText = activeStudyDays.size;
+            renderTodayView();
+            renderWeeklyGrid();
+            renderSubjectsSummary();
+            updateOverallStats();
+            updateLiveBanner();
+            updateTasksBadges();
+            updateSyncStatusUI('synced');
+            showSyncToast("تم تحديث ومزامنة البيانات تلقائياً من السحابة ☁️", 'success');
+          }
+        }
+      } catch (e) {
+        console.log("Auto-pull check:", e);
+      }
+    }
+
     async function clearAllDataConfirm() {
       const confirmMsg = "تحذير: هل أنت متأكد من رغبتك في تصفير قاعدة البيانات ومسح سجلات الحضور والتكليفات بالكامل للبدء من الصفر؟";
       if (!confirm(confirmMsg)) return;
@@ -5078,6 +5293,9 @@
       updateOverallStats();
       updateLiveBanner();
       updateSyncStatusUI();
+
+      // Silent auto-pull from cloud on launch (sync across devices)
+      autoPullFromCloud();
 
       // Refresh countdown every 60s
       setInterval(updateLiveBanner, 60000);

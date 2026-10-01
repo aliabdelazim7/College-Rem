@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v16 - Class CRUD & Schedule Customization)
+// Service Worker for Section 6 PWA (v17 - Full Offline Backup & Auto Cloud Sync)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v16';
+const CACHE_NAME = 'section6-hub-v17';
 
 const PRECACHE_ASSETS = [
   './',
