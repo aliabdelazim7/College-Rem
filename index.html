@@ -1692,10 +1692,10 @@
     // Auto-migrate to official Fall 2026 times if user has outdated periodTimes
     let storedPeriodTimes = JSON.parse(localStorage.getItem('sakan6_periodTimes'));
     if (!storedPeriodTimes || storedPeriodTimes[1]?.end === "10:00" || storedPeriodTimes[2]?.end === "11:30" || !storedPeriodTimes["on1"]) {
-      storedPeriodTimes = defaultPeriodTimes;
+      storedPeriodTimes = JSON.parse(JSON.stringify(defaultPeriodTimes));
       localStorage.setItem('sakan6_periodTimes', JSON.stringify(defaultPeriodTimes));
     }
-    let periodTimes = storedPeriodTimes;
+    let periodTimes = storedPeriodTimes ? JSON.parse(JSON.stringify(storedPeriodTimes)) : JSON.parse(JSON.stringify(defaultPeriodTimes));
 
     // Load dynamic schedule from localStorage, or initialize from initialSchedule
     let scheduleData = JSON.parse(localStorage.getItem('sakan6_schedule'));
@@ -4577,6 +4577,7 @@
             updateOverallStats();
             updateLiveBanner();
             updateTasksBadges();
+            populateTaskClassDropdown();
             updateSyncStatusUI('synced');
             showSyncToast("تم تحديث ومزامنة البيانات تلقائياً من السحابة ☁️", 'success');
           }

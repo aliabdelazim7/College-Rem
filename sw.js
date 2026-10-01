@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v21 - Dynamic Task TA Sync & Ahmed Kord Update)
+// Service Worker for Section 6 PWA (v22 - Full System Cycles Verified & Deep Clone Hardening)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v21';
+const CACHE_NAME = 'section6-hub-v22';
 
 const PRECACHE_ASSETS = [
   './',
