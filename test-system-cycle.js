@@ -608,10 +608,10 @@ await test('autoPullFromCloud should merge valid cloud data into scheduleData an
 // -------------------------------------------------------------
 console.log('\n--- 🧪 CYCLE 10: SERVICE WORKER & CACHE INTEGRITY ---');
 
-await test('sw.js cache version should match v21', () => {
+await test('sw.js cache version should match v23', () => {
   const swCode = fs.readFileSync('sw.js', 'utf8');
-  if (!swCode.includes("section6-hub-v21")) {
-    throw new Error('sw.js CACHE_NAME is not section6-hub-v21');
+  if (!swCode.includes("section6-hub-v23")) {
+    throw new Error('sw.js CACHE_NAME is not section6-hub-v23');
   }
 });
 

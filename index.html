@@ -617,12 +617,12 @@
           <div class="flex items-center gap-2">
             <span class="text-[11px] text-stone-500">حسب المادة:</span>
             <select id="tasksSubjectFilter" onchange="renderTasksView()" class="text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-white dark:bg-warmdark-700 px-2.5 py-1 text-stone-800 dark:text-stone-100 focus:outline-none">
-              <option value="all">جميع المواد والسكاشن</option>
-              <option value="شبكات الحاسب">شبكات الحاسب</option>
-              <option value="قواعد بيانات 2">قواعد بيانات 2</option>
-              <option value="تحليل النظم والتصميم المنطقي">تحليل النظم والتصميم</option>
-              <option value="نظرية المعلومات">نظرية المعلومات</option>
-              <option value="أساليب البحث العلمي">أساليب البحث العلمي</option>
+              <option value="all">All Subjects (جميع المواد والسكاشن)</option>
+              <option value="شبكات الحاسب">Computer Networks (شبكات الحاسب)</option>
+              <option value="قواعد بيانات 2">Database Systems II (قواعد بيانات 2)</option>
+              <option value="تحليل النظم والتصميم المنطقي">Systems Analysis &amp; Design (تحليل النظم)</option>
+              <option value="نظرية المعلومات">Information Theory (نظرية المعلومات)</option>
+              <option value="أساليب البحث العلمي">Research Methods (أساليب البحث العلمي)</option>
             </select>
           </div>
         </div>
@@ -901,11 +901,11 @@
       <!-- Add New Task Form -->
       <form onsubmit="addTask(event)" class="flex flex-col sm:flex-row gap-2 pt-2">
         <select id="taskSubject" class="text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-sage-500">
-          <option value="شبكات الحاسب">شبكات الحاسب</option>
-          <option value="قواعد بيانات 2">قواعد بيانات 2</option>
-          <option value="تحليل النظم والتصميم المنطقي">تحليل النظم</option>
-          <option value="نظرية المعلومات">نظرية المعلومات</option>
-          <option value="أساليب البحث العلمي">أساليب البحث العلمي</option>
+          <option value="شبكات الحاسب">Computer Networks (شبكات الحاسب)</option>
+          <option value="قواعد بيانات 2">Database Systems II (قواعد بيانات 2)</option>
+          <option value="تحليل النظم والتصميم المنطقي">Systems Analysis &amp; Design (تحليل النظم)</option>
+          <option value="نظرية المعلومات">Information Theory (نظرية المعلومات)</option>
+          <option value="أساليب البحث العلمي">Research Methods (أساليب البحث العلمي)</option>
         </select>
         <input id="taskTitle" type="text" placeholder="مثال: تسليم شيت 1 أو كويز المعمل" required class="flex-1 text-xs rounded-xl border border-stone-200 dark:border-warmdark-600 bg-stone-50 dark:bg-warmdark-700 px-3 py-2 text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-sage-500" />
         <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sage-600 hover:bg-sage-700 text-white shrink-0 flex items-center justify-center gap-1 shadow-xs">
@@ -1637,6 +1637,73 @@
       "حضورك يعكس احترامك لعلمك وطاقتك، استمتع بيومك الدراسي!"
     ];
 
+    // Academic Subject Bilingual Dictionary (English Primary + Arabic Subtitle)
+    const subjectDictionary = {
+      "شبكات الحاسب": {
+        en: "Computer Networks",
+        ar: "شبكات الحاسب",
+        code: "IT311P"
+      },
+      "قواعد بيانات 2": {
+        en: "Database Systems II",
+        ar: "قواعد بيانات 2",
+        code: "IS313P"
+      },
+      "تحليل النظم والتصميم المنطقي": {
+        en: "Systems Analysis & Design",
+        ar: "تحليل النظم والتصميم المنطقي",
+        code: "IS312P"
+      },
+      "تحليل النظم والتصميم": {
+        en: "Systems Analysis & Design",
+        ar: "تحليل النظم والتصميم",
+        code: "IS312P"
+      },
+      "تحليل النظم": {
+        en: "Systems Analysis & Design",
+        ar: "تحليل النظم",
+        code: "IS312P"
+      },
+      "نظرية المعلومات": {
+        en: "Information Theory",
+        ar: "نظرية المعلومات",
+        code: "IS311T"
+      },
+      "أساليب البحث العلمي": {
+        en: "Research Methods",
+        ar: "أساليب البحث العلمي",
+        code: "UNI311T"
+      }
+    };
+
+    function getSubjectNames(subject) {
+      if (!subject) return { en: '', ar: '', code: '' };
+      const s = String(subject).trim();
+
+      // Exact match in dictionary
+      if (subjectDictionary[s]) {
+        return subjectDictionary[s];
+      }
+
+      // Reverse lookup or substring match
+      for (const [key, item] of Object.entries(subjectDictionary)) {
+        if (s.toLowerCase() === item.en.toLowerCase() || s.toLowerCase().includes(item.en.toLowerCase())) {
+          return item;
+        }
+        if (s.includes(key) || key.includes(s)) {
+          return item;
+        }
+      }
+
+      // Fallback for custom added subjects
+      const hasArabic = /[\u0600-\u06FF]/.test(s);
+      return {
+        en: s,
+        ar: hasArabic ? s : '',
+        code: ''
+      };
+    }
+
     // Color theme classes helper
     const colorThemes = {
       sky: {
@@ -1890,6 +1957,7 @@
         const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
         const theme = colorThemes[c.color] || colorThemes.sky;
         const attStatus = attendanceData[c.id] || 'pending'; // 'present', 'absent', 'excused', 'pending'
+        const subNames = getSubjectNames(c.subject);
 
         const accentBorderClass = c.color === 'emerald' ? 'border-r-emerald-500' :
                                   c.color === 'sky' ? 'border-r-sky-500' :
@@ -1930,11 +1998,12 @@
                 </div>
               </div>
 
-              <!-- Subject & Details -->
-              <div>
-                <h3 class="text-base sm:text-lg font-bold text-stone-900 dark:text-white group-hover:${theme.accent} transition-colors leading-snug">
-                  ${c.subject}
+              <!-- Subject & Details (Primary in English + Arabic subtitle) -->
+              <div class="cursor-pointer" onclick="openClassModal('${c.id}')" title="انقر لتعديل تفاصيل الحصة">
+                <h3 class="text-base sm:text-lg font-black text-stone-900 dark:text-white group-hover:${theme.accent} transition-colors leading-tight font-mono tracking-tight" dir="ltr">
+                  ${subNames.en}
                 </h3>
+                ${subNames.ar ? `<span class="text-xs text-stone-500 dark:text-stone-400 font-medium block mt-0.5" dir="rtl">${subNames.ar}</span>` : ''}
                 <div class="flex flex-wrap items-center gap-2 text-xs text-stone-600 dark:text-stone-400 mt-2">
                   <span class="inline-flex items-center gap-1 font-medium bg-stone-50 dark:bg-warmdark-700/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-warmdark-600 shrink-0">
                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sage-600"></i>
@@ -2085,6 +2154,7 @@
               ` : `
                 <div class="space-y-3">
                   ${classes.map(c => {
+                    const subNames = getSubjectNames(c.subject);
                     const slot = periodTimes[c.period] || defaultPeriodTimes[c.period] || { start: '--:--', end: '--:--' };
                     const isLecture = c.type === 'lecture';
                     const typeBadgeBg = isLecture 
@@ -2127,11 +2197,12 @@
                           </div>
                         </div>
 
-                        <!-- Subject Name (Dedicated Row - Big, Bold, Clear, No Truncation!) -->
-                        <div class="pt-0.5">
-                          <h4 onclick="openClassModal('${c.id}')" title="انقر لتعديل: ${c.subject}" class="text-sm sm:text-base font-black text-stone-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors leading-snug cursor-pointer break-words">
-                            ${c.subject}
+                        <!-- Subject Name (Primary in English + Arabic subtitle) -->
+                        <div class="pt-0.5 cursor-pointer" onclick="openClassModal('${c.id}')" title="انقر لتعديل: ${c.subject}">
+                          <h4 class="text-sm sm:text-base font-black text-stone-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors leading-tight break-words font-mono tracking-tight" dir="ltr">
+                            ${subNames.en}
                           </h4>
+                          ${subNames.ar ? `<span class="text-xs text-stone-500 dark:text-stone-400 font-medium block mt-0.5" dir="rtl">${subNames.ar}</span>` : ''}
                         </div>
 
                         <!-- Time Slot -->
@@ -2360,8 +2431,8 @@
                     نظم معلومات
                   </span>
                 </div>
-                <h3 class="text-base font-bold text-stone-900 dark:text-white">${sub.name}</h3>
-                <div class="text-[11px] text-stone-400 font-sans mt-0.5">${sub.enName}</div>
+                <h3 class="text-base font-bold text-stone-900 dark:text-white font-mono tracking-tight" dir="ltr">${sub.enName}</h3>
+                <div class="text-xs text-stone-500 dark:text-stone-400 font-medium mt-0.5" dir="rtl">${sub.name}</div>
                 <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${sub.isPractical ? 'bg-sky-50 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/60' : 'bg-purple-50 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200/60'} mt-1.5">
                   <span>${sub.isPractical ? 'مقرر عملي (40 أعمال سنة + 60 فاينال)' : 'مقرر نظري (25 أعمال سنة + 75 فاينال)'}</span>
                 </div>
@@ -2707,7 +2778,10 @@
         const [eh, em] = slot.end.split(':').map(Number);
         const left = Math.max(0, (eh * 60 + em) - currentMinutes);
         if (timeRemaining) timeRemaining.innerText = `تنتهي خلال ${formatDurationArabic(left)}`;
-        if (subjectName) subjectName.innerText = `${ongoing.subject} (${ongoing.typeLabel})`;
+        if (subjectName) {
+          const subNames = getSubjectNames(ongoing.subject);
+          subjectName.innerHTML = `<span class="block font-black font-mono tracking-tight" dir="ltr">${escapeHtml(subNames.en)}</span><span class="block text-xs text-stone-500 dark:text-stone-400 font-medium mt-1" dir="rtl">${escapeHtml(subNames.ar)} • ${escapeHtml(ongoing.typeLabel)}</span>`;
+        }
         if (room) room.innerText = ongoing.room;
         if (doc) doc.innerText = ongoing.doctor;
         if (slotLabel) slotLabel.innerText = `الفترة ${ongoing.period} (${formatSlot12h(slot.start, slot.end)})`;
@@ -2718,7 +2792,10 @@
         const [sh, sm] = slot.start.split(':').map(Number);
         const left = Math.max(0, (sh * 60 + sm) - currentMinutes);
         if (timeRemaining) timeRemaining.innerText = `تبدأ بعد ${formatDurationArabic(left)}`;
-        if (subjectName) subjectName.innerText = `${nextClass.subject} (${nextClass.typeLabel})`;
+        if (subjectName) {
+          const subNames = getSubjectNames(nextClass.subject);
+          subjectName.innerHTML = `<span class="block font-black font-mono tracking-tight" dir="ltr">${escapeHtml(subNames.en)}</span><span class="block text-xs text-stone-500 dark:text-stone-400 font-medium mt-1" dir="rtl">${escapeHtml(subNames.ar)} • ${escapeHtml(nextClass.typeLabel)}</span>`;
+        }
         if (room) room.innerText = nextClass.room;
         if (doc) doc.innerText = nextClass.doctor;
         if (slotLabel) slotLabel.innerText = `الفترة ${nextClass.period} (${formatSlot12h(slot.start, slot.end)})`;
@@ -3241,9 +3318,13 @@
 
       // Summary Card
       const summaryContainer = document.getElementById('moveClassSummary');
+      const subNames = getSubjectNames(c.subject);
       summaryContainer.innerHTML = `
         <div class="flex items-center justify-between">
-          <span class="font-bold text-sm text-stone-900 dark:text-white">${c.subject}</span>
+          <div>
+            <span class="font-bold font-mono text-sm text-stone-900 dark:text-white block" dir="ltr">${subNames.en}</span>
+            ${subNames.ar ? `<span class="text-xs text-stone-500 dark:text-stone-400 font-medium block mt-0.5" dir="rtl">${subNames.ar}</span>` : ''}
+          </div>
           <span class="px-2 py-0.5 rounded-lg text-[10px] font-semibold ${theme.badge}">${c.typeLabel}</span>
         </div>
         <div class="text-[11px] text-stone-500 dark:text-stone-400 flex flex-wrap items-center gap-2 pt-1">
@@ -3449,7 +3530,8 @@
         if (!c) return;
 
         idInput.value = c.id;
-        if (titleEl) titleEl.innerText = `تعديل: ${c.subject}`;
+        const subNames = getSubjectNames(c.subject);
+        if (titleEl) titleEl.innerText = `تعديل: ${subNames.en} (${subNames.ar})`;
         if (subtitleEl) subtitleEl.innerText = `تعديل تفاصيل وموعد ${c.typeLabel} في الجدول`;
         if (saveBtnText) saveBtnText.innerText = "حفظ التعديلات";
         if (deleteBtn) {
@@ -3686,10 +3768,10 @@
         const docFormatted = c.doctor ? (c.doctor.startsWith('م/') || c.doctor.startsWith('د/') || c.doctor.startsWith('أ.د/') ? c.doctor : (isSection ? 'م/ ' + c.doctor : 'د/ ' + c.doctor)) : '';
         const docText = docFormatted ? ` (${docFormatted})` : '';
         const roomText = c.room ? ` - ${c.room}` : '';
-
+        const subNames = getSubjectNames(c.subject);
         const fullLabel = isSection 
-          ? `سكشن ${c.subject}${docText}${roomText}`
-          : `محاضرة ${c.subject} (${c.room || 'مدرج'})`;
+          ? `${subNames.en} • سكشن عملي (${subNames.ar}${docText}${roomText})`
+          : `${subNames.en} • محاضرة (${subNames.ar}${docText ? docText : (c.room ? ' - ' + c.room : '')})`;
 
         const sectionLabel = isSection
           ? `سكشن عملي (${docFormatted || 'معيد المادة'}${c.room ? ` - ${c.room}` : ''})`
@@ -3866,13 +3948,15 @@
           }
         }
 
+        const subNames = getSubjectNames(t.subject);
+
         return `
           <div class="rounded-2xl p-4 bg-white dark:bg-warmdark-800 border ${theme.border} shadow-soft hover:shadow-card transition-all flex flex-col justify-between gap-3 group">
             <div class="space-y-2.5">
               <!-- Header Badges -->
               <div class="flex items-center justify-between flex-wrap gap-2 text-[11px]">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="px-2.5 py-0.5 rounded-lg font-semibold ${theme.badge}">${t.subject}</span>
+                  <span class="px-2.5 py-0.5 rounded-lg font-bold font-mono ${theme.badge}" dir="ltr">${subNames.en}</span>
                   ${typeBadge}
                   ${priorityBadge}
                 </div>
@@ -3890,7 +3974,7 @@
                   </h4>
                   <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 flex items-center gap-1">
                     <i data-lucide="bookmark" class="w-3.5 h-3.5 text-sage-600 shrink-0"></i>
-                    <span>${t.sectionLabel || 'سكشن عملي'}</span>
+                    <span>${subNames.ar && subNames.ar !== subNames.en ? subNames.ar + ' • ' : ''}${t.sectionLabel || 'سكشن عملي'}</span>
                   </p>
                 </div>
               </div>
@@ -3966,12 +4050,14 @@
         return;
       }
 
-      container.innerHTML = tasksList.map(t => `
+      container.innerHTML = tasksList.map(t => {
+        const subNames = getSubjectNames(t.subject);
+        return `
         <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-warmdark-700/50 border border-stone-200/60 dark:border-warmdark-600 text-xs">
           <div class="flex items-center gap-2">
             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})" class="w-4 h-4 rounded text-sage-600 focus:ring-sage-500 cursor-pointer" />
             <div class="${t.completed ? 'line-through text-stone-400' : 'text-stone-800 dark:text-stone-200'}">
-              <span class="font-bold text-[10px] px-1.5 py-0.5 rounded bg-stone-200/70 dark:bg-warmdark-600 ml-1.5">${t.subject}</span>
+              <span class="font-bold font-mono text-[10px] px-1.5 py-0.5 rounded bg-stone-200/70 dark:bg-warmdark-600 ml-1.5" dir="ltr">${subNames.en}</span>
               ${t.title}
             </div>
           </div>
@@ -3979,7 +4065,8 @@
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
           </button>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       lucide.createIcons();
     }
@@ -4708,11 +4795,12 @@
                   <div class="space-y-1">
                     ${classes.map(c => {
                       const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
+                      const subNames = getSubjectNames(c.subject);
                       return `
                         <div class="flex items-center justify-between text-[11px] py-1 px-2 rounded-lg bg-stone-900/60 border border-stone-800">
                           <div class="flex items-center gap-1.5 truncate">
-                            <span class="font-bold text-stone-200 truncate">${c.subject}</span>
-                            <span class="text-[10px] text-stone-400 shrink-0">(${c.typeLabel})</span>
+                            <span class="font-bold text-stone-200 truncate font-mono text-[10px]" dir="ltr">${subNames.en}</span>
+                            <span class="text-[10px] text-stone-400 shrink-0">(${subNames.ar})</span>
                           </div>
                           <div class="flex items-center gap-1 shrink-0 text-[10px] font-mono text-sage-300">
                             <span>${c.room}</span>
@@ -4769,9 +4857,10 @@
                     ${classes.map(c => {
                       const slot = periodTimes[c.period] || defaultPeriodTimes[c.period];
                       const theme = colorThemes[c.color] || colorThemes.sky;
+                      const subNames = getSubjectNames(c.subject);
                       return `
                         <div class="p-1.5 rounded-lg ${theme.badge} font-medium">
-                          ف${c.period} (${formatSlot12h(slot.start, slot.end)}): ${c.subject} (${c.typeLabel}) - ${c.room}
+                          ف${c.period} (${formatSlot12h(slot.start, slot.end)}): <strong>${subNames.en}</strong> (${subNames.ar} - ${c.typeLabel}) - ${c.room}
                         </div>
                       `;
                     }).join('')}
@@ -5178,6 +5267,8 @@
           const comp = commute.company;
           const dep = commute.bestDeparture;
           const ret = commute.bestReturn;
+          const firstSubNames = getSubjectNames(commute.firstClass.subject);
+          const lastSubNames = getSubjectNames(commute.lastClass.subject);
 
           recContainer.innerHTML = `
             <div class="space-y-4">
@@ -5194,7 +5285,7 @@
                   </div>
                 </div>
                 <div class="text-[11px] text-stone-500 flex items-center gap-3">
-                  <span>أول محاضرة: <strong class="text-stone-800 dark:text-stone-200 font-mono">${commute.firstSlot.start}</strong> (${commute.firstClass.subject})</span>
+                  <span>أول محاضرة: <strong class="text-stone-800 dark:text-stone-200 font-mono">${commute.firstSlot.start}</strong> (<span dir="ltr" class="font-mono font-bold">${firstSubNames.en}</span>)</span>
                   <span>•</span>
                   <span>آخر محاضرة: <strong class="text-stone-800 dark:text-stone-200 font-mono">${commute.lastSlot.end}</strong></span>
                 </div>
@@ -5239,7 +5330,7 @@
                       <i data-lucide="${dep.isEarly ? 'check-circle' : 'alert-triangle'}" class="w-4 h-4 shrink-0 mt-0.5"></i>
                       <span>
                         ${dep.isEarly 
-                          ? `تصل قبل أول محاضرة (${commute.firstClass.subject}) بـ <strong>${dep.waitTime} دقيقة</strong> مستريحاً وبدون أي استعجال!`
+                          ? `تصل قبل أول محاضرة (${firstSubNames.en}) بـ <strong>${dep.waitTime} دقيقة</strong> مستريحاً وبدون أي استعجال!`
                           : `تنبيه: هذا الباص يصل بعد بدء المحاضرة بـ ${dep.lateTime} دقيقة.`}
                       </span>
                     </div>
@@ -5271,7 +5362,7 @@
                       <span class="text-base font-black text-sky-700 dark:text-sky-300 font-mono">${ret.label || formatTime12h(ret.time)}</span>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-sky-800 dark:text-sky-300 pt-1 border-t border-sky-200/40">
-                      <span>انتهاء آخر حصة (${commute.lastClass.subject}):</span>
+                      <span>انتهاء آخر حصة (${lastSubNames.en}):</span>
                       <span class="font-bold font-mono">${formatTime12h(commute.lastSlot.end)} (${commute.lastSlot.end})</span>
                     </div>
                   </div>

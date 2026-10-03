@@ -1,6 +1,6 @@
-// Service Worker for Section 6 PWA (v22 - Full System Cycles Verified & Deep Clone Hardening)
+// Service Worker for Section 6 PWA (v23 - English Primary Subject Naming & System Cycle Hardening)
 // ----------------------------------------------------
-const CACHE_NAME = 'section6-hub-v22';
+const CACHE_NAME = 'section6-hub-v23';
 
 const PRECACHE_ASSETS = [
   './',
